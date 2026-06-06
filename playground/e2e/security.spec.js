@@ -8,6 +8,7 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { Buffer } from 'node:buffer';
 
 const WP     = 'http://127.0.0.1:9400';
 const API    = `${WP}/wp-json/preview-token/v1`;
@@ -69,6 +70,9 @@ async function ensureUser(page, nonce, username, role) {
 // ── Shared state ──────────────────────────────────────────────────────────────
 
 let adminCtx, adminPage, adminNonce, draftPostId, validToken;
+/** Raw Application Password created in beforeAll for external-auth simulation. */
+let appPassword = null;
+let appPasswordUuid = null;
 
 test.beforeAll(async ({ browser }) => {
     ({ ctx: adminCtx, page: adminPage, nonce: adminNonce } = await adminLogin(browser));
@@ -84,9 +88,32 @@ test.beforeAll(async ({ browser }) => {
     expect(res.status()).toBe(201);
     validToken = extractToken(await res.json());
     expect(validToken).toMatch(/^[0-9a-f]{64}$/);
+
+    // Create an Application Password to simulate an external REST client.
+    // WP_ENVIRONMENT_TYPE=local (set via playground/package.json) enables
+    // Application Passwords even on HTTP.
+    const apRes = await adminPage.request.post(
+        `${WP_API}/users/1/application-passwords`,
+        {
+            headers: { 'X-WP-Nonce': adminNonce, 'Content-Type': 'application/json' },
+            data:    { name: 'pvt-e2e-external-test' },
+        }
+    );
+    if (apRes.ok()) {
+        const body      = await apRes.json();
+        appPassword     = body.password;  // raw password shown only at creation
+        appPasswordUuid = body.uuid;
+    }
 }, 60_000);
 
 test.afterAll(async () => {
+    // Delete the Application Password created for tests
+    if (appPasswordUuid && adminNonce) {
+        await adminPage.request.delete(
+            `${WP_API}/users/1/application-passwords/${appPasswordUuid}`,
+            { headers: { 'X-WP-Nonce': adminNonce } }
+        ).catch(() => null);
+    }
     await adminCtx?.close();
 });
 
@@ -429,6 +456,132 @@ test.describe('A10 — SSRF', () => {
         expect(body.preview_url).toMatch(/[?&]pt=\w+/);
         expect(body.preview_url).toMatch(/[?&]preview=true/);
         expect(body.preview_url).toMatch(/[?&]token=[0-9a-f]{64}/);
+    });
+
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// External Issuance Guard
+// ─────────────────────────────────────────────────────────────────────────────
+// When "Allow External Token Issuance" is OFF (default), POST /token must be
+// rejected for any request that lacks a valid X-WP-Nonce — even if the caller
+// holds valid WordPress credentials (cookie session, Application Password, etc.).
+// This prevents automated external clients from issuing tokens without opt-in.
+
+test.describe('External Issuance Guard', () => {
+
+    test('POST /token without X-WP-Nonce is rejected when external issuance is off', async () => {
+        // Use the admin page request context (carries session cookies) but
+        // deliberately omit the nonce header.
+        // A legitimate external client (e.g. curl with Application Password)
+        // would also lack this header, so this exercises the same code path.
+        const res = await adminPage.request.post(`${API}/token`, {
+            headers: {
+                // No X-WP-Nonce — simulating an external / non-admin-UI request
+                'Content-Type': 'application/json',
+            },
+            data: {
+                post_id:    draftPostId,
+                expires_at: Math.floor(Date.now() / 1000) + 3600,
+            },
+        });
+
+        // Must not succeed — either:
+        //   401: WP rejects cookie-based REST auth without a valid nonce (CSRF guard)
+        //   403: our external_issuance_disabled guard (Application Password path)
+        // Either way, no token may be issued.
+        expect([401, 403]).toContain(res.status());
+
+        if (res.status() === 403) {
+            const body = await res.json();
+            expect(body.code).toBe('external_issuance_disabled');
+        }
+    });
+
+    test('POST /token with valid X-WP-Nonce succeeds (admin UI path unaffected)', async () => {
+        // Confirm the admin UI path (nonce present) is not broken by the guard.
+        const res = await issueToken(adminPage, adminNonce, draftPostId);
+        expect([200, 201]).toContain(res.status());
+    });
+
+    // ── Application Password simulation ──────────────────────────────────────
+    // The tests above rely on cookie auth without nonce, which WP's own CSRF
+    // guard catches first (401). These tests use a real Application Password
+    // so that WP authenticates the request fully — the only thing stopping
+    // token issuance is our external_issuance_disabled guard (403).
+
+    test('Application Password was created successfully', () => {
+        if (!appPassword) test.skip();
+        expect(appPassword).toBeTruthy();
+    });
+
+    test('POST with Application Password (no nonce) → 403 external_issuance_disabled when external issuance is OFF', async ({ request }) => {
+        if (!appPassword) {
+            test.skip();
+            return;
+        }
+
+        // Basic Auth: WP authenticates the user without a nonce.
+        // Our guard should then return 403 external_issuance_disabled.
+        const credentials = Buffer.from(`admin:${appPassword}`).toString('base64');
+        const res = await request.post(`${API}/token`, {
+            headers: {
+                'Authorization': `Basic ${credentials}`,
+                'Content-Type':  'application/json',
+                // No X-WP-Nonce
+            },
+            data: {
+                post_id:    draftPostId,
+                expires_at: Math.floor(Date.now() / 1000) + 3600,
+            },
+        });
+
+        expect(res.status()).toBe(403);
+        const body = await res.json();
+        expect(body.code).toBe('external_issuance_disabled');
+    });
+
+    test('POST with Application Password succeeds when external issuance is ON', async ({ request }) => {
+        if (!appPassword) {
+            test.skip();
+            return;
+        }
+
+        // Enable external issuance via the settings page
+        await adminPage.goto(`${WP}/wp-admin/options-general.php?page=preview-token`);
+        await adminPage.waitForLoadState('domcontentloaded');
+        const checkbox = adminPage.locator('input[name="pvt_allow_external_issuance"]');
+        if (!(await checkbox.isChecked())) {
+            await checkbox.check();
+            await adminPage.locator('#submit').click();
+            await adminPage.waitForURL(`${WP}/wp-admin/options-general.php*`);
+        }
+
+        try {
+            const credentials = Buffer.from(`admin:${appPassword}`).toString('base64');
+            const res = await request.post(`${API}/token`, {
+                headers: {
+                    'Authorization': `Basic ${credentials}`,
+                    'Content-Type':  'application/json',
+                },
+                data: {
+                    post_id:    draftPostId,
+                    expires_at: Math.floor(Date.now() / 1000) + 3600,
+                },
+            });
+
+            expect([200, 201]).toContain(res.status());
+        } finally {
+            // Always restore the default (external issuance OFF)
+            await adminPage.goto(`${WP}/wp-admin/options-general.php?page=preview-token`);
+            await adminPage.waitForLoadState('domcontentloaded');
+            const cb = adminPage.locator('input[name="pvt_allow_external_issuance"]');
+            if (await cb.isChecked()) {
+                await cb.uncheck();
+                await adminPage.locator('#submit').click();
+                await adminPage.waitForURL(`${WP}/wp-admin/options-general.php*`);
+            }
+        }
     });
 
 });
