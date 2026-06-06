@@ -166,6 +166,27 @@ TypeScript ソースから JavaScript バンドルを再ビルドするには：
 
 はい。クラシックエディタープラグインが有効な場合、トークンパネルが投稿エディターのサイドバーにメタボックスとして表示されます。
 
+= フロントエンドからどのようにデータを取得できますか？ =
+
+`token` クエリパラメータをプレビューエンドポイントに渡すだけで、認証ヘッダーは不要です：
+
+```
+GET /wp-json/preview-token/v1/preview?token=<token>
+```
+
+トークンは発行時に特定の投稿と紐づいており（SHA-256 ハッシュが `wp_options` に保存）、サーバーはトークンのみから返すべき投稿を決定します。クライアントが別の投稿にリダイレクトさせることはできません。
+
+レスポンスは WordPress 標準の REST API フォーマット（`/wp/v2/posts/{id}` と同形式）で返されます。プレビュー URL には `p=<投稿ID>`・`pt=<投稿タイプ>`・`preview=true` も含まれるため、API 呼び出し前にルーティングやテンプレート選択が可能です。
+
+```javascript
+const params   = new URLSearchParams(location.search)
+const token    = params.get('token')
+const postType = params.get('pt')   // 'post'・'page'・カスタム投稿タイプのスラッグ
+
+const res  = await fetch(`https://wp.example.com/wp-json/preview-token/v1/preview?token=${token}`)
+const post = await res.json()
+```
+
 == スクリーンショット ==
 
 1. **Gutenberg サイドバー** — トークン生成前のパネル。有効期限を選択して「トークンを生成」をクリックします。

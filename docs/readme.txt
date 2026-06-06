@@ -166,6 +166,27 @@ By default, log entries are written via PHP's `error_log()`, which follows the `
 
 Yes. When the Classic Editor plugin is active, the token panel appears as a meta box in the post editor sidebar.
 
+= How does the frontend fetch the post data? =
+
+Pass the `token` query parameter directly to the preview endpoint — no authentication headers required:
+
+```
+GET /wp-json/preview-token/v1/preview?token=<token>
+```
+
+The token is bound to a specific post at issuance time (stored as a SHA-256 hash in `wp_options`). The server resolves which post to return from the token alone; the client cannot redirect it to a different post.
+
+The response follows the standard WordPress REST API post format (`/wp/v2/posts/{id}`). The preview URL also includes `p=<post_id>`, `pt=<post_type>`, and `preview=true` parameters so the frontend can determine routing and template selection before making the API call.
+
+```javascript
+const params  = new URLSearchParams(location.search)
+const token   = params.get('token')
+const postType = params.get('pt')   // 'post', 'page', or a custom post type slug
+
+const res  = await fetch(`https://wp.example.com/wp-json/preview-token/v1/preview?token=${token}`)
+const post = await res.json()
+```
+
 == Screenshots ==
 
 1. **Gutenberg sidebar** — Token generation panel before a token is issued. Select an expiry and click "Generate token".
