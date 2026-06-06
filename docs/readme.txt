@@ -200,7 +200,7 @@ const post = await res.json()
 == Changelog ==
 
 = 1.0.1 =
-* Preview URL now includes `p=<post_id>&preview=true` alongside `token=` for client-side post identification.
+* Preview URL now includes `p=<post_id>&pt=<post_type>&preview=true` alongside `token=` for client-side post identification.
 
 = 1.0.0 =
 * Initial release.
