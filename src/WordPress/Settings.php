@@ -19,11 +19,11 @@ class Settings
     private static function role_options(): array
     {
         return [
-            'subscriber'    => __('Subscriber',    'wp-preview-token'),
-            'contributor'   => __('Contributor',   'wp-preview-token'),
-            'author'        => __('Author',        'wp-preview-token'),
-            'editor'        => __('Editor',        'wp-preview-token'),
-            'administrator' => __('Administrator', 'wp-preview-token'),
+            'subscriber'    => __('Subscriber',    'preview-token'),
+            'contributor'   => __('Contributor',   'preview-token'),
+            'author'        => __('Author',        'preview-token'),
+            'editor'        => __('Editor',        'preview-token'),
+            'administrator' => __('Administrator', 'preview-token'),
         ];
     }
 
@@ -56,7 +56,7 @@ class Settings
 
     public function enqueue_settings_scripts(string $hook): void
     {
-        if ($hook !== 'settings_page_wp-preview-token') {
+        if ($hook !== 'settings_page_preview-token') {
             return;
         }
 
@@ -74,19 +74,19 @@ class Settings
 
         wp_localize_script('wpt-settings', 'wptSettingsData', [
             'field'        => Constants::OPTION_ALLOWED_ORIGINS . '[]',
-            'removeLabel'  => __('Remove this origin', 'wp-preview-token'),
-            'warningTitle' => __('Security Warning', 'wp-preview-token'),
-            'warningText'  => __('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'wp-preview-token'),
+            'removeLabel'  => __('Remove this origin', 'preview-token'),
+            'warningTitle' => __('Security Warning', 'preview-token'),
+            'warningText'  => __('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'preview-token'),
         ]);
     }
 
     public function add_settings_page(): void
     {
         add_options_page(
-            __('WP Preview Token', 'wp-preview-token'),
-            __('Preview Token',    'wp-preview-token'),
+            __('WP Preview Token', 'preview-token'),
+            __('Preview Token',    'preview-token'),
             'manage_options',
-            'wp-preview-token',
+            'preview-token',
             [$this, 'render_page']
         );
     }
@@ -147,15 +147,15 @@ class Settings
             'default'           => false,
         ]);
 
-        add_settings_section('wpt_main', '', '__return_null', 'wp-preview-token');
+        add_settings_section('wpt_main', '', '__return_null', 'preview-token');
 
-        add_settings_field('wpt_frontend_url',        __('External Preview URL',    'wp-preview-token'), [$this, 'render_frontend_url'],        'wp-preview-token', 'wpt_main');
-        add_settings_field('wpt_allowed_origins',     __('Allowed Origins (CORS)',  'wp-preview-token'), [$this, 'render_allowed_origins'],     'wp-preview-token', 'wpt_main');
-        add_settings_field('wpt_min_capability',      __('Minimum Capability',      'wp-preview-token'), [$this, 'render_min_capability'],      'wp-preview-token', 'wpt_main');
-        add_settings_field('wpt_rate_limit_requests', __('Rate Limit',              'wp-preview-token'), [$this, 'render_rate_limit_requests'], 'wp-preview-token', 'wpt_main');
-        add_settings_field('wpt_rate_limit_window',   __('Rate Limit Window',       'wp-preview-token'), [$this, 'render_rate_limit_window'],   'wp-preview-token', 'wpt_main');
-        add_settings_field('wpt_allow_no_expiry',     __('Allow No-Expiry Tokens',  'wp-preview-token'), [$this, 'render_allow_no_expiry'],     'wp-preview-token', 'wpt_main');
-        add_settings_field('wpt_skip_https_check',    __('Skip HTTPS Check',        'wp-preview-token'), [$this, 'render_skip_https_check'],    'wp-preview-token', 'wpt_main');
+        add_settings_field('wpt_frontend_url',        __('External Preview URL',    'preview-token'), [$this, 'render_frontend_url'],        'preview-token', 'wpt_main');
+        add_settings_field('wpt_allowed_origins',     __('Allowed Origins (CORS)',  'preview-token'), [$this, 'render_allowed_origins'],     'preview-token', 'wpt_main');
+        add_settings_field('wpt_min_capability',      __('Minimum Capability',      'preview-token'), [$this, 'render_min_capability'],      'preview-token', 'wpt_main');
+        add_settings_field('wpt_rate_limit_requests', __('Rate Limit',              'preview-token'), [$this, 'render_rate_limit_requests'], 'preview-token', 'wpt_main');
+        add_settings_field('wpt_rate_limit_window',   __('Rate Limit Window',       'preview-token'), [$this, 'render_rate_limit_window'],   'preview-token', 'wpt_main');
+        add_settings_field('wpt_allow_no_expiry',     __('Allow No-Expiry Tokens',  'preview-token'), [$this, 'render_allow_no_expiry'],     'preview-token', 'wpt_main');
+        add_settings_field('wpt_skip_https_check',    __('Skip HTTPS Check',        'preview-token'), [$this, 'render_skip_https_check'],    'preview-token', 'wpt_main');
     }
 
     public function render_page(): void
@@ -163,14 +163,14 @@ class Settings
         // Defense-in-depth: verify capability explicitly even though
         // add_options_page already restricts access to manage_options.
         if (!current_user_can('manage_options')) {
-            wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'wp-preview-token'));
+            wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'preview-token'));
         }
 
-        $current_tab = sanitize_key($_GET['tab'] ?? 'settings');
-        $base_url    = admin_url('options-general.php?page=wp-preview-token');
+        $current_tab = sanitize_key($_GET['tab'] ?? 'settings'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $base_url    = admin_url('options-general.php?page=preview-token');
         $tabs        = [
-            'settings' => __('Settings',      'wp-preview-token'),
-            'tokens'   => __('Issued Tokens', 'wp-preview-token'),
+            'settings' => __('Settings',      'preview-token'),
+            'tokens'   => __('Issued Tokens', 'preview-token'),
         ];
         ?>
         <div class="wrap">
@@ -178,7 +178,7 @@ class Settings
             <nav class="nav-tab-wrapper" style="margin-bottom:20px">
                 <?php foreach ($tabs as $slug => $label): ?>
                 <a href="<?php echo esc_url(add_query_arg('tab', $slug, $base_url)); ?>"
-                   class="nav-tab<?php echo $current_tab === $slug ? ' nav-tab-active' : ''; ?>">
+                   class="nav-tab<?php echo $current_tab === $slug ? ' nav-tab-active' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static strings only ?>">
                     <?php echo esc_html($label); ?>
                 </a>
                 <?php endforeach; ?>
@@ -190,7 +190,7 @@ class Settings
             <form method="post" action="options.php">
                 <?php
                 settings_fields('wpt_settings');
-                do_settings_sections('wp-preview-token');
+                do_settings_sections('preview-token');
                 submit_button();
                 ?>
             </form>
@@ -206,7 +206,7 @@ class Settings
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_FRONTEND_URL),
             esc_attr($this->get_frontend_url()),
-            esc_html__('URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress.', 'wp-preview-token')
+            esc_html__('URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress.', 'preview-token')
         );
     }
 
@@ -222,31 +222,31 @@ class Settings
             <?php foreach ($origins as $origin): ?>
             <div class="wpt-origin-row" style="display:flex;gap:6px;align-items:center">
                 <input type="text"
-                       name="<?php echo $field; ?>"
+                       name="<?php echo esc_attr($field); ?>"
                        value="<?php echo esc_attr($origin); ?>"
                        class="regular-text code"
                        placeholder="https://example.com  or  https://*.example.com"
                        style="flex:1;font-family:monospace" />
                 <button type="button"
                         class="button wpt-remove-origin"
-                        aria-label="<?php esc_attr_e('Remove this origin', 'wp-preview-token'); ?>">&#x2715;</button>
+                        aria-label="<?php esc_attr_e('Remove this origin', 'preview-token'); ?>">&#x2715;</button>
             </div>
             <?php endforeach; ?>
         </div>
         <button type="button" id="wpt-add-origin" class="button" style="margin-top:6px">
-            <?php esc_html_e('+ Add origin', 'wp-preview-token'); ?>
+            <?php esc_html_e('+ Add origin', 'preview-token'); ?>
         </button>
         <?php
         // Server-side warning when * is already saved (shown before JS loads).
         if (in_array('*', $this->get_allowed_origins(), true)):
         ?>
         <div id="wpt-wildcard-warning" class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
-            <strong><?php esc_html_e('Security Warning', 'wp-preview-token'); ?>:</strong>
-            <?php esc_html_e('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'wp-preview-token'); ?>
+            <strong><?php esc_html_e('Security Warning', 'preview-token'); ?>:</strong>
+            <?php esc_html_e('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'preview-token'); ?>
         </div>
         <?php endif; ?>
         <p class="description" style="margin-top:6px">
-            <?php esc_html_e('Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers.', 'wp-preview-token'); ?>
+            <?php esc_html_e('Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers.', 'preview-token'); ?>
         </p>
         <?php
         // JS (settings.iife.js) is enqueued via enqueue_settings_scripts() and
@@ -274,18 +274,18 @@ class Settings
     public function render_rate_limit_requests(): void
     {
         printf(
-            '<input type="number" name="%s" value="%d" min="1" max="1000" class="small-text" /> ' . esc_html__('requests per window', 'wp-preview-token'),
+            '<input type="number" name="%s" value="%d" min="1" max="1000" class="small-text" /> ' . esc_html__('requests per window', 'preview-token'),
             esc_attr(Constants::OPTION_RATE_LIMIT_REQUESTS),
-            $this->get_rate_limit_requests()
+            absint($this->get_rate_limit_requests())
         );
     }
 
     public function render_rate_limit_window(): void
     {
         printf(
-            '<input type="number" name="%s" value="%d" min="1" max="3600" class="small-text" /> ' . esc_html__('seconds', 'wp-preview-token'),
+            '<input type="number" name="%s" value="%d" min="1" max="3600" class="small-text" /> ' . esc_html__('seconds', 'preview-token'),
             esc_attr(Constants::OPTION_RATE_LIMIT_WINDOW),
-            $this->get_rate_limit_window()
+            absint($this->get_rate_limit_window())
         );
     }
 
@@ -353,8 +353,8 @@ class Settings
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_ALLOW_NO_EXPIRY),
             checked($this->get_allow_no_expiry(), true, false),
-            esc_html__('Enable', 'wp-preview-token'),
-            esc_html__('Allow preview tokens with no expiry. Use with caution — these tokens persist until manually deleted.', 'wp-preview-token')
+            esc_html__('Enable', 'preview-token'),
+            esc_html__('Allow preview tokens with no expiry. Use with caution — these tokens persist until manually deleted.', 'preview-token')
         );
     }
 
@@ -373,19 +373,19 @@ class Settings
                        name="<?php echo esc_attr(Constants::OPTION_SKIP_HTTPS_CHECK); ?>"
                        value="1"
                        <?php checked($enabled); ?> />
-                <?php esc_html_e('Enable (development only)', 'wp-preview-token'); ?>
+                <?php esc_html_e('Enable (development only)', 'preview-token'); ?>
             </label>
             <p class="description">
-                <?php esc_html_e('By default the preview endpoint requires HTTPS so that tokens cannot be intercepted in transit. Enable this option only when running WordPress on a local development environment where HTTPS is unavailable.', 'wp-preview-token'); ?>
+                <?php esc_html_e('By default the preview endpoint requires HTTPS so that tokens cannot be intercepted in transit. Enable this option only when running WordPress on a local development environment where HTTPS is unavailable.', 'preview-token'); ?>
             </p>
             <?php if ($enabled): ?>
             <div class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
-                <strong><?php esc_html_e('Security Warning', 'wp-preview-token'); ?>:</strong>
-                <?php esc_html_e('The HTTPS check is currently disabled. Preview tokens can be sent over unencrypted HTTP. Do not use this setting in a production environment.', 'wp-preview-token'); ?>
+                <strong><?php esc_html_e('Security Warning', 'preview-token'); ?>:</strong>
+                <?php esc_html_e('The HTTPS check is currently disabled. Preview tokens can be sent over unencrypted HTTP. Do not use this setting in a production environment.', 'preview-token'); ?>
             </div>
             <?php endif; ?>
             <p class="description" style="margin-top:6px;font-style:italic">
-                <?php esc_html_e('If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting.', 'wp-preview-token'); ?>
+                <?php esc_html_e('If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting.', 'preview-token'); ?>
             </p>
         </fieldset>
         <?php

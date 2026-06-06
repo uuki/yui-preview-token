@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Preview Token 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/uuki/wp-preview-token/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/uuki/preview-token/issues\n"
 "POT-Creation-Date: 2026-06-06T00:00:00+00:00\n"
 "PO-Revision-Date: 2026-06-06T00:00:00+00:00\n"
 "Last-Translator: \n"
@@ -132,7 +132,7 @@ msgstr "トークンを再生成"
 msgid "Token expired: %s"
 msgstr "トークンの有効期限が切れました: %s"
 
-msgid "Expires: %s (%s remaining)"
+msgid "Expires: %1$s (%2$s remaining)"
 msgstr "有効期限: %s（残り %s）"
 
 msgid "< 1 min"

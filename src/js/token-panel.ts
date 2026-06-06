@@ -28,7 +28,7 @@ const t = (): WptI18n => wptPreviewData?.i18n ?? {
   changeExpiry: 'Change expiry', deleteToken: 'Delete',
   deleteConfirm: 'Delete this token?', yes: 'Yes',
   generateToken: 'Generate token', regenerateToken: 'Regenerate token',
-  tokenExpired: 'Token expired: %s', expiresRelative: 'Expires: %s (%s remaining)',
+  tokenExpired: 'Token expired: %s', expiresRelative: 'Expires: %1$s (%2$s remaining)',
   lessThan1min: '< 1 min', errorOccurred: 'An error occurred',
 }
 

@@ -100,6 +100,7 @@ class TokenIssuer
     {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- no WP API for prefix-based option scan
         $rows = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
@@ -138,6 +139,7 @@ class TokenIssuer
     {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- no WP API for prefix-based option scan
         $rows = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",

@@ -12,7 +12,7 @@
 
 set -euo pipefail
 
-PLUGIN_SLUG="wp-preview-token"
+PLUGIN_SLUG="preview-token"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_DIR="$(mktemp -d)"
 DIST_DIR="${ROOT_DIR}/dist"
@@ -50,6 +50,9 @@ for f in .gitignore .gitattributes .distignore .phpunit.result.cache \
           phpunit.xml patchwork.json; do
     rm -f "${STAGE:?}/${f}"
 done
+# Rename main plugin file to match the slug (dir name = slug = preview-token)
+[ -f "${STAGE}/wp-preview-token.php" ] && mv "${STAGE}/wp-preview-token.php" "${STAGE}/preview-token.php"
+
 # POT templates and macOS metadata
 find "${STAGE}/languages" -name "*.pot" -delete 2>/dev/null || true
 find "${STAGE}" -name ".DS_Store" -delete 2>/dev/null || true

@@ -17,7 +17,7 @@ final class Constants
 {
     // ── REST API ─────────────────────────────────────────────────────────────
 
-    public const REST_NAMESPACE = 'wp-preview-token/v1';
+    public const REST_NAMESPACE = 'preview-token/v1';
 
     public const ROUTE_TOKEN   = '/token';
     public const ROUTE_PREVIEW = '/preview';

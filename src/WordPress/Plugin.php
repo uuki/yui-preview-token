@@ -28,7 +28,7 @@ class Plugin
     public function init(): void
     {
         load_plugin_textdomain(
-            'wp-preview-token',
+            'preview-token',
             false,
             dirname(plugin_basename(WPT_PLUGIN_FILE)) . '/languages'
         );

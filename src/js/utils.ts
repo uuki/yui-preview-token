@@ -3,9 +3,16 @@ import { PRESET_SECONDS } from './constants'
 
 export { PRESET_SECONDS }
 
-/** Minimal %s-based string interpolation (avoids @wordpress/i18n sprintf dep). */
-export const fmt = (template: string, ...args: (string | number)[]): string =>
-  args.reduce<string>((s, a) => s.replace('%s', String(a)), template)
+/**
+ * Minimal sprintf supporting both %s (sequential) and %1$s/%2$s (ordered)
+ * placeholders — avoids the @wordpress/i18n sprintf dependency.
+ */
+export const fmt = (template: string, ...args: (string | number)[]): string => {
+  // Handle ordered placeholders (%1$s, %2$s, …)
+  let result = template.replace(/%(\d+)\$s/g, (_, i) => String(args[parseInt(i, 10) - 1] ?? ''))
+  // Handle remaining sequential %s placeholders
+  return args.reduce<string>((s, a) => s.replace('%s', String(a)), result)
+}
 
 const i18n = (): WptI18n | undefined => wptPreviewData?.i18n
 

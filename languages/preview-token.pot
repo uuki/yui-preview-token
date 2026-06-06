@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Preview Token 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/uuki/wp-preview-token/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/uuki/preview-token/issues\n"
 "POT-Creation-Date: 2026-06-06T00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -172,7 +172,7 @@ msgstr ""
 
 #. translators: 1: expiry date, 2: relative time remaining
 #: src/WordPress/AdminScripts.php
-msgid "Expires: %s (%s remaining)"
+msgid "Expires: %1$s (%2$s remaining)"
 msgstr ""
 
 #: src/WordPress/AdminScripts.php

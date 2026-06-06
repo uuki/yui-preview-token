@@ -90,7 +90,7 @@ class AdminScripts
 
         add_meta_box(
             'wpt-preview',
-            __('External Preview', 'wp-preview-token'),
+            __('External Preview', 'preview-token'),
             [$this, 'render_classic_meta_box'],
             null,
             'side',
@@ -111,36 +111,36 @@ class AdminScripts
     private function preview_data(): array
     {
         return [
-            'tokenBase'     => rest_url('wp-preview-token/v1/token'),
+            'tokenBase'     => rest_url(Constants::REST_NAMESPACE . Constants::ROUTE_TOKEN),
             'nonce'         => wp_create_nonce('wp_rest'),
             'allowNoExpiry' => $this->settings->get_allow_no_expiry(),
             'i18n'          => [
                 // Preset labels
-                'preset1h'        => __('1 hour',    'wp-preview-token'),
-                'preset24h'       => __('24 hours',  'wp-preview-token'),
-                'preset30d'       => __('30 days',   'wp-preview-token'),
-                'presetCustom'    => __('Custom',    'wp-preview-token'),
-                'presetNoExpiry'  => __('No expiry', 'wp-preview-token'),
+                'preset1h'        => __('1 hour',    'preview-token'),
+                'preset24h'       => __('24 hours',  'preview-token'),
+                'preset30d'       => __('30 days',   'preview-token'),
+                'presetCustom'    => __('Custom',    'preview-token'),
+                'presetNoExpiry'  => __('No expiry', 'preview-token'),
                 // Panel UI
-                'loading'         => __('Loading…',                  'wp-preview-token'),
-                'expiry'          => __('Expiry',                    'wp-preview-token'),
-                'update'          => __('Update',                    'wp-preview-token'),
-                'cancel'          => __('Cancel',                    'wp-preview-token'),
-                'openPreview'     => __('Open external preview',     'wp-preview-token'),
-                'copyPreviewUrl'  => __('Copy external preview URL', 'wp-preview-token'),
-                'changeExpiry'    => __('Change expiry',             'wp-preview-token'),
-                'deleteToken'     => __('Delete',                    'wp-preview-token'),
-                'deleteConfirm'   => __('Delete this token?',        'wp-preview-token'),
-                'yes'             => __('Yes',                       'wp-preview-token'),
-                'generateToken'   => __('Generate token',            'wp-preview-token'),
-                'regenerateToken' => __('Regenerate token',          'wp-preview-token'),
+                'loading'         => __('Loading…',                  'preview-token'),
+                'expiry'          => __('Expiry',                    'preview-token'),
+                'update'          => __('Update',                    'preview-token'),
+                'cancel'          => __('Cancel',                    'preview-token'),
+                'openPreview'     => __('Open external preview',     'preview-token'),
+                'copyPreviewUrl'  => __('Copy external preview URL', 'preview-token'),
+                'changeExpiry'    => __('Change expiry',             'preview-token'),
+                'deleteToken'     => __('Delete',                    'preview-token'),
+                'deleteConfirm'   => __('Delete this token?',        'preview-token'),
+                'yes'             => __('Yes',                       'preview-token'),
+                'generateToken'   => __('Generate token',            'preview-token'),
+                'regenerateToken' => __('Regenerate token',          'preview-token'),
                 // Status — %s is a placeholder substituted in JS
                 /* translators: %s: token expiry date */
-                'tokenExpired'    => __('Token expired: %s',          'wp-preview-token'),
+                'tokenExpired'    => __('Token expired: %s',          'preview-token'),
                 /* translators: 1: expiry date, 2: relative time remaining */
-                'expiresRelative' => __('Expires: %s (%s remaining)', 'wp-preview-token'),
-                'lessThan1min'    => __('< 1 min',                    'wp-preview-token'),
-                'errorOccurred'   => __('An error occurred',          'wp-preview-token'),
+                'expiresRelative' => __('Expires: %1$s (%2$s remaining)', 'preview-token'),
+                'lessThan1min'    => __('< 1 min',                    'preview-token'),
+                'errorOccurred'   => __('An error occurred',          'preview-token'),
             ],
         ];
     }

@@ -11,7 +11,7 @@ namespace WPT\WordPress;
  * Each line is prefixed with [wpt] to distinguish WPT entries from other PHP errors.
  *
  * Custom output: define WPT_LOG_FILE in wp-config.php to write to a dedicated file.
- *   define('WPT_LOG_FILE', '/var/log/wp-preview-token.log');
+ *   define('WPT_LOG_FILE', '/var/log/preview-token.log');
  *
  * Logged events:
  *   - token issued / used                  (lifecycle)
@@ -81,7 +81,7 @@ class AuditLogger
             $line = sprintf("[%s] %s\n", gmdate('Y-m-d\TH:i:s\Z'), $message);
             $this->write_to_file(WPT_LOG_FILE, $line);
         } else {
-            error_log($message);
+            error_log($message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional audit logger
         }
     }
 
@@ -91,7 +91,7 @@ class AuditLogger
         if (!is_dir($dir)) {
             wp_mkdir_p($dir);
         }
-        @error_log($line, 3, $path);
+        @error_log($line, 3, $path); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional audit logger
     }
 
     private function get_ip(): string
