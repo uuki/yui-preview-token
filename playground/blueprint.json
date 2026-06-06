@@ -12,6 +12,13 @@
       "pluginPath": "wp-preview-token/wp-preview-token.php"
     },
     {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "wordpress.org/plugins",
+        "slug": "plugin-check"
+      }
+    },
+    {
       "step": "runPHP",
       "code": "<?php\nrequire '/wordpress/wp-load.php';\n$dir = WP_PLUGIN_DIR . '/classic-editor-fixture';\nif (!is_dir($dir)) mkdir($dir, 0755, true);\nfile_put_contents($dir . '/classic-editor-fixture.php', implode(\"\\n\", ['<?php','/*','Plugin Name: Classic Editor (Test Fixture)','Description: Disables the block editor for Classic Editor E2E testing.','Version: 1.0','*/','add_filter(\"use_block_editor_for_post\", \"__return_false\", 100);','']));\n?>"
     },

@@ -92,6 +92,46 @@ class TokenIssuer
     }
 
     /**
+     * Return all issued tokens, enriched with post meta, sorted newest-first.
+     *
+     * @return array<int, array{hash:string,post_id:int,user_id:int,expires_at:int,issued_at:int}>
+     */
+    public function get_all_tokens(): array
+    {
+        global $wpdb;
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
+                $wpdb->esc_like(self::OPTIONS_PREFIX) . '%'
+            )
+        );
+
+        $tokens = [];
+        foreach ($rows as $row) {
+            $data = maybe_unserialize($row->option_value);
+            if (!is_array($data)) {
+                continue;
+            }
+            $post_id = (int) ($data['post_id'] ?? 0);
+            if (!$post_id) {
+                continue;
+            }
+            $tokens[] = [
+                'hash'       => substr((string) $row->option_name, strlen(self::OPTIONS_PREFIX)),
+                'post_id'    => $post_id,
+                'user_id'    => (int) ($data['user_id'] ?? 0),
+                'expires_at' => (int) ($data['expires_at'] ?? 0),
+                'issued_at'  => (int) get_post_meta($post_id, self::META_ISSUED_AT, true),
+            ];
+        }
+
+        usort($tokens, static fn(array $a, array $b): int => $b['issued_at'] - $a['issued_at']);
+
+        return $tokens;
+    }
+
+    /**
      * Remove expired wpt_tk_* options. Called by WP Cron daily.
      */
     public function cleanup_expired(): void

@@ -140,3 +140,114 @@ msgstr "1分未満"
 
 msgid "An error occurred"
 msgstr "エラーが発生しました"
+
+msgid "requests per window"
+msgstr "リクエスト / ウィンドウ"
+
+msgid "seconds"
+msgstr "秒"
+
+#: src/WordPress/Settings.php
+msgid "Settings"
+msgstr "設定"
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "Issued Tokens"
+msgstr "発行済みトークン"
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "Security Warning"
+msgstr "セキュリティ警告"
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible."
+msgstr "ワイルドカード（*）を使用すると、有効なトークンを持つ任意のオリジンからドラフトコンテンツにアクセスできます。できる限り具体的なオリジンパターンを指定してください。"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Delete Expired"
+msgstr "期限切れを削除"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Token revoked."
+msgstr "トークンを失効させました。"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expired tokens deleted."
+msgstr "期限切れトークンを削除しました。"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post"
+msgstr "投稿"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post Status"
+msgstr "投稿ステータス"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Token Status"
+msgstr "トークンステータス"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Issued At"
+msgstr "発行日時"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expires At"
+msgstr "有効期限"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Issued By"
+msgstr "発行者"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Active"
+msgstr "有効"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expired"
+msgstr "期限切れ"
+
+#: src/WordPress/TokenAdmin.php
+msgid "(no title)"
+msgstr "（タイトルなし）"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post deleted"
+msgstr "投稿削除済み"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Revoke"
+msgstr "失効"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Revoke this token?"
+msgstr "このトークンを失効させますか？"
+
+#: src/WordPress/TokenAdmin.php
+msgid "No tokens have been issued yet."
+msgstr "まだトークンが発行されていません。"
+
+#. translators: %d: number of tokens
+#: src/WordPress/TokenAdmin.php
+msgid "%d token(s) issued in total."
+msgstr "合計 %d 件のトークンが発行されています。"
+
+#: src/WordPress/Settings.php
+msgid "Skip HTTPS Check"
+msgstr "HTTPS チェックをスキップ"
+
+#: src/WordPress/Settings.php
+msgid "Enable (development only)"
+msgstr "有効にする（開発環境のみ）"
+
+#: src/WordPress/Settings.php
+msgid "By default the preview endpoint requires HTTPS so that tokens cannot be intercepted in transit. Enable this option only when running WordPress on a local development environment where HTTPS is unavailable."
+msgstr "デフォルトでは、トークンが通信経路上で傍受されるのを防ぐためにプレビューエンドポイントは HTTPS を要求します。このオプションは HTTPS が利用できないローカル開発環境でのみ有効にしてください。"
+
+#: src/WordPress/Settings.php
+msgid "The HTTPS check is currently disabled. Preview tokens can be sent over unencrypted HTTP. Do not use this setting in a production environment."
+msgstr "現在 HTTPS チェックが無効になっています。プレビュートークンが暗号化されていない HTTP 通信で送信される可能性があります。本番環境では絶対に使用しないでください。"
+
+#: src/WordPress/Settings.php
+msgid "If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting."
+msgstr "wp-config.php で WPT_SKIP_HTTPS_CHECK 定数を定義している場合は、この設定よりも優先されます。"

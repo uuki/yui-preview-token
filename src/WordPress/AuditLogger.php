@@ -13,14 +13,22 @@ namespace WPT\WordPress;
  * Custom output: define WPT_LOG_FILE in wp-config.php to write to a dedicated file.
  *   define('WPT_LOG_FILE', '/var/log/wp-preview-token.log');
  *
- * Logged events: token issued, token used.
+ * Logged events:
+ *   - token issued / used                  (lifecycle)
+ *   - invalid_token / rate_limit_exceeded  (security: brute-force / abuse detection)
+ *   - capability_denied                    (security: privilege escalation attempts)
  */
 class AuditLogger
 {
     public function register(): void
     {
-        add_action('wpt_token_issued', [$this, 'on_token_issued'], 10, 2);
-        add_action('wpt_token_used',   [$this, 'on_token_used'],   10, 2);
+        // Token lifecycle
+        add_action('wpt_token_issued',      [$this, 'on_token_issued'],      10, 2);
+        add_action('wpt_token_used',        [$this, 'on_token_used'],        10, 2);
+        // Security events
+        add_action('wpt_invalid_token',     [$this, 'on_invalid_token'],     10, 1);
+        add_action('wpt_rate_limit_exceeded', [$this, 'on_rate_limit_exceeded'], 10, 2);
+        add_action('wpt_capability_denied', [$this, 'on_capability_denied'], 10, 2);
     }
 
     public function on_token_issued(int $post_id, int $user_id): void
@@ -33,6 +41,23 @@ class AuditLogger
         $this->write('used', $post_id, $user_id);
     }
 
+    public function on_invalid_token(string $ip): void
+    {
+        $this->write_security('invalid_token', "ip={$ip}");
+    }
+
+    public function on_rate_limit_exceeded(string $ip, string $endpoint): void
+    {
+        $this->write_security('rate_limit_exceeded', "ip={$ip} endpoint={$endpoint}");
+    }
+
+    public function on_capability_denied(int $user_id, int $post_id): void
+    {
+        $this->write_security('capability_denied', "user_id={$user_id} post_id={$post_id} ip={$this->get_ip()}");
+    }
+
+    // ── Internal ──────────────────────────────────────────────────────────────
+
     private function write(string $event, int $post_id, int $user_id): void
     {
         $message = sprintf(
@@ -42,15 +67,20 @@ class AuditLogger
             $user_id,
             $this->get_ip()
         );
+        $this->output($message);
+    }
 
+    private function write_security(string $event, string $context): void
+    {
+        $this->output(sprintf('[wpt] event=%s %s', $event, $context));
+    }
+
+    private function output(string $message): void
+    {
         if (defined('WPT_LOG_FILE') && is_string(WPT_LOG_FILE) && WPT_LOG_FILE !== '') {
-            // Write to the application-specific file. Prepend a timestamp since
-            // error_log type 3 does not add one automatically.
             $line = sprintf("[%s] %s\n", gmdate('Y-m-d\TH:i:s\Z'), $message);
             $this->write_to_file(WPT_LOG_FILE, $line);
         } else {
-            // Delegate to PHP's system error log. PHP prepends its own timestamp,
-            // and WordPress routes this to WP_DEBUG_LOG when it is configured.
             error_log($message);
         }
     }
@@ -61,7 +91,6 @@ class AuditLogger
         if (!is_dir($dir)) {
             wp_mkdir_p($dir);
         }
-        // Silently discard if the file is not writable.
         @error_log($line, 3, $path);
     }
 

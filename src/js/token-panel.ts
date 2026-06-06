@@ -185,10 +185,9 @@ export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) 
     )
   }
 
-  return el('div', { 'data-wpt-panel': isExpired ? 'expired' : 'empty' },
-    isExpired
-      ? el('p', { style: { ...S_ERROR, marginBottom: '8px' } }, fmt(t().tokenExpired, expiry?.abs ?? ''))
-      : null,
+  // Treat expired tokens the same as no token — show the "Generate" view
+  // without an expiry-error message. Conceptually, an expired token is gone.
+  return el('div', { 'data-wpt-panel': 'empty' },
     expirySelector(),
     error ? el('p', { style: S_ERROR }, error) : null,
     el('span', { 'data-wpt-action': 'generate' },
@@ -197,7 +196,7 @@ export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) 
         onClick: doGenerate,
         isBusy: busy,
         style: { width: '100%', justifyContent: 'center', marginTop: '8px' },
-      }, isExpired ? t().regenerateToken : t().generateToken),
+      }, t().generateToken),
     ),
   )
 }

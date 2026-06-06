@@ -49,8 +49,35 @@ class Settings
 
     public function register(): void
     {
-        add_action('admin_menu', [$this, 'add_settings_page']);
-        add_action('admin_init', [$this, 'register_fields']);
+        add_action('admin_menu',            [$this, 'add_settings_page']);
+        add_action('admin_init',            [$this, 'register_fields']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_settings_scripts']);
+    }
+
+    public function enqueue_settings_scripts(string $hook): void
+    {
+        if ($hook !== 'settings_page_wp-preview-token') {
+            return;
+        }
+
+        $plugin_url  = rtrim(plugin_dir_url(WPT_PLUGIN_FILE), '/');
+        $asset_path  = dirname(dirname(__DIR__)) . '/assets/js/settings.iife.js';
+        $version     = file_exists($asset_path) ? (string) filemtime($asset_path) : '0';
+
+        wp_enqueue_script(
+            'wpt-settings',
+            "{$plugin_url}/assets/js/settings.iife.js",
+            [],
+            $version,
+            true
+        );
+
+        wp_localize_script('wpt-settings', 'wptSettingsData', [
+            'field'        => Constants::OPTION_ALLOWED_ORIGINS . '[]',
+            'removeLabel'  => __('Remove this origin', 'wp-preview-token'),
+            'warningTitle' => __('Security Warning', 'wp-preview-token'),
+            'warningText'  => __('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'wp-preview-token'),
+        ]);
     }
 
     public function add_settings_page(): void
@@ -114,6 +141,12 @@ class Settings
             'default'           => false,
         ]);
 
+        register_setting('wpt_settings', Constants::OPTION_SKIP_HTTPS_CHECK, [
+            'type'              => 'boolean',
+            'sanitize_callback' => static fn($v): bool => (bool) $v,
+            'default'           => false,
+        ]);
+
         add_settings_section('wpt_main', '', '__return_null', 'wp-preview-token');
 
         add_settings_field('wpt_frontend_url',        __('External Preview URL',    'wp-preview-token'), [$this, 'render_frontend_url'],        'wp-preview-token', 'wpt_main');
@@ -122,6 +155,7 @@ class Settings
         add_settings_field('wpt_rate_limit_requests', __('Rate Limit',              'wp-preview-token'), [$this, 'render_rate_limit_requests'], 'wp-preview-token', 'wpt_main');
         add_settings_field('wpt_rate_limit_window',   __('Rate Limit Window',       'wp-preview-token'), [$this, 'render_rate_limit_window'],   'wp-preview-token', 'wpt_main');
         add_settings_field('wpt_allow_no_expiry',     __('Allow No-Expiry Tokens',  'wp-preview-token'), [$this, 'render_allow_no_expiry'],     'wp-preview-token', 'wpt_main');
+        add_settings_field('wpt_skip_https_check',    __('Skip HTTPS Check',        'wp-preview-token'), [$this, 'render_skip_https_check'],    'wp-preview-token', 'wpt_main');
     }
 
     public function render_page(): void
@@ -131,9 +165,28 @@ class Settings
         if (!current_user_can('manage_options')) {
             wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'wp-preview-token'));
         }
+
+        $current_tab = sanitize_key($_GET['tab'] ?? 'settings');
+        $base_url    = admin_url('options-general.php?page=wp-preview-token');
+        $tabs        = [
+            'settings' => __('Settings',      'wp-preview-token'),
+            'tokens'   => __('Issued Tokens', 'wp-preview-token'),
+        ];
         ?>
         <div class="wrap">
             <h1>WP Preview Token</h1>
+            <nav class="nav-tab-wrapper" style="margin-bottom:20px">
+                <?php foreach ($tabs as $slug => $label): ?>
+                <a href="<?php echo esc_url(add_query_arg('tab', $slug, $base_url)); ?>"
+                   class="nav-tab<?php echo $current_tab === $slug ? ' nav-tab-active' : ''; ?>">
+                    <?php echo esc_html($label); ?>
+                </a>
+                <?php endforeach; ?>
+            </nav>
+
+            <?php if ($current_tab === 'tokens'): ?>
+                <?php do_action('wpt_settings_render_tokens_tab'); ?>
+            <?php else: ?>
             <form method="post" action="options.php">
                 <?php
                 settings_fields('wpt_settings');
@@ -141,6 +194,7 @@ class Settings
                 submit_button();
                 ?>
             </form>
+            <?php endif; ?>
         </div>
         <?php
     }
@@ -182,65 +236,21 @@ class Settings
         <button type="button" id="wpt-add-origin" class="button" style="margin-top:6px">
             <?php esc_html_e('+ Add origin', 'wp-preview-token'); ?>
         </button>
+        <?php
+        // Server-side warning when * is already saved (shown before JS loads).
+        if (in_array('*', $this->get_allowed_origins(), true)):
+        ?>
+        <div id="wpt-wildcard-warning" class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
+            <strong><?php esc_html_e('Security Warning', 'wp-preview-token'); ?>:</strong>
+            <?php esc_html_e('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'wp-preview-token'); ?>
+        </div>
+        <?php endif; ?>
         <p class="description" style="margin-top:6px">
             <?php esc_html_e('Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers.', 'wp-preview-token'); ?>
         </p>
-        <script>
-        (function () {
-            var list   = document.getElementById('wpt-origins-list');
-            var addBtn = document.getElementById('wpt-add-origin');
-            var field  = <?php echo wp_json_encode(Constants::OPTION_ALLOWED_ORIGINS . '[]'); ?>;
-
-            function makeRow(value) {
-                var row   = document.createElement('div');
-                row.className = 'wpt-origin-row';
-                row.style.cssText = 'display:flex;gap:6px;align-items:center';
-
-                var input = document.createElement('input');
-                input.type        = 'text';
-                input.name        = field;
-                input.value       = value || '';
-                input.className   = 'regular-text code';
-                input.placeholder = 'https://example.com  or  https://*.example.com';
-                input.style.cssText = 'flex:1;font-family:monospace';
-
-                var btn = document.createElement('button');
-                btn.type      = 'button';
-                btn.className = 'button wpt-remove-origin';
-                btn.setAttribute('aria-label', <?php echo wp_json_encode(__('Remove this origin', 'wp-preview-token')); ?>);
-                btn.innerHTML = '&#x2715;';
-                btn.addEventListener('click', function () { removeRow(row); });
-
-                row.appendChild(input);
-                row.appendChild(btn);
-                return row;
-            }
-
-            function removeRow(row) {
-                var rows = list.querySelectorAll('.wpt-origin-row');
-                if (rows.length <= 1) {
-                    // Keep one empty row instead of removing the last one
-                    row.querySelector('input').value = '';
-                    return;
-                }
-                list.removeChild(row);
-            }
-
-            // Wire up existing remove buttons
-            list.querySelectorAll('.wpt-remove-origin').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    removeRow(btn.closest('.wpt-origin-row'));
-                });
-            });
-
-            addBtn.addEventListener('click', function () {
-                var row = makeRow('');
-                list.appendChild(row);
-                row.querySelector('input').focus();
-            });
-        }());
-        </script>
         <?php
+        // JS (settings.iife.js) is enqueued via enqueue_settings_scripts() and
+        // receives wptSettingsData via wp_localize_script — no inline script needed.
     }
 
     public function render_min_capability(): void
@@ -351,5 +361,38 @@ class Settings
     public function get_allow_no_expiry(): bool
     {
         return (bool) get_option(Constants::OPTION_ALLOW_NO_EXPIRY, false);
+    }
+
+    public function render_skip_https_check(): void
+    {
+        $enabled = $this->get_skip_https_check();
+        ?>
+        <fieldset>
+            <label>
+                <input type="checkbox"
+                       name="<?php echo esc_attr(Constants::OPTION_SKIP_HTTPS_CHECK); ?>"
+                       value="1"
+                       <?php checked($enabled); ?> />
+                <?php esc_html_e('Enable (development only)', 'wp-preview-token'); ?>
+            </label>
+            <p class="description">
+                <?php esc_html_e('By default the preview endpoint requires HTTPS so that tokens cannot be intercepted in transit. Enable this option only when running WordPress on a local development environment where HTTPS is unavailable.', 'wp-preview-token'); ?>
+            </p>
+            <?php if ($enabled): ?>
+            <div class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
+                <strong><?php esc_html_e('Security Warning', 'wp-preview-token'); ?>:</strong>
+                <?php esc_html_e('The HTTPS check is currently disabled. Preview tokens can be sent over unencrypted HTTP. Do not use this setting in a production environment.', 'wp-preview-token'); ?>
+            </div>
+            <?php endif; ?>
+            <p class="description" style="margin-top:6px;font-style:italic">
+                <?php esc_html_e('If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting.', 'wp-preview-token'); ?>
+            </p>
+        </fieldset>
+        <?php
+    }
+
+    public function get_skip_https_check(): bool
+    {
+        return (bool) get_option(Constants::OPTION_SKIP_HTTPS_CHECK, false);
     }
 }

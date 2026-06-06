@@ -33,6 +33,7 @@ final class Constants
     public const OPTION_RATE_LIMIT_REQUESTS = 'wpt_rate_limit_requests';
     public const OPTION_RATE_LIMIT_WINDOW   = 'wpt_rate_limit_window';
     public const OPTION_ALLOW_NO_EXPIRY     = 'wpt_allow_no_expiry';
+    public const OPTION_SKIP_HTTPS_CHECK    = 'wpt_skip_https_check';
 
     private function __construct() {}
 }
