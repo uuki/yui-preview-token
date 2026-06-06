@@ -424,7 +424,9 @@ test.describe('A10 — SSRF', () => {
         expect(Object.keys(body).sort()).toEqual(
             ['expires_at', 'issued_at', 'issued_by', 'preview_url'].sort()
         );
-        // preview_url embeds the token as a query param to the frontend — not a WP-internal URL
+        // preview_url embeds p, preview, and token params pointing to the frontend
+        expect(body.preview_url).toMatch(/[?&]p=\d+/);
+        expect(body.preview_url).toMatch(/[?&]preview=true/);
         expect(body.preview_url).toMatch(/[?&]token=[0-9a-f]{64}/);
     });
 
