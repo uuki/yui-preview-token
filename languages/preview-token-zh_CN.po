@@ -260,3 +260,6 @@ msgstr "速率限制的计量时间窗口（秒）。每个窗口到期后，请
 
 msgid "Expired tokens are rejected immediately upon use. However, the database records are removed once daily by WP Cron, so expired tokens may remain visible in this list until the next scheduled cleanup. To remove them right away, use the \"Delete Expired\" button above."
 msgstr "已过期的令牌在使用时会被立即拒绝。但是，数据库记录每天由 WP Cron 清理一次，因此过期令牌可能在下次计划清理前仍显示在此列表中。如需立即删除，请使用上方的「删除已过期」按钮。"
+
+msgid "Save your draft before opening the external preview to ensure the latest content is reflected."
+msgstr "请在打开外部预览前保存草稿，以确保显示最新内容。"

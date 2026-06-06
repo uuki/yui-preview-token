@@ -34,10 +34,18 @@ if (!PluginDocumentSettingPanel) {
 
       if (!postId) return null
 
+      // Save unsaved Gutenberg changes before opening the external preview,
+      // so the token endpoint returns the latest edited content.
+      const onBeforeOpenPreview = async (): Promise<void> => {
+        const editor   = wp.data.select('core/editor') as { isEditedPostDirty: () => boolean }
+        const dispatch = wp.data.dispatch('core/editor') as { savePost: () => Promise<void> }
+        if (editor.isEditedPostDirty()) await dispatch.savePost()
+      }
+
       return el(
         PluginDocumentSettingPanel,
         { name: 'pvt-preview', title: 'External Preview', icon: 'site', initialOpen: true },
-        el(PvtTokenPanel, { postId, Btn: Button, SelectInput: SelectControl }),
+        el(PvtTokenPanel, { postId, Btn: Button, SelectInput: SelectControl, onBeforeOpenPreview }),
       )
     },
   })

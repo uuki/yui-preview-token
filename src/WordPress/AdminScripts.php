@@ -89,8 +89,10 @@ class AdminScripts
     public function render_classic_meta_box(\WP_Post $post): void
     {
         printf(
-            '<div id="pvt-classic-meta-box-root" data-post-id="%d"></div>',
-            esc_attr($post->ID)
+            '<div id="pvt-classic-meta-box-root" data-post-id="%d"></div>'
+            . '<p class="description" style="margin-top:6px;font-size:11px">%s</p>',
+            esc_attr($post->ID),
+            esc_html__('Save your draft before opening the external preview to ensure the latest content is reflected.', 'preview-token')
         );
     }
 

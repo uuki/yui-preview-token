@@ -260,3 +260,6 @@ msgstr "レート制限を計測する時間ウィンドウ（秒単位）。各
 
 msgid "Expired tokens are rejected immediately upon use. However, the database records are removed once daily by WP Cron, so expired tokens may remain visible in this list until the next scheduled cleanup. To remove them right away, use the \"Delete Expired\" button above."
 msgstr "期限切れトークンは使用時に即座に拒否されます。ただし、データベースのレコードは WP Cron によって1日1回削除されるため、次のクリーンアップが実行されるまでこのリストに期限切れとして表示される場合があります。今すぐ削除するには、上の「期限切れを削除」ボタンをご利用ください。"
+
+msgid "Save your draft before opening the external preview to ensure the latest content is reflected."
+msgstr "最新のコンテンツを反映するために、外部プレビューを開く前に下書きを保存してください。"

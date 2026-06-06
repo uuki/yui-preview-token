@@ -45,12 +45,14 @@ const textLink = (label: string, onClick: () => void, style?: React.CSSPropertie
 // ── Main component ────────────────────────────────────────────────────────────
 
 export interface PvtTokenPanelProps {
-  postId:      number | null
-  Btn:         BtnComponent
-  SelectInput: SelectComponent
+  postId:               number | null
+  Btn:                  BtnComponent
+  SelectInput:          SelectComponent
+  /** Called before opening the preview URL. Use to save unsaved changes (e.g. Gutenberg savePost). */
+  onBeforeOpenPreview?: () => Promise<void>
 }
 
-export const PvtTokenPanel = ({ postId, Btn, SelectInput }: PvtTokenPanelProps) => {
+export const PvtTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }: PvtTokenPanelProps) => {
   const allowNoExpiry = pvtPreviewData?.allowNoExpiry ?? false
   const PRESET_OPTIONS: SelectOption[] = getPresetOptions(allowNoExpiry)
 
@@ -108,6 +110,10 @@ export const PvtTokenPanel = ({ postId, Btn, SelectInput }: PvtTokenPanelProps) 
   const doCopy = () => {
     if (token?.preview_url) navigator.clipboard?.writeText(token.preview_url)
   }
+  const doOpenPreview = () => withBusy(async () => {
+    if (onBeforeOpenPreview) await onBeforeOpenPreview()
+    if (token?.preview_url) window.open(token.preview_url, '_blank')
+  })
 
   const expirySelector = () => el('div', null,
     el(SelectInput, {
@@ -152,8 +158,8 @@ export const PvtTokenPanel = ({ postId, Btn, SelectInput }: PvtTokenPanelProps) 
         el('span', { 'data-pvt-action': 'preview', style: { flex: '1' } },
           el(Btn, {
             variant: 'secondary',
-            href: token?.preview_url,
-            target: '_blank',
+            onClick: doOpenPreview,
+            isBusy: busy,
             style: { width: '100%', justifyContent: 'center' },
           }, t().openPreview),
         ),
