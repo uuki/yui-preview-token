@@ -14,7 +14,7 @@
   "devDependencies": {
     "@playwright/test": "^1.48.0",
     "@wp-playground/cli": "*",
-    "concurrently": "^9.0.0",
+    "concurrently": "^10.0.3",
     "vite": "^6.0.0"
   }
 }
