@@ -11,3 +11,4 @@ assets/js/
 playwright-report/
 test-results/
 dist/
+database/
