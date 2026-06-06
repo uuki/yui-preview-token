@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # bin/publish.sh — Build a production-ready zip for WordPress.org submission.
 #
-# Output: dist/wp-preview-token.zip
+# Output: dist/preview-token.zip
 #
 # Checklist (WordPress.org "production-ready" requirement):
 #   ✓ TypeScript compiled to assets/js/*.iife.js
@@ -50,9 +50,6 @@ for f in .gitignore .gitattributes .distignore .phpunit.result.cache \
           phpunit.xml patchwork.json; do
     rm -f "${STAGE:?}/${f}"
 done
-# Rename main plugin file to match the slug (dir name = slug = preview-token)
-[ -f "${STAGE}/wp-preview-token.php" ] && mv "${STAGE}/wp-preview-token.php" "${STAGE}/preview-token.php"
-
 # POT templates and macOS metadata
 find "${STAGE}/languages" -name "*.pot" -delete 2>/dev/null || true
 find "${STAGE}" -name ".DS_Store" -delete 2>/dev/null || true

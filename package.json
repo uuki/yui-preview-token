@@ -1,5 +1,5 @@
 {
-  "name": "wp-preview-token",
+  "name": "preview-token",
   "private": true,
   "scripts": {
     "build": "tsdown",

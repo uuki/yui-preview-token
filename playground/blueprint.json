@@ -9,7 +9,7 @@
   "steps": [
     {
       "step": "activatePlugin",
-      "pluginPath": "wp-preview-token/wp-preview-token.php"
+      "pluginPath": "preview-token/preview-token.php"
     },
     {
       "step": "installPlugin",
