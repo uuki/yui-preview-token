@@ -3,7 +3,7 @@ Contributors: uuki
 Tags: preview, headless, rest-api, token, draft
 Requires at least: 5.9
 Tested up to: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -177,6 +177,15 @@ TypeScript ソースから JavaScript バンドルを再ビルドするには：
 8. **クイック編集パネル** — エディターを開かずに投稿一覧画面からトークンを管理します。
 
 == 変更履歴 ==
+
+= 1.1.0 =
+* プレビュー URL に `p=<投稿ID>&preview=true` を追加。クライアント側でどの投稿かを URL のみで特定できるように。
+* 内部識別子のプレフィックスを `wpt_` から `pvt_`（Preview Token）に変更。
+* 発行済みトークン管理タブを追加。一覧表示・個別失効・期限切れ一括削除が可能。
+* CORS: 複数の許可オリジンとワイルドカードパターン（`https://*.example.com`）に対応。
+* 設定画面に「HTTPS チェックをスキップ」オプションを追加（開発環境向け）。
+* External Preview URL 未設定時のフォールバックとして `home_url()` を使用。
+* Plugin Check 対応: i18n・エスケープ・translators コメントの修正。
 
 = 1.0.0 =
 * 初回リリース。

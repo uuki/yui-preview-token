@@ -3,7 +3,7 @@ Contributors: uuki
 Tags: preview, headless, rest-api, token, draft
 Requires at least: 5.9
 Tested up to: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -177,6 +177,15 @@ Yes. When the Classic Editor plugin is active, the token panel appears as a meta
 8. **Quick Edit panel** — Token management directly from the post list screen, without opening the editor.
 
 == Changelog ==
+
+= 1.1.0 =
+* Preview URL now includes `p=<post_id>&preview=true` alongside `token=` for client-side post identification.
+* Renamed all internal identifiers from `wpt_` prefix to `pvt_` (Preview Token) for clarity.
+* Added Issued Tokens admin tab: list, revoke, and bulk-delete expired tokens.
+* CORS: support multiple allowed origins with wildcard patterns (`https://*.example.com`).
+* Added "Skip HTTPS Check" toggle in settings (development environments).
+* Fallback to `home_url()` when External Preview URL is not configured.
+* Plugin Check compliance: i18n, escaping, and translators comment fixes.
 
 = 1.0.0 =
 * Initial release.
