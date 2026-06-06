@@ -46,7 +46,7 @@ msgid "Allow No-Expiry Tokens"
 msgstr ""
 
 #: src/WordPress/Settings.php
-msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress."
+msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress. If left empty, the WordPress site URL is used as a fallback."
 msgstr ""
 
 #: src/WordPress/Settings.php

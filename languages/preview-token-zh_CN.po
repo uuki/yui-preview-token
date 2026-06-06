@@ -39,8 +39,8 @@ msgstr "速率限制时间窗口"
 msgid "Allow No-Expiry Tokens"
 msgstr "允许无过期令牌"
 
-msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress."
-msgstr "用于渲染预览内容的外部客户端或前端的 URL。适用于无头架构（如 Astro、Next.js、Nuxt）和在 WordPress 外部渲染草稿内容的解耦架构。"
+msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress. If left empty, the WordPress site URL is used as a fallback."
+msgstr "用于渲染预览内容的外部客户端或前端的 URL。适用于无头架构（如 Astro、Next.js、Nuxt）和在 WordPress 外部渲染草稿内容的解耦架构。留空时将使用 WordPress 站点 URL 作为备用。"
 
 msgid "Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers."
 msgstr "支持通配符（如 https://*.example.com、*）。将所有字段留空可禁用 CORS 标头。"

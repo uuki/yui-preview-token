@@ -206,7 +206,7 @@ class Settings
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_FRONTEND_URL),
             esc_attr($this->get_frontend_url()),
-            esc_html__('URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress.', 'preview-token')
+            esc_html__('URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress. If left empty, the WordPress site URL is used as a fallback.', 'preview-token')
         );
     }
 
