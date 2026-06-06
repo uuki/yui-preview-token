@@ -106,14 +106,21 @@ This plugin is designed for **headless WordPress** setups where a decoupled fron
 4. Add the allowed CORS origin(s) for your frontend domain.
 5. Generate tokens from the Gutenberg sidebar, Quick Edit panel, or Classic Editor meta box.
 
+= JavaScript Source Code =
+
+The files in `assets/js/` are compiled and minified bundles. Per WordPress.org guidelines, the human-readable TypeScript source files are available at:
+
+https://github.com/uuki/preview-token/tree/main/src/js
+
 = Build from Source =
 
-The JavaScript bundles in `assets/js/` are compiled from TypeScript sources located in `src/js/`. To rebuild them:
+To rebuild the JavaScript bundles from the TypeScript sources:
 
-1. Install Node.js dependencies: `pnpm install`
-2. Compile: `pnpm run build`
+1. Clone the repository: `git clone https://github.com/uuki/preview-token.git`
+2. Install Node.js dependencies: `pnpm install`
+3. Compile: `pnpm run build`
 
-Full source code, including TypeScript sources and build configuration, is available at: https://github.com/uuki/preview-token
+The build configuration is defined in `tsdown.config.ts`. Each bundle in `assets/js/` corresponds to one entry point in `src/js/`.
 
 = Minimum Requirements =
 
