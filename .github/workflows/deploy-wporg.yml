@@ -1,0 +1,206 @@
+name: Deploy to WordPress.org
+
+# Triggers:
+#   - Push a tag like v1.2.3  →  automatic deploy
+#   - Manual dispatch          →  specify version explicitly
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g. 1.0.0 — without leading v)'
+        required: true
+
+# Required repository secrets:
+#   SVN_USERNAME  — WordPress.org username
+#   SVN_PASSWORD  — WordPress.org password (or application password)
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    environment: wordpress-org   # optional: gate behind an env protection rule
+
+    env:
+      PLUGIN_SLUG: preview-token
+      SVN_URL: https://plugins.svn.wordpress.org/preview-token
+
+    steps:
+      # ── 1. Source ─────────────────────────────────────────────────────────────
+
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      # ── 2. Resolve version ────────────────────────────────────────────────────
+      # Strip the leading "v" from the tag name, or use the manual input.
+
+      - name: Resolve version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── 3. Build assets ───────────────────────────────────────────────────────
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build TypeScript
+        run: pnpm run build
+
+      # ── 4. PHP dependencies (production only) ─────────────────────────────────
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install PHP dependencies (production)
+        run: composer install --no-dev --optimize-autoloader --no-interaction --quiet
+
+      # ── 5. Prepare production file tree ───────────────────────────────────────
+      # Mirror what bin/publish.sh does, but into a staging dir instead of a zip.
+
+      - name: Stage production files
+        run: |
+          STAGE="${{ runner.temp }}/stage/${{ env.PLUGIN_SLUG }}"
+          mkdir -p "$STAGE"
+
+          rsync -a \
+            --exclude='node_modules/' \
+            --exclude='.git/' \
+            --exclude='dist/' \
+            . "$STAGE/"
+
+          # Remove non-production paths (mirrors .distignore)
+          for d in .github .claude playground tests src/js docs bin; do
+            rm -rf "${STAGE:?}/$d"
+          done
+          for f in .gitignore .gitattributes .distignore .phpunit.result.cache \
+                   CLAUDE.md LICENSE package.json pnpm-lock.yaml \
+                   tsconfig.json tsdown.config.ts composer.json composer.lock \
+                   phpunit.xml patchwork.json; do
+            rm -f "${STAGE:?}/$f"
+          done
+          find "$STAGE/languages" -name '*.pot' -delete 2>/dev/null || true
+          find "$STAGE" -name '.DS_Store' -delete 2>/dev/null || true
+
+          echo "STAGE=$STAGE" >> "$GITHUB_ENV"
+
+      # ── 6. Checkout SVN ───────────────────────────────────────────────────────
+      # Shallow checkout of trunk + tags only (avoids downloading full history).
+
+      - name: Checkout SVN (trunk + tags)
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          SVN_DIR="${{ runner.temp }}/svn"
+          svn checkout "${{ env.SVN_URL }}" "$SVN_DIR" \
+            --depth immediates \
+            --no-auth-cache --non-interactive \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+
+          # Deepen trunk/ and tags/ so we can modify them
+          svn update "$SVN_DIR/trunk" --set-depth infinity \
+            --no-auth-cache --non-interactive \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+          svn update "$SVN_DIR/tags" --set-depth immediates \
+            --no-auth-cache --non-interactive \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+
+          echo "SVN_DIR=$SVN_DIR" >> "$GITHUB_ENV"
+
+      # ── 7. Sync staged files → SVN trunk/ ────────────────────────────────────
+      # rsync handles file additions and modifications; svn status catches deletions.
+
+      - name: Sync production files to trunk
+        run: |
+          rsync -rc --delete "${{ env.STAGE }}/" "${{ env.SVN_DIR }}/trunk/"
+
+          cd "${{ env.SVN_DIR }}"
+
+          # Stage new files
+          svn add trunk --force > /dev/null
+
+          # Stage deleted files (svn status shows '!' for missing tracked files)
+          svn status trunk \
+            | grep '^\!' \
+            | sed 's/^! *//' \
+            | xargs -r -I% svn rm "%" > /dev/null
+
+      # ── 8. Sync SVN assets/ (banners + icons) ─────────────────────────────────
+      # SVN assets/ lives at the repo root (outside trunk/).
+      # Source: local assets/ directory, excluding the js/ subdirectory.
+
+      - name: Sync plugin assets (banners / icons)
+        run: |
+          svn update "${{ env.SVN_DIR }}/assets" --set-depth infinity \
+            --no-auth-cache --non-interactive \
+            --username "${{ secrets.SVN_USERNAME }}" \
+            --password "${{ secrets.SVN_PASSWORD }}"
+
+          rsync -rc --delete \
+            --exclude='js/' \
+            assets/ "${{ env.SVN_DIR }}/assets/"
+
+          cd "${{ env.SVN_DIR }}"
+          svn add assets --force > /dev/null
+          svn status assets \
+            | grep '^\!' \
+            | sed 's/^! *//' \
+            | xargs -r -I% svn rm "%" > /dev/null
+
+      # ── 9. Create version tag ─────────────────────────────────────────────────
+      # svn cp is a local operation — the tag is committed in the same transaction.
+
+      - name: Create SVN tag
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          TAG_DIR="${{ env.SVN_DIR }}/tags/$VERSION"
+          if svn info "$TAG_DIR" > /dev/null 2>&1; then
+            echo "Tag $VERSION already exists in SVN — skipping tag creation."
+          else
+            svn cp "${{ env.SVN_DIR }}/trunk" "$TAG_DIR"
+            echo "Created tag $VERSION from trunk."
+          fi
+
+      # ── 10. Commit ────────────────────────────────────────────────────────────
+
+      - name: SVN commit
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          cd "${{ env.SVN_DIR }}"
+
+          # Verify there is something to commit
+          if svn status | grep -qE '^[MADR!]'; then
+            svn commit \
+              -m "Deploy version $VERSION" \
+              --no-auth-cache --non-interactive \
+              --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+            echo "✓ Deployed $VERSION to WordPress.org"
+          else
+            echo "Nothing to commit — SVN is already up to date."
+          fi
