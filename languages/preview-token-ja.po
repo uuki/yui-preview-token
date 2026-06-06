@@ -263,3 +263,9 @@ msgstr "期限切れトークンは使用時に即座に拒否されます。た
 
 msgid "Save your draft before opening the external preview to ensure the latest content is reflected."
 msgstr "最新のコンテンツを反映するために、外部プレビューを開く前に下書きを保存してください。"
+
+msgid "Allow External Token Issuance"
+msgstr "外部からのトークン発行を許可"
+
+msgid "When enabled, authenticated users with the required role can issue tokens via the REST API from outside the WordPress admin — for example from CI/CD pipelines or automated scripts. When disabled (default), token issuance is restricted to the WordPress admin interface."
+msgstr "有効にすると、必要なロールを持つ認証済みユーザーが WordPress 管理画面外から REST API 経由でトークンを発行できます（例：CI/CD パイプラインや自動化スクリプト）。無効（デフォルト）の場合、トークン発行は WordPress 管理画面からのみ可能です。"

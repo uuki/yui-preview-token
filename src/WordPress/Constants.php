@@ -32,8 +32,9 @@ final class Constants
     public const OPTION_MIN_CAPABILITY      = 'pvt_min_capability';
     public const OPTION_RATE_LIMIT_REQUESTS = 'pvt_rate_limit_requests';
     public const OPTION_RATE_LIMIT_WINDOW   = 'pvt_rate_limit_window';
-    public const OPTION_ALLOW_NO_EXPIRY     = 'pvt_allow_no_expiry';
-    public const OPTION_SKIP_HTTPS_CHECK    = 'pvt_skip_https_check';
+    public const OPTION_ALLOW_NO_EXPIRY         = 'pvt_allow_no_expiry';
+    public const OPTION_SKIP_HTTPS_CHECK        = 'pvt_skip_https_check';
+    public const OPTION_ALLOW_EXTERNAL_ISSUANCE = 'pvt_allow_external_issuance';
 
     private function __construct() {}
 }

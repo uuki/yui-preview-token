@@ -147,15 +147,22 @@ class Settings
             'default'           => false,
         ]);
 
+        register_setting('pvt_settings', Constants::OPTION_ALLOW_EXTERNAL_ISSUANCE, [
+            'type'              => 'boolean',
+            'sanitize_callback' => static fn($v): bool => (bool) $v,
+            'default'           => false,
+        ]);
+
         add_settings_section('pvt_main', '', '__return_null', 'preview-token');
 
-        add_settings_field('pvt_frontend_url',        __('External Preview URL',    'preview-token'), [$this, 'render_frontend_url'],        'preview-token', 'pvt_main');
-        add_settings_field('pvt_allowed_origins',     __('Allowed Origins (CORS)',  'preview-token'), [$this, 'render_allowed_origins'],     'preview-token', 'pvt_main');
-        add_settings_field('pvt_min_capability',      __('Minimum Capability',      'preview-token'), [$this, 'render_min_capability'],      'preview-token', 'pvt_main');
-        add_settings_field('pvt_rate_limit_requests', __('Rate Limit',              'preview-token'), [$this, 'render_rate_limit_requests'], 'preview-token', 'pvt_main');
-        add_settings_field('pvt_rate_limit_window',   __('Rate Limit Window',       'preview-token'), [$this, 'render_rate_limit_window'],   'preview-token', 'pvt_main');
-        add_settings_field('pvt_allow_no_expiry',     __('Allow No-Expiry Tokens',  'preview-token'), [$this, 'render_allow_no_expiry'],     'preview-token', 'pvt_main');
-        add_settings_field('pvt_skip_https_check',    __('Skip HTTPS Check',        'preview-token'), [$this, 'render_skip_https_check'],    'preview-token', 'pvt_main');
+        add_settings_field('pvt_frontend_url',             __('External Preview URL',          'preview-token'), [$this, 'render_frontend_url'],             'preview-token', 'pvt_main');
+        add_settings_field('pvt_allowed_origins',          __('Allowed Origins (CORS)',         'preview-token'), [$this, 'render_allowed_origins'],          'preview-token', 'pvt_main');
+        add_settings_field('pvt_min_capability',           __('Minimum Capability',             'preview-token'), [$this, 'render_min_capability'],           'preview-token', 'pvt_main');
+        add_settings_field('pvt_rate_limit_requests',      __('Rate Limit',                     'preview-token'), [$this, 'render_rate_limit_requests'],      'preview-token', 'pvt_main');
+        add_settings_field('pvt_rate_limit_window',        __('Rate Limit Window',              'preview-token'), [$this, 'render_rate_limit_window'],        'preview-token', 'pvt_main');
+        add_settings_field('pvt_allow_no_expiry',          __('Allow No-Expiry Tokens',         'preview-token'), [$this, 'render_allow_no_expiry'],          'preview-token', 'pvt_main');
+        add_settings_field('pvt_skip_https_check',         __('Skip HTTPS Check',               'preview-token'), [$this, 'render_skip_https_check'],         'preview-token', 'pvt_main');
+        add_settings_field('pvt_allow_external_issuance',  __('Allow External Token Issuance',  'preview-token'), [$this, 'render_allow_external_issuance'],  'preview-token', 'pvt_main');
     }
 
     public function render_page(): void
@@ -400,5 +407,23 @@ class Settings
     public function get_skip_https_check(): bool
     {
         return (bool) get_option(Constants::OPTION_SKIP_HTTPS_CHECK, false);
+    }
+
+    public function render_allow_external_issuance(): void
+    {
+        $enabled = $this->get_allow_external_issuance();
+        printf(
+            '<label><input type="checkbox" name="%s" value="1"%s /> %s</label>'
+            . '<p class="description">%s</p>',
+            esc_attr(Constants::OPTION_ALLOW_EXTERNAL_ISSUANCE),
+            checked($enabled, true, false),
+            esc_html__('Enable', 'preview-token'),
+            esc_html__('When enabled, authenticated users with the required role can issue tokens via the REST API from outside the WordPress admin — for example from CI/CD pipelines or automated scripts. When disabled (default), token issuance is restricted to the WordPress admin interface.', 'preview-token')
+        );
+    }
+
+    public function get_allow_external_issuance(): bool
+    {
+        return (bool) get_option(Constants::OPTION_ALLOW_EXTERNAL_ISSUANCE, false);
     }
 }

@@ -263,3 +263,9 @@ msgstr "已过期的令牌在使用时会被立即拒绝。但是，数据库记
 
 msgid "Save your draft before opening the external preview to ensure the latest content is reflected."
 msgstr "请在打开外部预览前保存草稿，以确保显示最新内容。"
+
+msgid "Allow External Token Issuance"
+msgstr "允许从外部发行令牌"
+
+msgid "When enabled, authenticated users with the required role can issue tokens via the REST API from outside the WordPress admin — for example from CI/CD pipelines or automated scripts. When disabled (default), token issuance is restricted to the WordPress admin interface."
+msgstr "启用后，具有所需角色的已认证用户可以通过 REST API 从 WordPress 管理界面外部发行令牌（例如 CI/CD 流水线或自动化脚本）。禁用时（默认），令牌发行仅限于 WordPress 管理界面。"
