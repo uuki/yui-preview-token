@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace WPT\WordPress;
+namespace PVT\WordPress;
 
 /**
  * Writes audit entries for token lifecycle events.
  *
  * Default output: PHP's system error log (same destination as WP_DEBUG_LOG).
- * Each line is prefixed with [wpt] to distinguish WPT entries from other PHP errors.
+ * Each line is prefixed with [pvt] to distinguish PVT entries from other PHP errors.
  *
- * Custom output: define WPT_LOG_FILE in wp-config.php to write to a dedicated file.
- *   define('WPT_LOG_FILE', '/var/log/preview-token.log');
+ * Custom output: define PVT_LOG_FILE in wp-config.php to write to a dedicated file.
+ *   define('PVT_LOG_FILE', '/var/log/pvt.log');
  *
  * Logged events:
  *   - token issued / used                  (lifecycle)
@@ -23,12 +23,12 @@ class AuditLogger
     public function register(): void
     {
         // Token lifecycle
-        add_action('wpt_token_issued',      [$this, 'on_token_issued'],      10, 2);
-        add_action('wpt_token_used',        [$this, 'on_token_used'],        10, 2);
+        add_action('pvt_token_issued',      [$this, 'on_token_issued'],      10, 2);
+        add_action('pvt_token_used',        [$this, 'on_token_used'],        10, 2);
         // Security events
-        add_action('wpt_invalid_token',     [$this, 'on_invalid_token'],     10, 1);
-        add_action('wpt_rate_limit_exceeded', [$this, 'on_rate_limit_exceeded'], 10, 2);
-        add_action('wpt_capability_denied', [$this, 'on_capability_denied'], 10, 2);
+        add_action('pvt_invalid_token',     [$this, 'on_invalid_token'],     10, 1);
+        add_action('pvt_rate_limit_exceeded', [$this, 'on_rate_limit_exceeded'], 10, 2);
+        add_action('pvt_capability_denied', [$this, 'on_capability_denied'], 10, 2);
     }
 
     public function on_token_issued(int $post_id, int $user_id): void
@@ -61,7 +61,7 @@ class AuditLogger
     private function write(string $event, int $post_id, int $user_id): void
     {
         $message = sprintf(
-            '[wpt] event=%s post_id=%d user_id=%d ip=%s',
+            '[pvt] event=%s post_id=%d user_id=%d ip=%s',
             $event,
             $post_id,
             $user_id,
@@ -72,14 +72,14 @@ class AuditLogger
 
     private function write_security(string $event, string $context): void
     {
-        $this->output(sprintf('[wpt] event=%s %s', $event, $context));
+        $this->output(sprintf('[pvt] event=%s %s', $event, $context));
     }
 
     private function output(string $message): void
     {
-        if (defined('WPT_LOG_FILE') && is_string(WPT_LOG_FILE) && WPT_LOG_FILE !== '') {
+        if (defined('PVT_LOG_FILE') && is_string(PVT_LOG_FILE) && PVT_LOG_FILE !== '') {
             $line = sprintf("[%s] %s\n", gmdate('Y-m-d\TH:i:s\Z'), $message);
-            $this->write_to_file(WPT_LOG_FILE, $line);
+            $this->write_to_file(PVT_LOG_FILE, $line);
         } else {
             error_log($message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional audit logger
         }

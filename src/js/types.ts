@@ -22,7 +22,7 @@ export interface SelectOption {
 }
 
 // ── Injected component interfaces ────────────────────────────────────────────
-// Minimal props required by WptTokenPanel; both wp.components.Button and
+// Minimal props required by PvtTokenPanel; both wp.components.Button and
 // NativeBtn must satisfy BtnProps, and both SelectControl/NativeSelect must
 // satisfy SelectInputProps.
 
@@ -43,7 +43,7 @@ export interface BtnProps {
   type?:             'button' | 'submit'
   'aria-label'?:     string
   /** Stable selector for E2E tests — locale-independent. */
-  'data-wpt-action'?: string
+  'data-pvt-action'?: string
   [key: string]:     unknown
 }
 

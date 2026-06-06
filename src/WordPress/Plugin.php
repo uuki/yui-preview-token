@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace WPT\WordPress;
+namespace PVT\WordPress;
 
-use WPT\Support\ResponseFilters;
-use WPT\Support\ResponsePipeline;
-use WPT\Token\TokenIssuer;
-use WPT\Token\TokenValidator;
+use PVT\Support\ResponseFilters;
+use PVT\Support\ResponsePipeline;
+use PVT\Token\TokenIssuer;
+use PVT\Token\TokenValidator;
 
 class Plugin
 {
@@ -30,7 +30,7 @@ class Plugin
         load_plugin_textdomain(
             'preview-token',
             false,
-            dirname(plugin_basename(WPT_PLUGIN_FILE)) . '/languages'
+            dirname(plugin_basename(PVT_PLUGIN_FILE)) . '/languages'
         );
 
         $pipeline = new ResponsePipeline([
@@ -48,7 +48,7 @@ class Plugin
         $issue    = new IssueEndpoint($issuer, $this->settings, $rate_limiter);
 
         $this->settings->register();
-        (new AdminScripts($this->settings, plugin_dir_url(WPT_PLUGIN_FILE)))->register();
+        (new AdminScripts($this->settings, plugin_dir_url(PVT_PLUGIN_FILE)))->register();
         (new AuditLogger())->register();
         (new TokenAdmin($issuer))->register();
 
@@ -56,12 +56,12 @@ class Plugin
         add_action('rest_api_init', [$issue,    'register']);
 
         // Daily cleanup of expired token options
-        add_action('wpt_cleanup_tokens', static function() use ($issuer): void {
+        add_action('pvt_cleanup_tokens', static function() use ($issuer): void {
             $issuer->cleanup_expired();
         });
         add_action('init', static function(): void {
-            if (!wp_next_scheduled('wpt_cleanup_tokens')) {
-                wp_schedule_event(time(), 'daily', 'wpt_cleanup_tokens');
+            if (!wp_next_scheduled('pvt_cleanup_tokens')) {
+                wp_schedule_event(time(), 'daily', 'pvt_cleanup_tokens');
             }
         });
     }

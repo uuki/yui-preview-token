@@ -21,7 +21,7 @@ export const NativeBtn = ({
   title,
   children,
   disabled,
-  // Forward remaining props (e.g. data-wpt-action) to the DOM element
+  // Forward remaining props (e.g. data-pvt-action) to the DOM element
   ...rest
 }: BtnProps) => {
   const cls: string[] = []

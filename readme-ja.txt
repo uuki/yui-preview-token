@@ -68,7 +68,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 * トークンの発行・使用イベントをログ記録（投稿 ID・ユーザー ID・クライアント IP）。
 * セキュリティイベントのログ記録：無効なトークン試行・レート制限超過・権限拒否。
-* デフォルトは `WP_DEBUG_LOG` に出力。`WPT_LOG_FILE` で専用ファイルに変更可能。
+* デフォルトは `WP_DEBUG_LOG` に出力。`PVT_LOG_FILE` で専用ファイルに変更可能。
 
 **国際化対応**
 
@@ -79,20 +79,20 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 **フィルター**
 
-* `wpt_preview_response_data` — 送信前に REST API レスポンスデータを変更します。
+* `pvt_preview_response_data` — 送信前に REST API レスポンスデータを変更します。
 
 **アクション**
 
-* `wpt_token_issued( int $post_id, int $user_id )` — トークン発行後に発火。
-* `wpt_token_used( int $post_id, int $user_id )` — トークンが正常に使用されたときに発火。
-* `wpt_invalid_token( string $ip )` — 無効・期限切れトークンのアクセス時に発火。
-* `wpt_rate_limit_exceeded( string $ip, string $endpoint )` — レート制限超過時に発火。
-* `wpt_capability_denied( int $user_id, int $post_id )` — 権限拒否時に発火。
+* `pvt_token_issued( int $post_id, int $user_id )` — トークン発行後に発火。
+* `pvt_token_used( int $post_id, int $user_id )` — トークンが正常に使用されたときに発火。
+* `pvt_invalid_token( string $ip )` — 無効・期限切れトークンのアクセス時に発火。
+* `pvt_rate_limit_exceeded( string $ip, string $endpoint )` — レート制限超過時に発火。
+* `pvt_capability_denied( int $user_id, int $post_id )` — 権限拒否時に発火。
 
 **定数（wp-config.php）**
 
-* `WPT_SKIP_HTTPS_CHECK` — `true` に設定すると HTTPS 要件を無効化します（開発環境専用）。
-* `WPT_LOG_FILE` — 専用監査ログファイルの絶対パス。
+* `PVT_SKIP_HTTPS_CHECK` — `true` に設定すると HTTPS 要件を無効化します（開発環境専用）。
+* `PVT_LOG_FILE` — 専用監査ログファイルの絶対パス。
 
 = ユースケース =
 
@@ -148,7 +148,7 @@ TypeScript ソースから JavaScript バンドルを再ビルドするには：
 
 = HTTPS は必須ですか？ =
 
-デフォルトでは必須です。トークンが通信経路上で傍受されるのを防ぐため、プレビューエンドポイントは HTTP リクエストに 403 を返します。ローカル開発環境では、`wp-config.php` に `define('WPT_SKIP_HTTPS_CHECK', true);` を追加することでバイパスできます。
+デフォルトでは必須です。トークンが通信経路上で傍受されるのを防ぐため、プレビューエンドポイントは HTTP リクエストに 403 を返します。ローカル開発環境では、`wp-config.php` に `define('PVT_SKIP_HTTPS_CHECK', true);` を追加することでバイパスできます。
 
 = トークンを発行できるユーザーを制限するには？ =
 
@@ -160,7 +160,7 @@ TypeScript ソースから JavaScript バンドルを再ビルドするには：
 
 = 監査ログはどこに保存されますか？ =
 
-デフォルトでは、ログは PHP の `error_log()` を介して出力されます（`WP_DEBUG_LOG` の設定に従います）。専用ファイルに書き出すには、`wp-config.php` に `define('WPT_LOG_FILE', '/絶対/パス/wpt.log');` を追加してください。
+デフォルトでは、ログは PHP の `error_log()` を介して出力されます（`WP_DEBUG_LOG` の設定に従います）。専用ファイルに書き出すには、`wp-config.php` に `define('PVT_LOG_FILE', '/絶対/パス/pvt.log');` を追加してください。
 
 = クラシックエディタープラグインと互換性がありますか？ =
 

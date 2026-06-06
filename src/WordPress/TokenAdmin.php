@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WPT\WordPress;
+namespace PVT\WordPress;
 
-use WPT\Token\TokenIssuer;
+use PVT\Token\TokenIssuer;
 
 /**
  * Renders the "Issued Tokens" admin tab and handles token deletion actions.
  * Registered via Plugin::init(); hooks into Settings::render_page() via
- * the wpt_settings_render_tokens_tab action.
+ * the pvt_settings_render_tokens_tab action.
  */
 class TokenAdmin
 {
@@ -25,9 +25,9 @@ class TokenAdmin
 
     public function register(): void
     {
-        add_action('wpt_settings_render_tokens_tab', [$this, 'render_token_table']);
-        add_action('admin_post_wpt_delete_token',    [$this, 'handle_delete_token']);
-        add_action('admin_post_wpt_delete_expired',  [$this, 'handle_delete_expired']);
+        add_action('pvt_settings_render_tokens_tab', [$this, 'render_token_table']);
+        add_action('admin_post_pvt_delete_token',    [$this, 'handle_delete_token']);
+        add_action('admin_post_pvt_delete_expired',  [$this, 'handle_delete_expired']);
     }
 
     // ── Action handlers ───────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ class TokenAdmin
     public function handle_delete_token(): void
     {
         $post_id = absint(wp_unslash($_GET['post_id'] ?? 0)); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified on next line
-        check_admin_referer("wpt_delete_token_{$post_id}");
+        check_admin_referer("pvt_delete_token_{$post_id}");
 
         if ($post_id && current_user_can('manage_options')) {
             $this->issuer->delete_by_post($post_id);
@@ -47,7 +47,7 @@ class TokenAdmin
 
     public function handle_delete_expired(): void
     {
-        check_admin_referer('wpt_delete_expired');
+        check_admin_referer('pvt_delete_expired');
 
         if (current_user_can('manage_options')) {
             $this->issuer->cleanup_expired();
@@ -80,8 +80,8 @@ class TokenAdmin
             <h2 style="margin:0"><?php esc_html_e('Issued Tokens', 'preview-token'); ?></h2>
             <?php if (!empty($tokens)): ?>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <?php wp_nonce_field('wpt_delete_expired'); ?>
-                <input type="hidden" name="action" value="wpt_delete_expired">
+                <?php wp_nonce_field('pvt_delete_expired'); ?>
+                <input type="hidden" name="action" value="pvt_delete_expired">
                 <button type="submit" class="button button-small">
                     <?php esc_html_e('Delete Expired', 'preview-token'); ?>
                 </button>
@@ -111,8 +111,8 @@ class TokenAdmin
                 $is_expired = ($token['expires_at'] > 0 && $token['expires_at'] <= $now);
                 $no_expiry  = ($token['expires_at'] > $now + self::NO_EXPIRY_THRESHOLD);
                 $delete_url = wp_nonce_url(
-                    admin_url("admin-post.php?action=wpt_delete_token&post_id={$token['post_id']}"),
-                    "wpt_delete_token_{$token['post_id']}"
+                    admin_url("admin-post.php?action=pvt_delete_token&post_id={$token['post_id']}"),
+                    "pvt_delete_token_{$token['post_id']}"
                 );
             ?>
                 <tr>

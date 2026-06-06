@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPT\Token;
+namespace PVT\Token;
 
 class TokenValidator
 {

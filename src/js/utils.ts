@@ -14,7 +14,7 @@ export const fmt = (template: string, ...args: (string | number)[]): string => {
   return args.reduce<string>((s, a) => s.replace('%s', String(a)), result)
 }
 
-const i18n = (): WptI18n | undefined => wptPreviewData?.i18n
+const i18n = (): PvtI18n | undefined => pvtPreviewData?.i18n
 
 export const getPresetOptions = (allowNoExpiry: boolean): SelectOption[] => {
   const t = i18n()
@@ -80,11 +80,11 @@ export const apiFetch = async <T = unknown>(
   body?: JsonBody | null,
   queryParams?: Record<string, string>,
 ): Promise<T | null> => {
-  if (typeof wptPreviewData === 'undefined') {
-    throw new Error('wptPreviewData is not defined')
+  if (typeof pvtPreviewData === 'undefined') {
+    throw new Error('pvtPreviewData is not defined')
   }
 
-  const { tokenBase, nonce } = wptPreviewData
+  const { tokenBase, nonce } = pvtPreviewData
   const url = queryParams
     ? `${tokenBase}?${new URLSearchParams(queryParams).toString()}`
     : tokenBase

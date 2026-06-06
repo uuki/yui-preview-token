@@ -12,19 +12,12 @@
       "pluginPath": "preview-token/preview-token.php"
     },
     {
-      "step": "installPlugin",
-      "pluginData": {
-        "resource": "wordpress.org/plugins",
-        "slug": "plugin-check"
-      }
-    },
-    {
       "step": "runPHP",
       "code": "<?php\nrequire '/wordpress/wp-load.php';\n$dir = WP_PLUGIN_DIR . '/classic-editor-fixture';\nif (!is_dir($dir)) mkdir($dir, 0755, true);\nfile_put_contents($dir . '/classic-editor-fixture.php', implode(\"\\n\", ['<?php','/*','Plugin Name: Classic Editor (Test Fixture)','Description: Disables the block editor for Classic Editor E2E testing.','Version: 1.0','*/','add_filter(\"use_block_editor_for_post\", \"__return_false\", 100);','']));\n?>"
     },
     {
       "step": "runPHP",
-      "code": "<?php\nrequire '/wordpress/wp-load.php';\nupdate_option('wpt_frontend_url', 'http://localhost:5173');\nupdate_option('wpt_allowed_origins', 'http://localhost:4321');\nupdate_option('wpt_min_capability', 'contributor');\nupdate_option('wpt_rate_limit_requests', 60);\nupdate_option('wpt_rate_limit_window', 60);\n\n?>"
+      "code": "<?php\nrequire '/wordpress/wp-load.php';\nupdate_option('pvt_frontend_url', 'http://localhost:5173');\nupdate_option('pvt_allowed_origins', 'http://localhost:4321');\nupdate_option('pvt_min_capability', 'contributor');\nupdate_option('pvt_rate_limit_requests', 60);\nupdate_option('pvt_rate_limit_window', 60);\n\n?>"
     },
     {
       "step": "wp-cli",

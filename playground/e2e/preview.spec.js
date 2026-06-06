@@ -95,12 +95,12 @@ test.describe('Gutenberg sidebar preview', () => {
 
         // Check if generate button exists and click it
         const hasGenerate = await page.evaluate(() =>
-            !!document.querySelector('[data-wpt-action="generate"]')
+            !!document.querySelector('[data-pvt-action="generate"]')
         ).catch(() => false);
 
         if (hasGenerate) {
             await page.evaluate(() => {
-                const span = document.querySelector('[data-wpt-action="generate"]');
+                const span = document.querySelector('[data-pvt-action="generate"]');
                 if (span) (span.querySelector('button') ?? span).click();
             }).catch(() => null);
             // Wait for token generation (fixed wait — no polling)
@@ -109,7 +109,7 @@ test.describe('Gutenberg sidebar preview', () => {
 
         // Get preview URL
         const previewUrl = await page.evaluate(() => {
-            const span = document.querySelector('[data-wpt-action="preview"]');
+            const span = document.querySelector('[data-pvt-action="preview"]');
             const link = span ? span.querySelector('a') : null;
             return link ? link.href : null;
         }).catch(() => null);
@@ -155,34 +155,34 @@ test.describe('Quick Edit token panel', () => {
             return rows.length > 0;
         }, { timeout: 15_000 });
 
-        // Wait for WPT panel to finish loading
+        // Wait for PVT panel to finish loading
         await page.waitForFunction(() => {
-            const panel = document.querySelector('.wpt-quick-edit-root [data-wpt-panel]');
-            return panel && panel.getAttribute('data-wpt-panel') !== 'loading';
+            const panel = document.querySelector('.pvt-quick-edit-root [data-pvt-panel]');
+            return panel && panel.getAttribute('data-pvt-panel') !== 'loading';
         }, { timeout: 20_000 });
 
         await page.waitForFunction(() =>
-            !!document.querySelector('.wpt-quick-edit-root [data-wpt-action="generate"], .wpt-quick-edit-root [data-wpt-action="preview"]'),
+            !!document.querySelector('.pvt-quick-edit-root [data-pvt-action="generate"], .pvt-quick-edit-root [data-pvt-action="preview"]'),
             { timeout: 5_000 }
         );
 
         const hasGenerate = await page.evaluate(() =>
-            !!document.querySelector('.wpt-quick-edit-root [data-wpt-action="generate"]')
+            !!document.querySelector('.pvt-quick-edit-root [data-pvt-action="generate"]')
         );
 
         if (hasGenerate) {
             await page.evaluate(() => {
-                const span = document.querySelector('.wpt-quick-edit-root [data-wpt-action="generate"]');
+                const span = document.querySelector('.pvt-quick-edit-root [data-pvt-action="generate"]');
                 (span?.querySelector('button') ?? span)?.click();
             });
             await page.waitForFunction(() =>
-                !!document.querySelector('.wpt-quick-edit-root [data-wpt-action="preview"]'),
+                !!document.querySelector('.pvt-quick-edit-root [data-pvt-action="preview"]'),
                 { timeout: 10_000 }
             );
         }
 
         const href = await page.evaluate(() => {
-            const span = document.querySelector('.wpt-quick-edit-root [data-wpt-action="preview"]');
+            const span = document.querySelector('.pvt-quick-edit-root [data-pvt-action="preview"]');
             return (span?.querySelector('a') ?? span)?.href ?? '';
         });
         expect(href).toMatch(/[?&]token=[0-9a-f]{64}/);
@@ -218,7 +218,7 @@ test.describe('Classic Editor token panel', () => {
         await page.close();
     });
 
-    test('shows WPT panel in Classic Editor and generates a token', async ({ page }) => {
+    test('shows PVT panel in Classic Editor and generates a token', async ({ page }) => {
         test.setTimeout(60_000);
 
         await loginToAdmin(page);
@@ -228,34 +228,34 @@ test.describe('Classic Editor token panel', () => {
         await page.goto(editHref + '&classic-editor');
         await page.waitForURL(`${WP}/wp-admin/post.php?post=*&action=edit*`);
 
-        // Wait for WPT meta box panel to finish loading
+        // Wait for PVT meta box panel to finish loading
         await page.waitForFunction(() => {
-            const panel = document.querySelector('#wpt-classic-meta-box-root [data-wpt-panel]');
-            return panel && panel.getAttribute('data-wpt-panel') !== 'loading';
+            const panel = document.querySelector('#pvt-classic-meta-box-root [data-pvt-panel]');
+            return panel && panel.getAttribute('data-pvt-panel') !== 'loading';
         }, { timeout: 20_000 });
 
         await page.waitForFunction(() =>
-            !!document.querySelector('#wpt-classic-meta-box-root [data-wpt-action="generate"], #wpt-classic-meta-box-root [data-wpt-action="preview"]'),
+            !!document.querySelector('#pvt-classic-meta-box-root [data-pvt-action="generate"], #pvt-classic-meta-box-root [data-pvt-action="preview"]'),
             { timeout: 5_000 }
         );
 
         const hasGenerate = await page.evaluate(() =>
-            !!document.querySelector('#wpt-classic-meta-box-root [data-wpt-action="generate"]')
+            !!document.querySelector('#pvt-classic-meta-box-root [data-pvt-action="generate"]')
         );
 
         if (hasGenerate) {
             await page.evaluate(() => {
-                const span = document.querySelector('#wpt-classic-meta-box-root [data-wpt-action="generate"]');
+                const span = document.querySelector('#pvt-classic-meta-box-root [data-pvt-action="generate"]');
                 (span?.querySelector('button') ?? span)?.click();
             });
             await page.waitForFunction(() =>
-                !!document.querySelector('#wpt-classic-meta-box-root [data-wpt-action="preview"]'),
+                !!document.querySelector('#pvt-classic-meta-box-root [data-pvt-action="preview"]'),
                 { timeout: 10_000 }
             );
         }
 
         const href = await page.evaluate(() => {
-            const span = document.querySelector('#wpt-classic-meta-box-root [data-wpt-action="preview"]');
+            const span = document.querySelector('#pvt-classic-meta-box-root [data-pvt-action="preview"]');
             return (span?.querySelector('a') ?? span)?.href ?? '';
         });
         expect(href).toMatch(/[?&]token=[0-9a-f]{64}/);

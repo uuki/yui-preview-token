@@ -1,29 +1,29 @@
 /**
  * Quick Edit entry.
- * Mounts WptTokenPanel inside the #edit-{postId} rows via MutationObserver.
+ * Mounts PvtTokenPanel inside the #edit-{postId} rows via MutationObserver.
  * WordPress deps: wp-element, inline-edit-post
  */
 
-import { WptTokenPanel } from './token-panel'
+import { PvtTokenPanel } from './token-panel'
 import { NativeBtn, NativeSelect } from './native-components'
 
-if (typeof wptPreviewData === 'undefined') {
-  throw new Error('[WPT] wptPreviewData is not defined')
+if (typeof pvtPreviewData === 'undefined') {
+  throw new Error('[PVT] pvtPreviewData is not defined')
 }
 
 const { createElement: el } = wp.element
 
 // ── renderToContainer ─────────────────────────────────────────────────────────
 
-interface WptContainer extends HTMLElement {
-  _wptRoot?: { render: (node: unknown) => void; unmount: () => void }
+interface PvtContainer extends HTMLElement {
+  _pvtRoot?: { render: (node: unknown) => void; unmount: () => void }
 }
 
-const renderToContainer = (container: WptContainer, postId: number): void => {
-  const panel = el(WptTokenPanel, { postId, Btn: NativeBtn, SelectInput: NativeSelect })
+const renderToContainer = (container: PvtContainer, postId: number): void => {
+  const panel = el(PvtTokenPanel, { postId, Btn: NativeBtn, SelectInput: NativeSelect })
   if (wp.element.createRoot) {
-    if (!container._wptRoot) container._wptRoot = wp.element.createRoot(container)
-    container._wptRoot.render(panel)
+    if (!container._pvtRoot) container._pvtRoot = wp.element.createRoot(container)
+    container._pvtRoot.render(panel)
   } else {
     // @ts-expect-error — legacy React 17 render API
     wp.element.render(panel, container)
@@ -40,10 +40,10 @@ const mountPanel = (row: HTMLElement, postId: number): void => {
   const col = getQuickEditCol(row)
   if (!col || !postId) return
 
-  let container = col.querySelector<WptContainer>('.wpt-quick-edit-root')
+  let container = col.querySelector<PvtContainer>('.pvt-quick-edit-root')
   if (!container) {
-    container = document.createElement('div') as WptContainer
-    container.className = 'wpt-quick-edit-root'
+    container = document.createElement('div') as PvtContainer
+    container.className = 'pvt-quick-edit-root'
     container.style.cssText = 'border-top:1px solid #ddd;margin-top:8px;padding-top:8px'
     col.appendChild(container)
   }
@@ -51,10 +51,10 @@ const mountPanel = (row: HTMLElement, postId: number): void => {
 }
 
 const unmountRow = (row: HTMLElement): void => {
-  const container = row.querySelector<WptContainer>('.wpt-quick-edit-root')
+  const container = row.querySelector<PvtContainer>('.pvt-quick-edit-root')
   if (!container) return
-  container._wptRoot?.unmount()
-  container._wptRoot = undefined
+  container._pvtRoot?.unmount()
+  container._pvtRoot = undefined
   container.remove()
 }
 

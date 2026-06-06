@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WPT\WordPress;
+namespace PVT\WordPress;
 
-use WPT\Support\ResponsePipeline;
-use WPT\Token\TokenValidator;
+use PVT\Support\ResponsePipeline;
+use PVT\Token\TokenValidator;
 use WP_Error;
 use WP_HTTP_Response;
 use WP_Post;
@@ -59,9 +59,9 @@ class RestEndpoint
     {
         // M-3: HTTPS required.
         // Override options (precedence: wp-config constant > DB option):
-        //   define('WPT_SKIP_HTTPS_CHECK', true)         — server-level override
+        //   define('PVT_SKIP_HTTPS_CHECK', true)         — server-level override
         //   Settings > Skip HTTPS Check (checkbox)       — admin UI toggle
-        $skip_https = (defined('WPT_SKIP_HTTPS_CHECK') && WPT_SKIP_HTTPS_CHECK)
+        $skip_https = (defined('PVT_SKIP_HTTPS_CHECK') && PVT_SKIP_HTTPS_CHECK)
                    || $this->settings->get_skip_https_check();
         if (!is_ssl() && !$skip_https) {
             return new WP_Error(
@@ -74,7 +74,7 @@ class RestEndpoint
         // M-2: Rate limiting per client IP
         $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
         if (!$this->rate_limiter->is_allowed($ip)) {
-            do_action('wpt_rate_limit_exceeded', $ip, 'preview');
+            do_action('pvt_rate_limit_exceeded', $ip, 'preview');
             return new WP_Error(
                 'rate_limit_exceeded',
                 'Too many requests.',
@@ -86,7 +86,7 @@ class RestEndpoint
         $data  = $this->validator->validate($token);
 
         if ($data === false) {
-            do_action('wpt_invalid_token', $ip);
+            do_action('pvt_invalid_token', $ip);
             return new WP_Error(
                 'invalid_token',
                 'Invalid or expired preview token.',
@@ -114,15 +114,15 @@ class RestEndpoint
         }
 
         // L-5: Audit log
-        do_action('wpt_token_used', $post->ID, $data['user_id']);
+        do_action('pvt_token_used', $post->ID, $data['user_id']);
 
         $controller = new WP_REST_Posts_Controller($post->post_type);
         $prepared   = $controller->prepare_item_for_response($post, $request);
         $filtered   = $this->pipeline->process($prepared->get_data());
 
         // I-2: Allow application-layer response shaping
-        // add_filter('wpt_preview_response_data', function(array $data, WP_Post $post, WP_REST_Request $req): array { ... }, 10, 3);
-        $filtered = apply_filters('wpt_preview_response_data', $filtered, $post, $request);
+        // add_filter('pvt_preview_response_data', function(array $data, WP_Post $post, WP_REST_Request $req): array { ... }, 10, 3);
+        $filtered = apply_filters('pvt_preview_response_data', $filtered, $post, $request);
 
         return new WP_REST_Response($filtered, 200);
     }

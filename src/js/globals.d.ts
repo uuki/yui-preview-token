@@ -24,7 +24,7 @@ declare global {
     editPost:   typeof WPEditor
   }
 
-  interface WptI18n {
+  interface PvtI18n {
     // Preset labels
     preset1h:       string
     preset24h:      string
@@ -51,18 +51,18 @@ declare global {
     errorOccurred:  string
   }
 
-  interface WptPreviewData {
+  interface PvtPreviewData {
     tokenBase:     string
     nonce:         string
     allowNoExpiry: boolean
-    i18n:          WptI18n
+    i18n:          PvtI18n
   }
 
   /** Injected by wp_localize_script before each entry script runs. */
-  const wptPreviewData: WptPreviewData | undefined
+  const pvtPreviewData: PvtPreviewData | undefined
 
-  interface WptSettingsData {
-    /** name attribute for origin inputs, e.g. "wpt_allowed_origins[]" */
+  interface PvtSettingsData {
+    /** name attribute for origin inputs, e.g. "pvt_allowed_origins[]" */
     field:        string
     /** aria-label for the × remove button */
     removeLabel:  string
@@ -73,7 +73,7 @@ declare global {
   }
 
   /** Injected on the plugin settings page only. */
-  const wptSettingsData: WptSettingsData
+  const pvtSettingsData: PvtSettingsData
 }
 
 export {}

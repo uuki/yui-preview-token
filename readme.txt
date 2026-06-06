@@ -68,7 +68,7 @@ The frontend (Astro, Next.js, Nuxt, etc.) receives a preview URL containing the 
 
 * Logs token issuance and usage events (post ID, user ID, client IP).
 * Logs security events: invalid token attempts, rate-limit violations, capability denials.
-* Output goes to `WP_DEBUG_LOG` by default; point to a dedicated file with `WPT_LOG_FILE`.
+* Output goes to `WP_DEBUG_LOG` by default; point to a dedicated file with `PVT_LOG_FILE`.
 
 **Internationalisation**
 
@@ -79,20 +79,20 @@ The frontend (Astro, Next.js, Nuxt, etc.) receives a preview URL containing the 
 
 **Filter**
 
-* `wpt_preview_response_data` — Modify the REST API response data before it is sent.
+* `pvt_preview_response_data` — Modify the REST API response data before it is sent.
 
 **Actions**
 
-* `wpt_token_issued( int $post_id, int $user_id )` — Fires after a token is issued.
-* `wpt_token_used( int $post_id, int $user_id )` — Fires when a token is used successfully.
-* `wpt_invalid_token( string $ip )` — Fires on an invalid/expired token attempt.
-* `wpt_rate_limit_exceeded( string $ip, string $endpoint )` — Fires when rate limit is hit.
-* `wpt_capability_denied( int $user_id, int $post_id )` — Fires on a capability denial.
+* `pvt_token_issued( int $post_id, int $user_id )` — Fires after a token is issued.
+* `pvt_token_used( int $post_id, int $user_id )` — Fires when a token is used successfully.
+* `pvt_invalid_token( string $ip )` — Fires on an invalid/expired token attempt.
+* `pvt_rate_limit_exceeded( string $ip, string $endpoint )` — Fires when rate limit is hit.
+* `pvt_capability_denied( int $user_id, int $post_id )` — Fires on a capability denial.
 
 **Constants (wp-config.php)**
 
-* `WPT_SKIP_HTTPS_CHECK` — Set to `true` to disable the HTTPS requirement (development only).
-* `WPT_LOG_FILE` — Absolute path to a dedicated audit log file.
+* `PVT_SKIP_HTTPS_CHECK` — Set to `true` to disable the HTTPS requirement (development only).
+* `PVT_LOG_FILE` — Absolute path to a dedicated audit log file.
 
 = Use Case =
 
@@ -148,7 +148,7 @@ The token is rejected with a 401 response. The expired token is automatically de
 
 = Is HTTPS required? =
 
-By default, yes. The preview endpoint returns a 403 for HTTP requests to protect the token from being intercepted in transit. For local development, add `define('WPT_SKIP_HTTPS_CHECK', true);` to `wp-config.php`.
+By default, yes. The preview endpoint returns a 403 for HTTP requests to protect the token from being intercepted in transit. For local development, add `define('PVT_SKIP_HTTPS_CHECK', true);` to `wp-config.php`.
 
 = How do I restrict who can generate tokens? =
 
@@ -160,7 +160,7 @@ Yes. You can enter patterns like `https://*.example.com` to allow all subdomains
 
 = Where are audit logs stored? =
 
-By default, log entries are written via PHP's `error_log()`, which follows the `WP_DEBUG_LOG` setting. To write to a dedicated file, add `define('WPT_LOG_FILE', '/absolute/path/to/wpt.log');` to `wp-config.php`.
+By default, log entries are written via PHP's `error_log()`, which follows the `WP_DEBUG_LOG` setting. To write to a dedicated file, add `define('PVT_LOG_FILE', '/absolute/path/to/pvt.log');` to `wp-config.php`.
 
 = Does this work with the Classic Editor plugin? =
 

@@ -1,13 +1,13 @@
 /**
  * Settings page entry — CORS origin list management + wildcard security warning.
  * WordPress deps: none (plain DOM, no wp.* globals needed)
- * Data injected via wp_localize_script as window.wptSettingsData.
+ * Data injected via wp_localize_script as window.pvtSettingsData.
  */
 
-const { field, removeLabel, warningTitle, warningText } = wptSettingsData
+const { field, removeLabel, warningTitle, warningText } = pvtSettingsData
 
-const list   = document.getElementById('wpt-origins-list') as HTMLElement | null
-const addBtn = document.getElementById('wpt-add-origin')   as HTMLElement | null
+const list   = document.getElementById('pvt-origins-list') as HTMLElement | null
+const addBtn = document.getElementById('pvt-add-origin')   as HTMLElement | null
 
 if (!list || !addBtn) {
   // Guard: script may be enqueued on a page where the markup isn't present.
@@ -16,7 +16,7 @@ if (!list || !addBtn) {
 
   const makeRow = (value: string): HTMLDivElement => {
     const row   = document.createElement('div')
-    row.className = 'wpt-origin-row'
+    row.className = 'pvt-origin-row'
     row.style.cssText = 'display:flex;gap:6px;align-items:center'
 
     const input = document.createElement('input')
@@ -30,7 +30,7 @@ if (!list || !addBtn) {
 
     const btn = document.createElement('button')
     btn.type      = 'button'
-    btn.className = 'button wpt-remove-origin'
+    btn.className = 'button pvt-remove-origin'
     btn.setAttribute('aria-label', removeLabel)
     btn.innerHTML = '&#x2715;'
     btn.addEventListener('click', () => removeRow(row))
@@ -43,7 +43,7 @@ if (!list || !addBtn) {
   // ── Remove row ─────────────────────────────────────────────────────────────
 
   const removeRow = (row: HTMLDivElement): void => {
-    const rows = list.querySelectorAll('.wpt-origin-row')
+    const rows = list.querySelectorAll('.pvt-origin-row')
     if (rows.length <= 1) {
       // Keep one empty row instead of collapsing the list entirely
       const inp = row.querySelector<HTMLInputElement>('input')
@@ -57,7 +57,7 @@ if (!list || !addBtn) {
 
   // ── Wildcard warning ───────────────────────────────────────────────────────
 
-  const WARNING_ID = 'wpt-wildcard-warning'
+  const WARNING_ID = 'pvt-wildcard-warning'
 
   const updateWildcardWarning = (): void => {
     const hasBareWildcard = Array.from(
@@ -80,9 +80,9 @@ if (!list || !addBtn) {
 
   // ── Wire up existing rows ──────────────────────────────────────────────────
 
-  list.querySelectorAll<HTMLButtonElement>('.wpt-remove-origin').forEach(btn => {
+  list.querySelectorAll<HTMLButtonElement>('.pvt-remove-origin').forEach(btn => {
     btn.addEventListener('click', () => {
-      const row = btn.closest<HTMLDivElement>('.wpt-origin-row')
+      const row = btn.closest<HTMLDivElement>('.pvt-origin-row')
       if (row) removeRow(row)
     })
   })

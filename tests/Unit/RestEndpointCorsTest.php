@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace WPT\Tests\Unit;
+namespace PVT\Tests\Unit;
 
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use PHPUnit\Framework\TestCase;
-use WPT\WordPress\RestEndpoint;
-use WPT\WordPress\Settings;
-use WPT\Token\TokenValidator;
-use WPT\Support\ResponsePipeline;
-use WPT\WordPress\RateLimiter;
+use PVT\WordPress\RestEndpoint;
+use PVT\WordPress\Settings;
+use PVT\Token\TokenValidator;
+use PVT\Support\ResponsePipeline;
+use PVT\WordPress\RateLimiter;
 
 class RestEndpointCorsTest extends TestCase
 {

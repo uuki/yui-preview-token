@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPT\Support;
+namespace PVT\Support;
 
 class ResponsePipeline
 {

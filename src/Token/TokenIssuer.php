@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace WPT\Token;
+namespace PVT\Token;
 
 class TokenIssuer
 {
-    public const OPTIONS_PREFIX  = 'wpt_tk_';
-    public const META_HASH       = '_wpt_token_hash';
-    public const META_RAW        = '_wpt_token_raw';
-    public const META_EXPIRES_AT = '_wpt_expires_at';
-    public const META_ISSUED_BY  = '_wpt_issued_by';
-    public const META_ISSUED_AT  = '_wpt_issued_at';
+    public const OPTIONS_PREFIX  = 'pvt_tk_';
+    public const META_HASH       = '_pvt_token_hash';
+    public const META_RAW        = '_pvt_token_raw';
+    public const META_EXPIRES_AT = '_pvt_expires_at';
+    public const META_ISSUED_BY  = '_pvt_issued_by';
+    public const META_ISSUED_AT  = '_pvt_issued_at';
 
     /**
      * Issue a new token, overwriting any existing one for the post.
@@ -38,7 +38,7 @@ class TokenIssuer
         update_post_meta($post_id, self::META_ISSUED_BY,  $user_id);
         update_post_meta($post_id, self::META_ISSUED_AT,  time());
 
-        do_action('wpt_token_issued', $post_id, $user_id);
+        do_action('pvt_token_issued', $post_id, $user_id);
 
         return $token;
     }
@@ -133,7 +133,7 @@ class TokenIssuer
     }
 
     /**
-     * Remove expired wpt_tk_* options. Called by WP Cron daily.
+     * Remove expired pvt_tk_* options. Called by WP Cron daily.
      */
     public function cleanup_expired(): void
     {

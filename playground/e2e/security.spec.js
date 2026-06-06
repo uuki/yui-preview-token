@@ -177,7 +177,7 @@ test.describe('A01 — Broken Access Control', () => {
 
     test('token revoke request without valid nonce → rejected (not 200)', async ({ request }) => {
         const res = await request.get(
-            `${WP}/wp-admin/admin-post.php?action=wpt_delete_token&post_id=${draftPostId}`,
+            `${WP}/wp-admin/admin-post.php?action=pvt_delete_token&post_id=${draftPostId}`,
             { maxRedirects: 0 }
         );
         expect(res.status()).not.toBe(200);
@@ -203,8 +203,8 @@ test.describe('A02 — Cryptographic Failures', () => {
         // Internal storage keys must never appear in the API response
         expect(keys).not.toContain('hash');
         expect(keys).not.toContain('raw');
-        expect(keys).not.toContain('_wpt_token_hash');
-        expect(keys).not.toContain('_wpt_token_raw');
+        expect(keys).not.toContain('_pvt_token_hash');
+        expect(keys).not.toContain('_pvt_token_raw');
         // Token is embedded in preview_url only (one-way)
         expect(body).toHaveProperty('preview_url');
         expect(body).toHaveProperty('expires_at');
@@ -219,9 +219,9 @@ test.describe('A02 — Cryptographic Failures', () => {
         const body = await res.json();
         const meta = body.meta ?? {};
         // Underscore-prefixed meta must not be exposed (WP private meta)
-        expect(meta).not.toHaveProperty('_wpt_token_raw');
-        expect(meta).not.toHaveProperty('_wpt_token_hash');
-        expect(meta).not.toHaveProperty('_wpt_expires_at');
+        expect(meta).not.toHaveProperty('_pvt_token_raw');
+        expect(meta).not.toHaveProperty('_pvt_token_hash');
+        expect(meta).not.toHaveProperty('_pvt_expires_at');
     });
 
 });
@@ -376,7 +376,7 @@ test.describe('A08 — Software & Data Integrity', () => {
 
     test('CSRF: token delete without nonce → rejected (302 to login or 403)', async ({ request }) => {
         const res = await request.post(`${WP}/wp-admin/admin-post.php`, {
-            form: { action: 'wpt_delete_token', post_id: String(draftPostId) },
+            form: { action: 'pvt_delete_token', post_id: String(draftPostId) },
             maxRedirects: 0,
         });
         expect(res.status()).not.toBe(200);
@@ -384,7 +384,7 @@ test.describe('A08 — Software & Data Integrity', () => {
 
     test('CSRF: bulk delete expired without nonce → rejected', async ({ request }) => {
         const res = await request.post(`${WP}/wp-admin/admin-post.php`, {
-            form: { action: 'wpt_delete_expired' },
+            form: { action: 'pvt_delete_expired' },
             maxRedirects: 0,
         });
         expect(res.status()).not.toBe(200);
@@ -393,9 +393,9 @@ test.describe('A08 — Software & Data Integrity', () => {
     test('CSRF: settings update without nonce → rejected (302 or 403)', async ({ request }) => {
         const res = await request.post(`${WP}/wp-admin/options.php`, {
             form: {
-                option_page:      'wpt_settings',
+                option_page:      'pvt_settings',
                 action:           'update',
-                wpt_frontend_url: 'https://evil.example.com',
+                pvt_frontend_url: 'https://evil.example.com',
             },
             maxRedirects: 0,
         });

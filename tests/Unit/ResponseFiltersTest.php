@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WPT\Tests\Unit;
+namespace PVT\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use WPT\Support\ResponseFilters;
+use PVT\Support\ResponseFilters;
 
 class ResponseFiltersTest extends TestCase
 {

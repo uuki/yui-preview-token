@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace WPT\Tests\Unit;
+namespace PVT\Tests\Unit;
 
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use PHPUnit\Framework\TestCase;
-use WPT\Token\TokenIssuer;
+use PVT\Token\TokenIssuer;
 
 class TokenIssuerTest extends TestCase
 {
@@ -67,13 +67,13 @@ class TokenIssuerTest extends TestCase
 
         $token = (new TokenIssuer())->issue(1, 2, 1_749_456_000);
 
-        $this->assertSame('wpt_tk_' . hash('sha256', $token), $capturedKey);
+        $this->assertSame('pvt_tk_' . hash('sha256', $token), $capturedKey);
         $this->assertSame(1,             $capturedData['post_id']);
         $this->assertSame(2,             $capturedData['user_id']);
         $this->assertSame(1_749_456_000, $capturedData['expires_at']);
     }
 
-    public function test_issue_fires_wpt_token_issued_action(): void
+    public function test_issue_fires_pvt_token_issued_action(): void
     {
         // Stub everything except do_action, which we assert on
         Functions\when('get_post_meta')->justReturn('');
@@ -85,7 +85,7 @@ class TokenIssuerTest extends TestCase
         $fired = false;
         Functions\expect('do_action')
             ->once()
-            ->with('wpt_token_issued', 10, 99)
+            ->with('pvt_token_issued', 10, 99)
             ->andReturnUsing(static function () use (&$fired): void { $fired = true; });
 
         (new TokenIssuer())->issue(10, 99, 1_749_456_000);
@@ -154,7 +154,7 @@ class TokenIssuerTest extends TestCase
 
         (new TokenIssuer())->delete_by_post(1);
 
-        $this->assertSame('wpt_tk_deadbeefhash', $deletedOption);
+        $this->assertSame('pvt_tk_deadbeefhash', $deletedOption);
     }
 
     public function test_get_by_post_returns_null_when_no_meta(): void

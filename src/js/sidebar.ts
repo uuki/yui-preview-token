@@ -1,15 +1,15 @@
 /**
  * Gutenberg sidebar entry.
- * Registers a PluginDocumentSettingPanel with WptTokenPanel.
+ * Registers a PluginDocumentSettingPanel with PvtTokenPanel.
  * WordPress deps: wp-element, wp-components, wp-plugins, wp-data, wp-editor, wp-edit-post
  */
 
-import { WptTokenPanel } from './token-panel'
+import { PvtTokenPanel } from './token-panel'
 
-if (typeof wptPreviewData === 'undefined') {
-  // wptPreviewData is injected by wp_localize_script; if missing, skip silently
+if (typeof pvtPreviewData === 'undefined') {
+  // pvtPreviewData is injected by wp_localize_script; if missing, skip silently
   // (avoids breaking Gutenberg if the plugin's enqueue hook didn't fire)
-  console.warn('[WPT] wptPreviewData is not defined')
+  console.warn('[PVT] pvtPreviewData is not defined')
 }
 
 const { createElement: el }      = wp.element
@@ -24,7 +24,7 @@ const PluginDocumentSettingPanel =
 if (!PluginDocumentSettingPanel) {
   // Silently skip on pages where Gutenberg is not loaded
 } else {
-  registerPlugin('wpt-preview', {
+  registerPlugin('pvt-preview', {
     render() {
       const postId = useSelect(
         (select: ReturnType<typeof wp.data.select>) =>
@@ -36,8 +36,8 @@ if (!PluginDocumentSettingPanel) {
 
       return el(
         PluginDocumentSettingPanel,
-        { name: 'wpt-preview', title: 'External Preview', icon: 'site', initialOpen: true },
-        el(WptTokenPanel, { postId, Btn: Button, SelectInput: SelectControl }),
+        { name: 'pvt-preview', title: 'External Preview', icon: 'site', initialOpen: true },
+        el(PvtTokenPanel, { postId, Btn: Button, SelectInput: SelectControl }),
       )
     },
   })

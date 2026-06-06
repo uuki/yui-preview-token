@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPT\WordPress;
+namespace PVT\WordPress;
 
 class Settings
 {
@@ -60,19 +60,19 @@ class Settings
             return;
         }
 
-        $plugin_url  = rtrim(plugin_dir_url(WPT_PLUGIN_FILE), '/');
+        $plugin_url  = rtrim(plugin_dir_url(PVT_PLUGIN_FILE), '/');
         $asset_path  = dirname(dirname(__DIR__)) . '/assets/js/settings.iife.js';
         $version     = file_exists($asset_path) ? (string) filemtime($asset_path) : '0';
 
         wp_enqueue_script(
-            'wpt-settings',
+            'pvt-settings',
             "{$plugin_url}/assets/js/settings.iife.js",
             [],
             $version,
             true
         );
 
-        wp_localize_script('wpt-settings', 'wptSettingsData', [
+        wp_localize_script('pvt-settings', 'pvtSettingsData', [
             'field'        => Constants::OPTION_ALLOWED_ORIGINS . '[]',
             'removeLabel'  => __('Remove this origin', 'preview-token'),
             'warningTitle' => __('Security Warning', 'preview-token'),
@@ -93,15 +93,15 @@ class Settings
 
     public function register_fields(): void
     {
-        register_setting('wpt_settings', Constants::OPTION_FRONTEND_URL, [
+        register_setting('pvt_settings', Constants::OPTION_FRONTEND_URL, [
             'type'              => 'string',
             'sanitize_callback' => 'esc_url_raw',
         ]);
 
-        register_setting('wpt_settings', Constants::OPTION_ALLOWED_ORIGINS, [
+        register_setting('pvt_settings', Constants::OPTION_ALLOWED_ORIGINS, [
             'type'              => 'string',
             // Accepts either a newline-separated string (legacy textarea) or
-            // an array submitted by the dynamic input list (name="wpt_allowed_origins[]").
+            // an array submitted by the dynamic input list (name="pvt_allowed_origins[]").
             'sanitize_callback' => static function ($value): string {
                 $lines = is_array($value)
                     ? $value
@@ -115,7 +115,7 @@ class Settings
         ]);
 
         $allowed_roles = self::ROLE_SLUGS;
-        register_setting('wpt_settings', Constants::OPTION_MIN_CAPABILITY, [
+        register_setting('pvt_settings', Constants::OPTION_MIN_CAPABILITY, [
             'type'              => 'string',
             'sanitize_callback' => static function (string $value) use ($allowed_roles): string {
                 return in_array($value, $allowed_roles, true) ? $value : 'contributor';
@@ -123,39 +123,39 @@ class Settings
             'default'           => 'contributor',
         ]);
 
-        register_setting('wpt_settings', Constants::OPTION_RATE_LIMIT_REQUESTS, [
+        register_setting('pvt_settings', Constants::OPTION_RATE_LIMIT_REQUESTS, [
             'type'              => 'integer',
             'sanitize_callback' => 'absint',
             'default'           => 30,
         ]);
 
-        register_setting('wpt_settings', Constants::OPTION_RATE_LIMIT_WINDOW, [
+        register_setting('pvt_settings', Constants::OPTION_RATE_LIMIT_WINDOW, [
             'type'              => 'integer',
             'sanitize_callback' => 'absint',
             'default'           => 60,
         ]);
 
-        register_setting('wpt_settings', Constants::OPTION_ALLOW_NO_EXPIRY, [
+        register_setting('pvt_settings', Constants::OPTION_ALLOW_NO_EXPIRY, [
             'type'              => 'boolean',
             'sanitize_callback' => static fn($v): bool => (bool) $v,
             'default'           => false,
         ]);
 
-        register_setting('wpt_settings', Constants::OPTION_SKIP_HTTPS_CHECK, [
+        register_setting('pvt_settings', Constants::OPTION_SKIP_HTTPS_CHECK, [
             'type'              => 'boolean',
             'sanitize_callback' => static fn($v): bool => (bool) $v,
             'default'           => false,
         ]);
 
-        add_settings_section('wpt_main', '', '__return_null', 'preview-token');
+        add_settings_section('pvt_main', '', '__return_null', 'preview-token');
 
-        add_settings_field('wpt_frontend_url',        __('External Preview URL',    'preview-token'), [$this, 'render_frontend_url'],        'preview-token', 'wpt_main');
-        add_settings_field('wpt_allowed_origins',     __('Allowed Origins (CORS)',  'preview-token'), [$this, 'render_allowed_origins'],     'preview-token', 'wpt_main');
-        add_settings_field('wpt_min_capability',      __('Minimum Capability',      'preview-token'), [$this, 'render_min_capability'],      'preview-token', 'wpt_main');
-        add_settings_field('wpt_rate_limit_requests', __('Rate Limit',              'preview-token'), [$this, 'render_rate_limit_requests'], 'preview-token', 'wpt_main');
-        add_settings_field('wpt_rate_limit_window',   __('Rate Limit Window',       'preview-token'), [$this, 'render_rate_limit_window'],   'preview-token', 'wpt_main');
-        add_settings_field('wpt_allow_no_expiry',     __('Allow No-Expiry Tokens',  'preview-token'), [$this, 'render_allow_no_expiry'],     'preview-token', 'wpt_main');
-        add_settings_field('wpt_skip_https_check',    __('Skip HTTPS Check',        'preview-token'), [$this, 'render_skip_https_check'],    'preview-token', 'wpt_main');
+        add_settings_field('pvt_frontend_url',        __('External Preview URL',    'preview-token'), [$this, 'render_frontend_url'],        'preview-token', 'pvt_main');
+        add_settings_field('pvt_allowed_origins',     __('Allowed Origins (CORS)',  'preview-token'), [$this, 'render_allowed_origins'],     'preview-token', 'pvt_main');
+        add_settings_field('pvt_min_capability',      __('Minimum Capability',      'preview-token'), [$this, 'render_min_capability'],      'preview-token', 'pvt_main');
+        add_settings_field('pvt_rate_limit_requests', __('Rate Limit',              'preview-token'), [$this, 'render_rate_limit_requests'], 'preview-token', 'pvt_main');
+        add_settings_field('pvt_rate_limit_window',   __('Rate Limit Window',       'preview-token'), [$this, 'render_rate_limit_window'],   'preview-token', 'pvt_main');
+        add_settings_field('pvt_allow_no_expiry',     __('Allow No-Expiry Tokens',  'preview-token'), [$this, 'render_allow_no_expiry'],     'preview-token', 'pvt_main');
+        add_settings_field('pvt_skip_https_check',    __('Skip HTTPS Check',        'preview-token'), [$this, 'render_skip_https_check'],    'preview-token', 'pvt_main');
     }
 
     public function render_page(): void
@@ -185,11 +185,11 @@ class Settings
             </nav>
 
             <?php if ($current_tab === 'tokens'): ?>
-                <?php do_action('wpt_settings_render_tokens_tab'); ?>
+                <?php do_action('pvt_settings_render_tokens_tab'); ?>
             <?php else: ?>
             <form method="post" action="options.php">
                 <?php
-                settings_fields('wpt_settings');
+                settings_fields('pvt_settings');
                 do_settings_sections('preview-token');
                 submit_button();
                 ?>
@@ -218,9 +218,9 @@ class Settings
         }
         $field = esc_attr(Constants::OPTION_ALLOWED_ORIGINS . '[]');
         ?>
-        <div id="wpt-origins-list" style="display:flex;flex-direction:column;gap:6px;max-width:500px">
+        <div id="pvt-origins-list" style="display:flex;flex-direction:column;gap:6px;max-width:500px">
             <?php foreach ($origins as $origin): ?>
-            <div class="wpt-origin-row" style="display:flex;gap:6px;align-items:center">
+            <div class="pvt-origin-row" style="display:flex;gap:6px;align-items:center">
                 <input type="text"
                        name="<?php echo esc_attr($field); ?>"
                        value="<?php echo esc_attr($origin); ?>"
@@ -228,19 +228,19 @@ class Settings
                        placeholder="https://example.com  or  https://*.example.com"
                        style="flex:1;font-family:-apple-system,&quot;system-ui&quot;,&quot;Segoe UI&quot;,Roboto,Oxygen-Sans,Ubuntu,Cantarell,&quot;Helvetica Neue&quot;,sans-serif" />
                 <button type="button"
-                        class="button wpt-remove-origin"
+                        class="button pvt-remove-origin"
                         aria-label="<?php esc_attr_e('Remove this origin', 'preview-token'); ?>">&#x2715;</button>
             </div>
             <?php endforeach; ?>
         </div>
-        <button type="button" id="wpt-add-origin" class="button" style="margin-top:6px">
+        <button type="button" id="pvt-add-origin" class="button" style="margin-top:6px">
             <?php esc_html_e('+ Add origin', 'preview-token'); ?>
         </button>
         <?php
         // Server-side warning when * is already saved (shown before JS loads).
         if (in_array('*', $this->get_allowed_origins(), true)):
         ?>
-        <div id="wpt-wildcard-warning" class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
+        <div id="pvt-wildcard-warning" class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
             <strong><?php esc_html_e('Security Warning', 'preview-token'); ?>:</strong>
             <?php esc_html_e('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'preview-token'); ?>
         </div>
@@ -250,7 +250,7 @@ class Settings
         </p>
         <?php
         // JS (settings.iife.js) is enqueued via enqueue_settings_scripts() and
-        // receives wptSettingsData via wp_localize_script — no inline script needed.
+        // receives pvtSettingsData via wp_localize_script — no inline script needed.
     }
 
     public function render_min_capability(): void
@@ -391,7 +391,7 @@ class Settings
             </div>
             <?php endif; ?>
             <p class="description" style="margin-top:6px;font-style:italic">
-                <?php esc_html_e('If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting.', 'preview-token'); ?>
+                <?php esc_html_e('If the PVT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting.', 'preview-token'); ?>
             </p>
         </fieldset>
         <?php

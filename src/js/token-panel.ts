@@ -19,7 +19,7 @@ const S_DIVIDER: React.CSSProperties = { color: '#ddd', margin: '0 4px' }
 
 // ── i18n helper ───────────────────────────────────────────────────────────────
 
-const t = (): WptI18n => wptPreviewData?.i18n ?? {
+const t = (): PvtI18n => pvtPreviewData?.i18n ?? {
   preset1h: '1 hour', preset24h: '24 hours', preset30d: '30 days',
   presetCustom: 'Custom', presetNoExpiry: 'No expiry',
   loading: 'Loading…', expiry: 'Expiry',
@@ -44,14 +44,14 @@ const textLink = (label: string, onClick: () => void, style?: React.CSSPropertie
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export interface WptTokenPanelProps {
+export interface PvtTokenPanelProps {
   postId:      number | null
   Btn:         BtnComponent
   SelectInput: SelectComponent
 }
 
-export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) => {
-  const allowNoExpiry = wptPreviewData?.allowNoExpiry ?? false
+export const PvtTokenPanel = ({ postId, Btn, SelectInput }: PvtTokenPanelProps) => {
+  const allowNoExpiry = pvtPreviewData?.allowNoExpiry ?? false
   const PRESET_OPTIONS: SelectOption[] = getPresetOptions(allowNoExpiry)
 
   const [token,     setToken]     = useState<TokenData | null>(null)
@@ -66,8 +66,8 @@ export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) 
     if (!postId) return
     setLoaded(false); setToken(null); setMode('view')
 
-    fetch(`${wptPreviewData?.tokenBase ?? ''}?post_id=${postId}`, {
-      headers: { 'X-WP-Nonce': wptPreviewData?.nonce ?? '' },
+    fetch(`${pvtPreviewData?.tokenBase ?? ''}?post_id=${postId}`, {
+      headers: { 'X-WP-Nonce': pvtPreviewData?.nonce ?? '' },
     })
       .then(r => r.ok ? r.json() as Promise<TokenData> : null)
       .then(d => { setToken(d); setLoaded(true) })
@@ -128,10 +128,10 @@ export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) 
       : null,
   )
 
-  if (!loaded) return el('div', { 'data-wpt-panel': 'loading' }, el('p', { style: S_META }, t().loading))
+  if (!loaded) return el('div', { 'data-pvt-panel': 'loading' }, el('p', { style: S_META }, t().loading))
 
   if (isActive && mode === 'editing') {
-    return el('div', { 'data-wpt-panel': 'editing' },
+    return el('div', { 'data-pvt-panel': 'editing' },
       expirySelector(),
       error ? el('p', { style: S_ERROR }, error) : null,
       el('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', marginTop: '8px' } },
@@ -146,10 +146,10 @@ export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) 
       ? fmt(t().expiresRelative, expiry.abs, expiry.rel)
       : expiry?.abs ?? ''
 
-    return el('div', { 'data-wpt-panel': 'active' },
+    return el('div', { 'data-pvt-panel': 'active' },
       el('p', { style: S_META }, expiresLabel),
       el('div', { style: { display: 'flex', gap: '4px', alignItems: 'center', marginBottom: '8px' } },
-        el('span', { 'data-wpt-action': 'preview', style: { flex: '1' } },
+        el('span', { 'data-pvt-action': 'preview', style: { flex: '1' } },
           el(Btn, {
             variant: 'secondary',
             href: token?.preview_url,
@@ -188,10 +188,10 @@ export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) 
 
   // Treat expired tokens the same as no token — show the "Generate" view
   // without an expiry-error message. Conceptually, an expired token is gone.
-  return el('div', { 'data-wpt-panel': 'empty' },
+  return el('div', { 'data-pvt-panel': 'empty' },
     expirySelector(),
     error ? el('p', { style: S_ERROR }, error) : null,
-    el('span', { 'data-wpt-action': 'generate' },
+    el('span', { 'data-pvt-action': 'generate' },
       el(Btn, {
         variant: 'secondary',
         onClick: doGenerate,

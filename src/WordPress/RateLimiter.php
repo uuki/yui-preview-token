@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace WPT\WordPress;
+namespace PVT\WordPress;
 
 class RateLimiter
 {
-    private const PREFIX = 'wpt_rl_';
+    private const PREFIX = 'pvt_rl_';
 
     private int $max_requests;
     private int $window;

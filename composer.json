@@ -14,12 +14,12 @@
     },
     "autoload": {
         "psr-4": {
-            "WPT\\": "src/"
+            "PVT\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "WPT\\Tests\\": "tests/"
+            "PVT\\Tests\\": "tests/"
         }
     },
     "scripts": {

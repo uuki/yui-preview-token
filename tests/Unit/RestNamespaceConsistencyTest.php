@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WPT\Tests\Unit;
+namespace PVT\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use WPT\WordPress\Constants;
+use PVT\WordPress\Constants;
 
 /**
  * Asserts that every hardcoded REST namespace reference in the playground

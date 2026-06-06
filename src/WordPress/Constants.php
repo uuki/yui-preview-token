@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPT\WordPress;
+namespace PVT\WordPress;
 
 /**
  * Plugin-wide constants.
@@ -27,13 +27,13 @@ final class Constants
 
     // ── wp_options keys ──────────────────────────────────────────────────────
 
-    public const OPTION_FRONTEND_URL        = 'wpt_frontend_url';
-    public const OPTION_ALLOWED_ORIGINS     = 'wpt_allowed_origins';
-    public const OPTION_MIN_CAPABILITY      = 'wpt_min_capability';
-    public const OPTION_RATE_LIMIT_REQUESTS = 'wpt_rate_limit_requests';
-    public const OPTION_RATE_LIMIT_WINDOW   = 'wpt_rate_limit_window';
-    public const OPTION_ALLOW_NO_EXPIRY     = 'wpt_allow_no_expiry';
-    public const OPTION_SKIP_HTTPS_CHECK    = 'wpt_skip_https_check';
+    public const OPTION_FRONTEND_URL        = 'pvt_frontend_url';
+    public const OPTION_ALLOWED_ORIGINS     = 'pvt_allowed_origins';
+    public const OPTION_MIN_CAPABILITY      = 'pvt_min_capability';
+    public const OPTION_RATE_LIMIT_REQUESTS = 'pvt_rate_limit_requests';
+    public const OPTION_RATE_LIMIT_WINDOW   = 'pvt_rate_limit_window';
+    public const OPTION_ALLOW_NO_EXPIRY     = 'pvt_allow_no_expiry';
+    public const OPTION_SKIP_HTTPS_CHECK    = 'pvt_skip_https_check';
 
     private function __construct() {}
 }

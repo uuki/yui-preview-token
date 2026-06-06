@@ -1,34 +1,34 @@
 /**
  * Classic Editor meta box entry.
- * Mounts WptTokenPanel into the container injected by Settings::render_classic_meta_box().
+ * Mounts PvtTokenPanel into the container injected by Settings::render_classic_meta_box().
  * WordPress deps: wp-element
  */
 
-import { WptTokenPanel } from './token-panel'
+import { PvtTokenPanel } from './token-panel'
 import { NativeBtn, NativeSelect } from './native-components'
 
-if (typeof wptPreviewData === 'undefined') {
-  throw new Error('[WPT] wptPreviewData is not defined')
+if (typeof pvtPreviewData === 'undefined') {
+  throw new Error('[PVT] pvtPreviewData is not defined')
 }
 
 const { createElement: el } = wp.element
 
-interface WptContainer extends HTMLElement {
-  _wptRoot?: { render: (node: unknown) => void; unmount: () => void }
+interface PvtContainer extends HTMLElement {
+  _pvtRoot?: { render: (node: unknown) => void; unmount: () => void }
 }
 
 const initClassicMetaBox = (): void => {
-  const root = document.getElementById('wpt-classic-meta-box-root') as WptContainer | null
+  const root = document.getElementById('pvt-classic-meta-box-root') as PvtContainer | null
   if (!root) return
 
   const postId = parseInt(root.dataset['postId'] ?? '0', 10)
   if (!postId) return
 
-  const panel = el(WptTokenPanel, { postId, Btn: NativeBtn, SelectInput: NativeSelect })
+  const panel = el(PvtTokenPanel, { postId, Btn: NativeBtn, SelectInput: NativeSelect })
 
   if (wp.element.createRoot) {
-    if (!root._wptRoot) root._wptRoot = wp.element.createRoot(root)
-    root._wptRoot.render(panel)
+    if (!root._pvtRoot) root._pvtRoot = wp.element.createRoot(root)
+    root._pvtRoot.render(panel)
   } else {
     // @ts-expect-error — legacy React 17 render API
     wp.element.render(panel, root)

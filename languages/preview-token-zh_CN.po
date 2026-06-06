@@ -249,8 +249,8 @@ msgid "The HTTPS check is currently disabled. Preview tokens can be sent over un
 msgstr "当前 HTTPS 检查已禁用。预览令牌可能通过未加密的 HTTP 传输。请勿在生产环境中使用此设置。"
 
 #: src/WordPress/Settings.php
-msgid "If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting."
-msgstr "如果在 wp-config.php 中定义了 WPT_SKIP_HTTPS_CHECK 常量，则该常量优先于此设置。"
+msgid "If the PVT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting."
+msgstr "如果在 wp-config.php 中定义了 PVT_SKIP_HTTPS_CHECK 常量，则该常量优先于此设置。"
 
 msgid "Maximum number of preview requests allowed from a single IP address within the rate limit window. Requests that exceed this limit receive a 429 response. Default: 30."
 msgstr "在速率限制时间窗口内，单个 IP 地址允许的最大预览请求数。超过此限制的请求将收到 429 响应。默认值：30。"

@@ -249,8 +249,8 @@ msgid "The HTTPS check is currently disabled. Preview tokens can be sent over un
 msgstr "現在 HTTPS チェックが無効になっています。プレビュートークンが暗号化されていない HTTP 通信で送信される可能性があります。本番環境では絶対に使用しないでください。"
 
 #: src/WordPress/Settings.php
-msgid "If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting."
-msgstr "wp-config.php で WPT_SKIP_HTTPS_CHECK 定数を定義している場合は、この設定よりも優先されます。"
+msgid "If the PVT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting."
+msgstr "wp-config.php で PVT_SKIP_HTTPS_CHECK 定数を定義している場合は、この設定よりも優先されます。"
 
 msgid "Maximum number of preview requests allowed from a single IP address within the rate limit window. Requests that exceed this limit receive a 429 response. Default: 30."
 msgstr "レート制限ウィンドウ内に1つの IP アドレスから許可されるプレビューリクエストの最大数。この上限を超えたリクエストは 429 レスポンスを受け取ります。デフォルト: 30。"
