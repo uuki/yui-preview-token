@@ -13,7 +13,6 @@ pnpm-lock.yaml
 package.json
 tsconfig.json
 tsdown.config.ts
-composer.json
 composer.lock
 phpunit.xml
 patchwork.json

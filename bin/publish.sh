@@ -46,7 +46,7 @@ done
 # Files
 for f in .gitignore .gitattributes .distignore .phpunit.result.cache \
           CLAUDE.md LICENSE readme-ja.txt package.json pnpm-lock.yaml \
-          tsconfig.json tsdown.config.ts composer.json composer.lock \
+          tsconfig.json tsdown.config.ts composer.lock \
           phpunit.xml patchwork.json; do
     rm -f "${STAGE:?}/${f}"
 done
