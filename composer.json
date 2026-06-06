@@ -1,6 +1,6 @@
 {
-    "name": "uuki/wp-preview-token",
-    "description": "Issues short-lived preview tokens for Headless WordPress.",
+    "name": "uuki/preview-token",
+    "description": "Issues time-limited preview tokens for Headless WordPress.",
     "type": "wordpress-plugin",
     "license": "MIT",
     "require": {
