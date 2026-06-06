@@ -23,7 +23,7 @@ if (!list || !addBtn) {
     input.type        = 'text'
     input.name        = field
     input.value       = value
-    input.className   = 'regular-text code'
+    input.className   = 'regular-text'
     input.placeholder = 'https://example.com  or  https://*.example.com'
     input.style.cssText = 'flex:1;font-family:monospace'
     input.addEventListener('input', updateWildcardWarning)
