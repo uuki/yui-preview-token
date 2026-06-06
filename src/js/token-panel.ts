@@ -6,6 +6,7 @@ import {
   fmt,
   formatExpiry,
   getPresetOptions,
+  toLocalDatetimeString,
 } from './utils'
 
 const { createElement: el, useState, useEffect } = wp.element
@@ -120,7 +121,7 @@ export const WptTokenPanel = ({ postId, Btn, SelectInput }: WptTokenPanelProps) 
           key: 'custom-dt',
           type: 'datetime-local',
           value: customIso,
-          min: new Date().toISOString().slice(0, 16),
+          min: toLocalDatetimeString(new Date()),
           onChange: (e: Event) => setCustomIso((e.target as HTMLInputElement).value),
           style: { width: '100%', marginTop: '6px', boxSizing: 'border-box' as const },
         })

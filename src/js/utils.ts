@@ -29,8 +29,20 @@ export const getPresetOptions = (allowNoExpiry: boolean): SelectOption[] => {
 
 // ── Pure functions ────────────────────────────────────────────────────────────
 
+/**
+ * Formats a Date as "YYYY-MM-DDTHH:MM" in the browser's LOCAL timezone.
+ * toISOString() returns UTC, which would be offset by the browser's UTC
+ * offset when set as a datetime-local value — causing the wrong time to
+ * appear in the picker for users outside UTC.
+ */
+export const toLocalDatetimeString = (date: Date): string => {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+       + `T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
 export const defaultCustomIso = (): string =>
-  new Date(Date.now() + 86_400_000).toISOString().slice(0, 16)
+  toLocalDatetimeString(new Date(Date.now() + 86_400_000))
 
 export const computeExpiresAt = (preset: string, customIso: string): number => {
   const now = Math.floor(Date.now() / 1000)
