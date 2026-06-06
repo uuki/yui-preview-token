@@ -26,10 +26,6 @@ class AdminScripts
 
     public function enqueue_block_editor(): void
     {
-        if ($this->settings->get_frontend_url() === '') {
-            return;
-        }
-
         wp_enqueue_script(
             'wpt-sidebar',
             $this->asset_url('sidebar'),
@@ -44,10 +40,6 @@ class AdminScripts
 
     public function enqueue_admin(string $hook): void
     {
-        if ($this->settings->get_frontend_url() === '') {
-            return;
-        }
-
         if ($hook === 'edit.php') {
             wp_enqueue_script(
                 'wpt-quick-edit',
@@ -79,10 +71,6 @@ class AdminScripts
 
     public function register_classic_meta_box(): void
     {
-        if ($this->settings->get_frontend_url() === '') {
-            return;
-        }
-
         $screen = get_current_screen();
         if (!$screen || $screen->is_block_editor()) {
             return;

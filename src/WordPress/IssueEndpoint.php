@@ -177,7 +177,7 @@ class IssueEndpoint
     private function format(array $data): array
     {
         return [
-            'preview_url' => add_query_arg('token', $data['raw'], $this->settings->get_frontend_url()),
+            'preview_url' => add_query_arg('token', $data['raw'], $this->settings->get_frontend_url() ?: home_url('/')),
             'expires_at'  => $data['expires_at'],
             'issued_at'   => $data['issued_at'],
             'issued_by'   => $data['issued_by'],

@@ -39,8 +39,8 @@ msgstr "レート制限ウィンドウ"
 msgid "Allow No-Expiry Tokens"
 msgstr "有効期限なしトークンを許可"
 
-msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress."
-msgstr "プレビューコンテンツをレンダリングする外部クライアントまたはフロントエンドの URL。ヘッドレス構成（Astro、Next.js、Nuxt など）や WordPress 外でドラフトコンテンツをレンダリングするデカップル型アーキテクチャ向けです。"
+msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress. If left empty, the WordPress site URL is used as a fallback."
+msgstr "プレビューコンテンツをレンダリングする外部クライアントまたはフロントエンドの URL。ヘッドレス構成（Astro、Next.js、Nuxt など）や WordPress 外でドラフトコンテンツをレンダリングするデカップル型アーキテクチャ向けです。空欄の場合は WordPress サイト URL がフォールバックとして使用されます。"
 
 msgid "Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers."
 msgstr "ワイルドカードをサポートしています（例：https://*.example.com、*）。すべてのフィールドを空にすると CORS ヘッダーを無効にします。"
