@@ -179,9 +179,9 @@ class IssueEndpoint
         return [
             'preview_url' => add_query_arg(
                 [
-                    'token'   => $data['raw'],
                     'p'       => $post_id,
                     'preview' => 'true',
+                    'token'   => $data['raw'],
                 ],
                 $this->settings->get_frontend_url() ?: home_url('/')
             ),
