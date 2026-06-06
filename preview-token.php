@@ -4,7 +4,7 @@
  * Plugin Name: Preview Token
  * Plugin URI:  https://github.com/uuki/wp-preview-token
  * Description: Issues short-lived preview tokens for Headless WordPress preview authentication.
- * Version:     1.0.1
+ * Version:     1.0.3
  * Requires PHP: 7.4
  * License:     GPL-2.0-or-later
  */

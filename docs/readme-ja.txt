@@ -3,7 +3,7 @@ Contributors: uuki
 Tags: preview, headless, rest-api, token, draft
 Requires at least: 5.9
 Tested up to: 7.0
-Stable tag: 1.0.1
+Stable tag: 1.0.3
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -198,6 +198,9 @@ const post = await res.json()
 8. **クイック編集パネル** — エディターを開かずに投稿一覧画面からトークンを管理します。
 
 == 変更履歴 ==
+
+= 1.0.3 =
+* 外部フロントエンドでのプレビュー時、下書きが未保存だと最新のデータを取得できないため、Gutenberg では外部プレビューを開く際に自動保存を行うようにしました。クラシックエディターでは、保存してからプレビューを開くよう促す説明文を追加しました。
 
 = 1.0.1 =
 * プレビュー URL に `p=<投稿ID>&pt=<投稿タイプ>&preview=true` を追加。フロントエンドが URL のみで対象投稿とコンテンツタイプを特定できるようにしました。
