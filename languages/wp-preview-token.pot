@@ -182,3 +182,88 @@ msgstr ""
 #: src/WordPress/AdminScripts.php
 msgid "An error occurred"
 msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Settings"
+msgstr ""
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "Issued Tokens"
+msgstr ""
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "Security Warning"
+msgstr ""
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible."
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Delete Expired"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Token revoked."
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expired tokens deleted."
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post Status"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Token Status"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Issued At"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expires At"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Issued By"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Active"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expired"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "(no title)"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post deleted"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Revoke"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "Revoke this token?"
+msgstr ""
+
+#: src/WordPress/TokenAdmin.php
+msgid "No tokens have been issued yet."
+msgstr ""
+
+#. translators: %d: number of tokens
+#: src/WordPress/TokenAdmin.php
+msgid "%d token(s) issued in total."
+msgstr ""

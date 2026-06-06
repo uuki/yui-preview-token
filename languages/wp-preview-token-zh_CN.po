@@ -140,3 +140,114 @@ msgstr "不足1分钟"
 
 msgid "An error occurred"
 msgstr "发生错误"
+
+msgid "requests per window"
+msgstr "次请求/时间窗口"
+
+msgid "seconds"
+msgstr "秒"
+
+#: src/WordPress/Settings.php
+msgid "Settings"
+msgstr "设置"
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "Issued Tokens"
+msgstr "已发行令牌"
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "Security Warning"
+msgstr "安全警告"
+
+#: src/WordPress/Settings.php src/WordPress/TokenAdmin.php
+msgid "The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible."
+msgstr "使用裸通配符（*）将允许任何来源通过有效令牌访问草稿内容。请尽可能使用具体的来源模式。"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Delete Expired"
+msgstr "删除已过期"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Token revoked."
+msgstr "令牌已失效。"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expired tokens deleted."
+msgstr "已过期的令牌已删除。"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post"
+msgstr "文章"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post Status"
+msgstr "文章状态"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Token Status"
+msgstr "令牌状态"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Issued At"
+msgstr "发行时间"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expires At"
+msgstr "过期时间"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Issued By"
+msgstr "发行者"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Active"
+msgstr "有效"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Expired"
+msgstr "已过期"
+
+#: src/WordPress/TokenAdmin.php
+msgid "(no title)"
+msgstr "（无标题）"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Post deleted"
+msgstr "文章已删除"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Revoke"
+msgstr "撤销"
+
+#: src/WordPress/TokenAdmin.php
+msgid "Revoke this token?"
+msgstr "确认撤销此令牌？"
+
+#: src/WordPress/TokenAdmin.php
+msgid "No tokens have been issued yet."
+msgstr "尚未发行任何令牌。"
+
+#. translators: %d: number of tokens
+#: src/WordPress/TokenAdmin.php
+msgid "%d token(s) issued in total."
+msgstr "共发行了 %d 个令牌。"
+
+#: src/WordPress/Settings.php
+msgid "Skip HTTPS Check"
+msgstr "跳过 HTTPS 检查"
+
+#: src/WordPress/Settings.php
+msgid "Enable (development only)"
+msgstr "启用（仅限开发环境）"
+
+#: src/WordPress/Settings.php
+msgid "By default the preview endpoint requires HTTPS so that tokens cannot be intercepted in transit. Enable this option only when running WordPress on a local development environment where HTTPS is unavailable."
+msgstr "默认情况下，预览端点要求使用 HTTPS，以防止令牌在传输过程中被截取。仅在无法使用 HTTPS 的本地开发环境中启用此选项。"
+
+#: src/WordPress/Settings.php
+msgid "The HTTPS check is currently disabled. Preview tokens can be sent over unencrypted HTTP. Do not use this setting in a production environment."
+msgstr "当前 HTTPS 检查已禁用。预览令牌可能通过未加密的 HTTP 传输。请勿在生产环境中使用此设置。"
+
+#: src/WordPress/Settings.php
+msgid "If the WPT_SKIP_HTTPS_CHECK constant is defined in wp-config.php, it takes precedence over this setting."
+msgstr "如果在 wp-config.php 中定义了 WPT_SKIP_HTTPS_CHECK 常量，则该常量优先于此设置。"

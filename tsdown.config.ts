@@ -14,7 +14,8 @@ const shared = {
 } as const
 
 export default defineConfig([
-  { ...shared, entry: { sidebar: 'src/js/sidebar.ts' } },
-  { ...shared, entry: { 'quick-edit': 'src/js/quick-edit.ts' } },
-  { ...shared, entry: { 'classic-editor': 'src/js/classic-editor.ts' } },
+  { ...shared, entry: { sidebar:           'src/js/sidebar.ts'         } },
+  { ...shared, entry: { 'quick-edit':      'src/js/quick-edit.ts'      } },
+  { ...shared, entry: { 'classic-editor':  'src/js/classic-editor.ts'  } },
+  { ...shared, entry: { settings:          'src/js/settings.ts'        } },
 ])

@@ -10,3 +10,4 @@ assets/js/
 .wp-playground/
 playwright-report/
 test-results/
+dist/

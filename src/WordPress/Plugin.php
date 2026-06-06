@@ -50,6 +50,7 @@ class Plugin
         $this->settings->register();
         (new AdminScripts($this->settings, plugin_dir_url(WPT_PLUGIN_FILE)))->register();
         (new AuditLogger())->register();
+        (new TokenAdmin($issuer))->register();
 
         add_action('rest_api_init', [$endpoint, 'register']);
         add_action('rest_api_init', [$issue,    'register']);

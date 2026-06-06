@@ -6,7 +6,7 @@
  * Description: Issues short-lived preview tokens for Headless WordPress preview authentication.
  * Version:     1.0.0
  * Requires PHP: 7.4
- * License:     MIT
+ * License:     GPL-2.0-or-later
  */
 
 declare(strict_types=1);

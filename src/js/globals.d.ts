@@ -60,6 +60,20 @@ declare global {
 
   /** Injected by wp_localize_script before each entry script runs. */
   const wptPreviewData: WptPreviewData | undefined
+
+  interface WptSettingsData {
+    /** name attribute for origin inputs, e.g. "wpt_allowed_origins[]" */
+    field:        string
+    /** aria-label for the × remove button */
+    removeLabel:  string
+    /** "Security Warning" title */
+    warningTitle: string
+    /** Full wildcard (*) warning message */
+    warningText:  string
+  }
+
+  /** Injected on the plugin settings page only. */
+  const wptSettingsData: WptSettingsData
 }
 
 export {}

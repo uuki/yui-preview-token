@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build": "tsdown",
-    "build:watch": "tsdown --watch"
+    "build:watch": "tsdown --watch",
+    "release": "bash bin/publish.sh"
   },
   "devDependencies": {
     "@wordpress/components": "^29.0.0",

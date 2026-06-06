@@ -78,6 +78,7 @@ class IssueEndpoint
     {
         $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
         if (!$this->rate_limiter->is_allowed($ip)) {
+            do_action('wpt_rate_limit_exceeded', $ip, 'token');
             return new WP_Error('rate_limit_exceeded', 'Too many requests.', ['status' => 429]);
         }
 
@@ -138,6 +139,7 @@ class IssueEndpoint
     private function check_capability(int $user_id, int $post_id)
     {
         if (!user_can($user_id, $this->settings->get_min_capability(), $post_id)) {
+            do_action('wpt_capability_denied', $user_id, $post_id);
             return new WP_Error('forbidden', 'Insufficient permissions.', ['status' => 403]);
         }
         return null;

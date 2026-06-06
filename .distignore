@@ -1,0 +1,27 @@
+# Development files excluded from the distribution zip.
+# Used by bin/publish.sh via rsync --exclude-from.
+
+.git
+.gitignore
+.github
+.claude
+.phpunit.result.cache
+CLAUDE.md
+LICENSE
+node_modules
+pnpm-lock.yaml
+package.json
+tsconfig.json
+tsdown.config.ts
+composer.json
+composer.lock
+phpunit.xml
+patchwork.json
+playground
+tests
+src/js
+docs
+bin
+dist
+languages/*.pot
+*.DS_Store

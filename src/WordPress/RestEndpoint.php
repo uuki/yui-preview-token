@@ -57,8 +57,13 @@ class RestEndpoint
      */
     public function handle(WP_REST_Request $request)
     {
-        // M-3: HTTPS required. Override with define('WPT_SKIP_HTTPS_CHECK', true) in wp-config.php.
-        if (!is_ssl() && !(defined('WPT_SKIP_HTTPS_CHECK') && WPT_SKIP_HTTPS_CHECK)) {
+        // M-3: HTTPS required.
+        // Override options (precedence: wp-config constant > DB option):
+        //   define('WPT_SKIP_HTTPS_CHECK', true)         — server-level override
+        //   Settings > Skip HTTPS Check (checkbox)       — admin UI toggle
+        $skip_https = (defined('WPT_SKIP_HTTPS_CHECK') && WPT_SKIP_HTTPS_CHECK)
+                   || $this->settings->get_skip_https_check();
+        if (!is_ssl() && !$skip_https) {
             return new WP_Error(
                 'https_required',
                 'HTTPS is required.',
@@ -69,6 +74,7 @@ class RestEndpoint
         // M-2: Rate limiting per client IP
         $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
         if (!$this->rate_limiter->is_allowed($ip)) {
+            do_action('wpt_rate_limit_exceeded', $ip, 'preview');
             return new WP_Error(
                 'rate_limit_exceeded',
                 'Too many requests.',
@@ -80,6 +86,7 @@ class RestEndpoint
         $data  = $this->validator->validate($token);
 
         if ($data === false) {
+            do_action('wpt_invalid_token', $ip);
             return new WP_Error(
                 'invalid_token',
                 'Invalid or expired preview token.',
@@ -142,6 +149,16 @@ class RestEndpoint
                     : '';
 
                 if ($request_origin === '' || !$this->is_origin_allowed($request_origin, $patterns)) {
+                    // WP core's rest_send_cors_headers (priority 10) unconditionally echoes
+                    // back the request origin.  Only remove that specific echo-back; leave
+                    // any Access-Control-Allow-Origin set to a *different* value intact so
+                    // that other plugins' deliberate CORS policies are not overridden.
+                    $current = $this->current_acao_header();
+                    if ($current !== null && $current === $request_origin) {
+                        header_remove('Access-Control-Allow-Origin');
+                        header_remove('Access-Control-Allow-Methods');
+                        header_remove('Access-Control-Allow-Credentials');
+                    }
                     return $served;
                 }
 
@@ -156,7 +173,9 @@ class RestEndpoint
 
                 return $served;
             },
-            10,
+            // Priority 11: run after WP core's rest_send_cors_headers (priority 10)
+            // so we can override or remove the headers it sets for our endpoints.
+            11,
             3
         );
     }
@@ -201,5 +220,19 @@ class RestEndpoint
         }
 
         return false;
+    }
+
+    /**
+     * Returns the current Access-Control-Allow-Origin value from already-sent
+     * PHP response headers, or null if the header has not been set.
+     */
+    private function current_acao_header(): ?string
+    {
+        foreach (headers_list() as $header) {
+            if (stripos($header, 'Access-Control-Allow-Origin:') === 0) {
+                return trim(substr($header, strlen('Access-Control-Allow-Origin:')));
+            }
+        }
+        return null;
     }
 }
