@@ -224,7 +224,7 @@ class Settings
                 <input type="text"
                        name="<?php echo esc_attr($field); ?>"
                        value="<?php echo esc_attr($origin); ?>"
-                       class="regular-text code"
+                       class="regular-text"
                        placeholder="https://example.com  or  https://*.example.com"
                        style="flex:1;font-family:monospace" />
                 <button type="button"
