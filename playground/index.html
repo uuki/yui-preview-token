@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 720px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      color: #111;
+    }
+    #status { color: #888; }
+    #status.error { color: #c00; }
+    h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .meta { color: #888; font-size: 0.875rem; margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+  <p id="status">Loading preview…</p>
+  <article id="post" hidden>
+    <h1 id="title"></h1>
+    <p class="meta" id="meta"></p>
+    <div id="content"></div>
+  </article>
+
+  <script type="module">
+    const token  = new URLSearchParams(location.search).get('token');
+    const status = document.getElementById('status');
+
+    if (!token) {
+      status.textContent = 'No preview token in URL.';
+      status.className   = 'error';
+    } else {
+      try {
+        const res = await fetch(
+          `/wp-json/wp-preview-token/v1/preview?token=${encodeURIComponent(token)}`
+        );
+        if (!res.ok) throw new Error(`${res.status} — invalid or expired token`);
+
+        const post = await res.json();
+
+        status.hidden = true;
+        document.getElementById('title').textContent  = post.title?.rendered   ?? post.title   ?? '';
+        document.getElementById('meta').textContent   = `status: ${post.status}  ·  modified: ${post.modified}`;
+        document.getElementById('content').innerHTML  = post.content?.rendered ?? post.content ?? '';
+        document.getElementById('post').hidden        = false;
+      } catch (err) {
+        status.textContent = err.message;
+        status.className   = 'error';
+      }
+    }
+  </script>
+</body>
+</html>

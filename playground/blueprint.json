@@ -1,0 +1,27 @@
+{
+  "preferredVersions": {
+    "php": "8.0",
+    "wp": "latest"
+  },
+  "siteOptions": {
+    "blogname": "WP Preview Token Dev"
+  },
+  "steps": [
+    {
+      "step": "activatePlugin",
+      "pluginPath": "wp-preview-token/wp-preview-token.php"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire '/wordpress/wp-load.php';\n$dir = WP_PLUGIN_DIR . '/classic-editor-fixture';\nif (!is_dir($dir)) mkdir($dir, 0755, true);\nfile_put_contents($dir . '/classic-editor-fixture.php', implode(\"\\n\", ['<?php','/*','Plugin Name: Classic Editor (Test Fixture)','Description: Disables the block editor for Classic Editor E2E testing.','Version: 1.0','*/','add_filter(\"use_block_editor_for_post\", \"__return_false\", 100);','']));\n?>"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire '/wordpress/wp-load.php';\nupdate_option('wpt_frontend_url', 'http://localhost:5173');\nupdate_option('wpt_allowed_origin', 'http://localhost:5173');\nupdate_option('wpt_min_capability', 'edit_posts');\nupdate_option('wpt_rate_limit_requests', 60);\nupdate_option('wpt_rate_limit_window', 60);\n?>"
+    },
+    {
+      "step": "wp-cli",
+      "command": "wp post create --post_title='Draft: Preview Test' --post_content='<p>This is a <strong>draft</strong> post for preview testing.</p><p>Second paragraph with some <em>formatted</em> content.</p>' --post_status=draft --post_author=1"
+    }
+  ]
+}

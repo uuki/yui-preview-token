@@ -1,0 +1,31 @@
+{
+    "name": "uuki/wp-preview-token",
+    "description": "Issues short-lived preview tokens for Headless WordPress.",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4",
+        "symfony/polyfill-php80": "^1.31"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "brain/monkey": "^2.6",
+        "mockery/mockery": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "WPT\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WPT\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

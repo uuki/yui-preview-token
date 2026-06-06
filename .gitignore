@@ -1,0 +1,11 @@
+*.DS_Store
+*.log
+.claude/
+CLAUDE.md
+vendor/
+composer.lock
+*.cache
+node_modules/
+.wp-playground/
+playwright-report/
+test-results/

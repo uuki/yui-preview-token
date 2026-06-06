@@ -1,0 +1,20 @@
+{
+  "name": "wp-preview-token-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "composer install --no-dev --working-dir=..",
+    "dev": "concurrently -n WP,Vite -c blue,green \"pnpm run wp\" \"pnpm run frontend\"",
+    "wp": "wp-playground-cli start --path=../ --port=9400 --skip-browser --define-bool WPT_SKIP_HTTPS_CHECK true --blueprint=blueprint.json",
+    "frontend": "vite --port=5173",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@wp-playground/cli": "*",
+    "concurrently": "^9.0.0",
+    "vite": "^6.0.0"
+  }
+}
