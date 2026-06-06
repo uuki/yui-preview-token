@@ -179,6 +179,9 @@ class TokenAdmin
                 count($tokens)
             ); ?>
         </p>
+        <p class="description" style="margin-top:4px">
+            <?php esc_html_e('Expired tokens are rejected immediately upon use. However, the database records are removed once daily by WP Cron, so expired tokens may remain visible in this list until the next scheduled cleanup. To remove them right away, use the "Delete Expired" button above.', 'preview-token'); ?>
+        </p>
         <?php endif;
     }
 
