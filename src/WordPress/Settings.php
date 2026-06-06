@@ -226,7 +226,7 @@ class Settings
                        value="<?php echo esc_attr($origin); ?>"
                        class="regular-text"
                        placeholder="https://example.com  or  https://*.example.com"
-                       style="flex:1;font-family:monospace" />
+                       style="flex:1;font-family:-apple-system,&quot;system-ui&quot;,&quot;Segoe UI&quot;,Roboto,Oxygen-Sans,Ubuntu,Cantarell,&quot;Helvetica Neue&quot;,sans-serif" />
                 <button type="button"
                         class="button wpt-remove-origin"
                         aria-label="<?php esc_attr_e('Remove this origin', 'preview-token'); ?>">&#x2715;</button>

@@ -25,7 +25,7 @@ if (!list || !addBtn) {
     input.value       = value
     input.className   = 'regular-text'
     input.placeholder = 'https://example.com  or  https://*.example.com'
-    input.style.cssText = 'flex:1;font-family:monospace'
+    input.style.cssText = 'flex:1;font-family:-apple-system,"system-ui","Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif'
     input.addEventListener('input', updateWildcardWarning)
 
     const btn = document.createElement('button')
