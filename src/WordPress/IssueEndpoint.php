@@ -70,7 +70,7 @@ class IssueEndpoint
         $data = $this->issuer->get_by_post($post_id);
         if (!$data) return new WP_REST_Response(null, 404);
 
-        return new WP_REST_Response($this->format($data), 200);
+        return new WP_REST_Response($this->format($data, $post_id), 200);
     }
 
     /** @return WP_REST_Response|WP_Error */
@@ -97,7 +97,7 @@ class IssueEndpoint
 
         $this->issuer->issue($post_id, $user_id, $resolved);
 
-        return new WP_REST_Response($this->format($this->issuer->get_by_post($post_id)), 201);
+        return new WP_REST_Response($this->format($this->issuer->get_by_post($post_id), $post_id), 201);
     }
 
     /** @return WP_REST_Response|WP_Error */
@@ -117,7 +117,7 @@ class IssueEndpoint
             return new WP_Error('no_token', 'No active token for this post.', ['status' => 404]);
         }
 
-        return new WP_REST_Response($this->format($this->issuer->get_by_post($post_id)), 200);
+        return new WP_REST_Response($this->format($this->issuer->get_by_post($post_id), $post_id), 200);
     }
 
     /** @return WP_REST_Response|WP_Error */
@@ -174,13 +174,13 @@ class IssueEndpoint
         return time() + self::NO_EXPIRY_SECONDS;
     }
 
-    private function format(array $data): array
+    private function format(array $data, int $post_id): array
     {
         return [
             'preview_url' => add_query_arg(
                 [
                     'token'   => $data['raw'],
-                    'p'       => $data['post_id'],
+                    'p'       => $post_id,
                     'preview' => 'true',
                 ],
                 $this->settings->get_frontend_url() ?: home_url('/')
