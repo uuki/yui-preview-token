@@ -1,0 +1,184 @@
+# Copyright (C) 2026 WP Preview Token
+# This file is distributed under the MIT license.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Preview Token 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/uuki/wp-preview-token/issues\n"
+"POT-Creation-Date: 2026-06-06T00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: WP Preview Token\n"
+
+#. Plugin name.
+msgid "WP Preview Token"
+msgstr ""
+
+#. Settings menu name.
+msgid "Preview Token"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "External Preview URL"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Allowed Origins (CORS)"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Minimum Capability"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Rate Limit"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Rate Limit Window"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Allow No-Expiry Tokens"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress."
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers."
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "+ Add origin"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Remove this origin"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Enable"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Allow preview tokens with no expiry. Use with caution — these tokens persist until manually deleted."
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Subscriber"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Contributor"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Author"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Editor"
+msgstr ""
+
+#: src/WordPress/Settings.php
+msgid "Administrator"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "External Preview"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "1 hour"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "24 hours"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "30 days"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Custom"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "No expiry"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Loading…"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Expiry"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Update"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Cancel"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Open external preview"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Copy external preview URL"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Change expiry"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Delete"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Delete this token?"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Yes"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Generate token"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "Regenerate token"
+msgstr ""
+
+#. translators: %s: token expiry date
+#: src/WordPress/AdminScripts.php
+msgid "Token expired: %s"
+msgstr ""
+
+#. translators: 1: expiry date, 2: relative time remaining
+#: src/WordPress/AdminScripts.php
+msgid "Expires: %s (%s remaining)"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "< 1 min"
+msgstr ""
+
+#: src/WordPress/AdminScripts.php
+msgid "An error occurred"
+msgstr ""

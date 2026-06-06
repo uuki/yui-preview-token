@@ -27,6 +27,12 @@ class Plugin
 
     public function init(): void
     {
+        load_plugin_textdomain(
+            'wp-preview-token',
+            false,
+            dirname(plugin_basename(WPT_PLUGIN_FILE)) . '/languages'
+        );
+
         $pipeline = new ResponsePipeline([
             [ResponseFilters::class, 'strip_password'],
             [ResponseFilters::class, 'strip_internal_fields'],
@@ -42,7 +48,8 @@ class Plugin
         $issue    = new IssueEndpoint($issuer, $this->settings, $rate_limiter);
 
         $this->settings->register();
-        (new AdminScripts($this->settings))->register();
+        (new AdminScripts($this->settings, plugin_dir_url(WPT_PLUGIN_FILE)))->register();
+        (new AuditLogger())->register();
 
         add_action('rest_api_init', [$endpoint, 'register']);
         add_action('rest_api_init', [$issue,    'register']);

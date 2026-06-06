@@ -16,10 +16,6 @@ use WP_REST_Server;
 
 class RestEndpoint
 {
-    public const NAMESPACE = 'wp-preview-token/v1';
-    public const ROUTE     = '/preview';
-
-    private const PREVIEWABLE_STATUSES = ['draft', 'pending', 'future'];
 
     private TokenValidator $validator;
     private ResponsePipeline $pipeline;
@@ -40,7 +36,7 @@ class RestEndpoint
 
     public function register(): void
     {
-        register_rest_route(self::NAMESPACE, self::ROUTE, [
+        register_rest_route(Constants::REST_NAMESPACE, Constants::ROUTE_PREVIEW, [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'handle'],
             'permission_callback' => '__return_true',
@@ -102,7 +98,7 @@ class RestEndpoint
         }
 
         // L-3: Restrict to previewable statuses only
-        if (!in_array($post->post_status, self::PREVIEWABLE_STATUSES, true)) {
+        if (!in_array($post->post_status, Constants::PREVIEWABLE_STATUSES, true)) {
             return new WP_Error(
                 'invalid_post_status',
                 'Preview is only available for unpublished posts.',
@@ -126,32 +122,84 @@ class RestEndpoint
 
     private function register_response_headers(): void
     {
-        $origin = $this->settings->get_allowed_origin();
-
         add_filter(
             'rest_pre_serve_request',
-            function (bool $served, WP_HTTP_Response $result, WP_REST_Request $request) use ($origin): bool {
-                if (!str_starts_with($request->get_route(), '/' . self::NAMESPACE)) {
+            function (bool $served, WP_HTTP_Response $result, WP_REST_Request $request): bool {
+                if (!str_starts_with($request->get_route(), '/' . Constants::REST_NAMESPACE)) {
                     return $served;
                 }
 
                 // M-3: Prevent token leakage via Referer header on external resource loads
                 header('Referrer-Policy: no-referrer');
 
-                if ($origin !== '') {
-                    // L-1: Strip newlines before header interpolation (belt-and-suspenders over esc_url_raw)
-                    $safe_origin = str_replace(["\r", "\n"], '', $origin);
-                    header("Access-Control-Allow-Origin: {$safe_origin}");
-                    header('Access-Control-Allow-Methods: GET, OPTIONS');
-                    header('Access-Control-Allow-Credentials: false');
-                    // L-1: Required to prevent CDN/proxy caching a single-origin response for all origins
-                    header('Vary: Origin');
+                $patterns = $this->settings->get_allowed_origins();
+                if ($patterns === []) {
+                    return $served;
                 }
+
+                $request_origin = isset($_SERVER['HTTP_ORIGIN'])
+                    ? trim(sanitize_text_field(wp_unslash($_SERVER['HTTP_ORIGIN'])))
+                    : '';
+
+                if ($request_origin === '' || !$this->is_origin_allowed($request_origin, $patterns)) {
+                    return $served;
+                }
+
+                // L-1: Always echo back the *actual* request origin, never the pattern.
+                //      Browsers reject wildcard pattern strings as ACAO values.
+                $safe = str_replace(["\r", "\n"], '', $request_origin);
+                header("Access-Control-Allow-Origin: {$safe}");
+                header('Access-Control-Allow-Methods: GET, OPTIONS');
+                header('Access-Control-Allow-Credentials: false');
+                // L-1: Required to prevent CDN/proxy caching a single-origin response for all origins
+                header('Vary: Origin');
 
                 return $served;
             },
             10,
             3
         );
+    }
+
+    /**
+     * Returns true when $origin matches at least one pattern in $patterns.
+     *
+     * Pattern syntax:
+     *   - Exact match:   https://example.com
+     *   - Host wildcard: https://*.example.com  (matches one subdomain level)
+     *   - Full wildcard: *  (matches any origin — use with caution)
+     *
+     * @param string   $origin   The actual HTTP_ORIGIN value from the request.
+     * @param string[] $patterns Origin patterns from Settings::get_allowed_origins().
+     */
+    public function is_origin_allowed(string $origin, array $patterns): bool
+    {
+        foreach ($patterns as $pattern) {
+            if ($pattern === '*') {
+                return true;
+            }
+
+            if ($pattern === $origin) {
+                return true;
+            }
+
+            if (strpos($pattern, '*') === false) {
+                continue;
+            }
+
+            // Convert the wildcard pattern to a regex.
+            // Use '#' as delimiter so literal '/' in URLs need not be escaped.
+            // Each literal segment is quoted; '*' becomes [^:/]+ so wildcards
+            // cannot cross scheme/host/port boundaries.
+            $segments = explode('*', $pattern);
+            // [^.:/]+ — wildcard matches one host component only (no dots, no port)
+            $regex    = implode('[^.:/]+', array_map(static fn($s) => preg_quote($s, '#'), $segments));
+
+            if (preg_match('#^' . $regex . '$#', $origin)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

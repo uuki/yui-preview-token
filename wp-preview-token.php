@@ -15,6 +15,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+define('WPT_PLUGIN_FILE', __FILE__);
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 WPT\WordPress\Plugin::get_instance()->init();

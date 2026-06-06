@@ -17,7 +17,7 @@
     },
     {
       "step": "runPHP",
-      "code": "<?php\nrequire '/wordpress/wp-load.php';\nupdate_option('wpt_frontend_url', 'http://localhost:5173');\nupdate_option('wpt_allowed_origin', 'http://localhost:5173');\nupdate_option('wpt_min_capability', 'edit_posts');\nupdate_option('wpt_rate_limit_requests', 60);\nupdate_option('wpt_rate_limit_window', 60);\n?>"
+      "code": "<?php\nrequire '/wordpress/wp-load.php';\nupdate_option('wpt_frontend_url', 'http://localhost:5173');\nupdate_option('wpt_allowed_origins', 'http://localhost:4321');\nupdate_option('wpt_min_capability', 'contributor');\nupdate_option('wpt_rate_limit_requests', 60);\nupdate_option('wpt_rate_limit_window', 60);\n\n?>"
     },
     {
       "step": "wp-cli",

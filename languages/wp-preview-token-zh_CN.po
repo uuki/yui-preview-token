@@ -1,0 +1,142 @@
+# Simplified Chinese translation for WP Preview Token
+# Copyright (C) 2026 WP Preview Token
+# This file is distributed under the MIT license.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Preview Token 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/uuki/wp-preview-token/issues\n"
+"POT-Creation-Date: 2026-06-06T00:00:00+00:00\n"
+"PO-Revision-Date: 2026-06-06T00:00:00+00:00\n"
+"Last-Translator: \n"
+"Language-Team: Simplified Chinese\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "WP Preview Token"
+msgstr "WP 预览令牌"
+
+msgid "Preview Token"
+msgstr "预览令牌"
+
+msgid "External Preview URL"
+msgstr "外部预览 URL"
+
+msgid "Allowed Origins (CORS)"
+msgstr "允许的来源（CORS）"
+
+msgid "Minimum Capability"
+msgstr "最低角色"
+
+msgid "Rate Limit"
+msgstr "速率限制"
+
+msgid "Rate Limit Window"
+msgstr "速率限制时间窗口"
+
+msgid "Allow No-Expiry Tokens"
+msgstr "允许无过期令牌"
+
+msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress."
+msgstr "用于渲染预览内容的外部客户端或前端的 URL。适用于无头架构（如 Astro、Next.js、Nuxt）和在 WordPress 外部渲染草稿内容的解耦架构。"
+
+msgid "Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers."
+msgstr "支持通配符（如 https://*.example.com、*）。将所有字段留空可禁用 CORS 标头。"
+
+msgid "+ Add origin"
+msgstr "+ 添加来源"
+
+msgid "Remove this origin"
+msgstr "删除此来源"
+
+msgid "Enable"
+msgstr "启用"
+
+msgid "Allow preview tokens with no expiry. Use with caution — these tokens persist until manually deleted."
+msgstr "允许无过期的预览令牌。请谨慎使用——这些令牌在手动删除之前将一直有效。"
+
+msgid "You do not have sufficient permissions to access this page."
+msgstr "您没有足够的权限访问此页面。"
+
+msgid "Subscriber"
+msgstr "订阅者"
+
+msgid "Contributor"
+msgstr "投稿者"
+
+msgid "Author"
+msgstr "作者"
+
+msgid "Editor"
+msgstr "编辑"
+
+msgid "Administrator"
+msgstr "管理员"
+
+msgid "External Preview"
+msgstr "外部预览"
+
+msgid "1 hour"
+msgstr "1小时"
+
+msgid "24 hours"
+msgstr "24小时"
+
+msgid "30 days"
+msgstr "30天"
+
+msgid "Custom"
+msgstr "自定义"
+
+msgid "No expiry"
+msgstr "永不过期"
+
+msgid "Loading…"
+msgstr "加载中…"
+
+msgid "Expiry"
+msgstr "过期时间"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Open external preview"
+msgstr "打开外部预览"
+
+msgid "Copy external preview URL"
+msgstr "复制外部预览 URL"
+
+msgid "Change expiry"
+msgstr "修改过期时间"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Delete this token?"
+msgstr "确认删除此令牌？"
+
+msgid "Yes"
+msgstr "确认"
+
+msgid "Generate token"
+msgstr "生成令牌"
+
+msgid "Regenerate token"
+msgstr "重新生成令牌"
+
+msgid "Token expired: %s"
+msgstr "令牌已过期：%s"
+
+msgid "Expires: %s (%s remaining)"
+msgstr "过期时间：%s（剩余 %s）"
+
+msgid "< 1 min"
+msgstr "不足1分钟"
+
+msgid "An error occurred"
+msgstr "发生错误"

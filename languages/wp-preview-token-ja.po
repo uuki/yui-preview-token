@@ -1,0 +1,142 @@
+# Japanese translation for WP Preview Token
+# Copyright (C) 2026 WP Preview Token
+# This file is distributed under the MIT license.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Preview Token 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/uuki/wp-preview-token/issues\n"
+"POT-Creation-Date: 2026-06-06T00:00:00+00:00\n"
+"PO-Revision-Date: 2026-06-06T00:00:00+00:00\n"
+"Last-Translator: \n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "WP Preview Token"
+msgstr "WP プレビュートークン"
+
+msgid "Preview Token"
+msgstr "プレビュートークン"
+
+msgid "External Preview URL"
+msgstr "外部プレビュー URL"
+
+msgid "Allowed Origins (CORS)"
+msgstr "許可オリジン (CORS)"
+
+msgid "Minimum Capability"
+msgstr "最低ロール"
+
+msgid "Rate Limit"
+msgstr "レート制限"
+
+msgid "Rate Limit Window"
+msgstr "レート制限ウィンドウ"
+
+msgid "Allow No-Expiry Tokens"
+msgstr "有効期限なしトークンを許可"
+
+msgid "URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress."
+msgstr "プレビューコンテンツをレンダリングする外部クライアントまたはフロントエンドの URL。ヘッドレス構成（Astro、Next.js、Nuxt など）や WordPress 外でドラフトコンテンツをレンダリングするデカップル型アーキテクチャ向けです。"
+
+msgid "Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers."
+msgstr "ワイルドカードをサポートしています（例：https://*.example.com、*）。すべてのフィールドを空にすると CORS ヘッダーを無効にします。"
+
+msgid "+ Add origin"
+msgstr "+ オリジンを追加"
+
+msgid "Remove this origin"
+msgstr "このオリジンを削除"
+
+msgid "Enable"
+msgstr "有効にする"
+
+msgid "Allow preview tokens with no expiry. Use with caution — these tokens persist until manually deleted."
+msgstr "有効期限なしのプレビュートークンを許可します。注意して使用してください — これらのトークンは手動で削除されるまで有効です。"
+
+msgid "You do not have sufficient permissions to access this page."
+msgstr "このページにアクセスするための十分な権限がありません。"
+
+msgid "Subscriber"
+msgstr "購読者"
+
+msgid "Contributor"
+msgstr "寄稿者"
+
+msgid "Author"
+msgstr "投稿者"
+
+msgid "Editor"
+msgstr "編集者"
+
+msgid "Administrator"
+msgstr "管理者"
+
+msgid "External Preview"
+msgstr "外部プレビュー"
+
+msgid "1 hour"
+msgstr "1時間"
+
+msgid "24 hours"
+msgstr "24時間"
+
+msgid "30 days"
+msgstr "30日"
+
+msgid "Custom"
+msgstr "カスタム"
+
+msgid "No expiry"
+msgstr "有効期限なし"
+
+msgid "Loading…"
+msgstr "読み込み中…"
+
+msgid "Expiry"
+msgstr "有効期限"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "Open external preview"
+msgstr "外部プレビューを開く"
+
+msgid "Copy external preview URL"
+msgstr "外部プレビュー URL をコピー"
+
+msgid "Change expiry"
+msgstr "有効期限を変更"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Delete this token?"
+msgstr "このトークンを削除しますか？"
+
+msgid "Yes"
+msgstr "はい"
+
+msgid "Generate token"
+msgstr "トークンを生成"
+
+msgid "Regenerate token"
+msgstr "トークンを再生成"
+
+msgid "Token expired: %s"
+msgstr "トークンの有効期限が切れました: %s"
+
+msgid "Expires: %s (%s remaining)"
+msgstr "有効期限: %s（残り %s）"
+
+msgid "< 1 min"
+msgstr "1分未満"
+
+msgid "An error occurred"
+msgstr "エラーが発生しました"

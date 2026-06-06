@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["ES2020", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "outDir": "assets/js",
+    "rootDir": "src/js",
+    "declaration": false,
+    "sourceMap": false
+  },
+  "include": ["src/js/**/*"]
+}

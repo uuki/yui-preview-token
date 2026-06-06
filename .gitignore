@@ -6,6 +6,7 @@ vendor/
 composer.lock
 *.cache
 node_modules/
+assets/js/
 .wp-playground/
 playwright-report/
 test-results/

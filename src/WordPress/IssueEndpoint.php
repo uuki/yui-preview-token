@@ -13,11 +13,7 @@ use WP_REST_Server;
 
 class IssueEndpoint
 {
-    private const NAMESPACE         = 'wp-preview-token/v1';
-    private const ROUTE             = '/token';
     private const NO_EXPIRY_SECONDS = 3_153_600_000; // 100 × YEAR_IN_SECONDS (no-overflow on 64-bit PHP)
-
-    private const PREVIEWABLE_STATUSES = ['draft', 'pending', 'future'];
 
     private TokenIssuer $issuer;
     private Settings    $settings;
@@ -35,7 +31,7 @@ class IssueEndpoint
         $post_id_arg = ['required' => true, 'type' => 'integer', 'sanitize_callback' => 'absint'];
         $expiry_arg  = ['required' => true, 'type' => 'integer', 'sanitize_callback' => 'absint'];
 
-        register_rest_route(self::NAMESPACE, self::ROUTE, [
+        register_rest_route(Constants::REST_NAMESPACE, Constants::ROUTE_TOKEN, [
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [$this, 'handle_get'],
@@ -154,7 +150,7 @@ class IssueEndpoint
         if (!($post instanceof WP_Post)) {
             return new WP_Error('post_not_found', 'Post not found.', ['status' => 404]);
         }
-        if (!in_array($post->post_status, self::PREVIEWABLE_STATUSES, true)) {
+        if (!in_array($post->post_status, Constants::PREVIEWABLE_STATUSES, true)) {
             return new WP_Error('invalid_post_status', 'Preview is only available for unpublished posts.', ['status' => 403]);
         }
         return null;
