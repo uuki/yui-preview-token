@@ -84,7 +84,30 @@ The preview response body matches the standard WordPress REST API post format (`
 | `ping_status` | Not relevant to preview |
 | `template`    | Not relevant to preview |
 
-Additional fields can be removed via the `pvt_preview_response_data` filter.
+Use the `pvt_preview_response_data` filter to add, remove, or transform fields in the response.
+
+```php
+// Remove additional fields
+add_filter('pvt_preview_response_data', function (array $data, WP_Post $post, WP_REST_Request $req): array {
+    unset($data['author']);
+    return $data;
+}, 10, 3);
+
+// Add ACF fields (ACF fields registered with "Show in REST API" are included automatically;
+// use this only when you need fields that are not exposed to unauthenticated requests)
+add_filter('pvt_preview_response_data', function (array $data, WP_Post $post): array {
+    $data['acf'] = function_exists('get_fields') ? get_fields($post->ID) : [];
+    return $data;
+}, 10, 2);
+
+// Add content.raw (raw block markup — only expose when the token recipient is trusted)
+add_filter('pvt_preview_response_data', function (array $data, WP_Post $post): array {
+    $data['content']['raw'] = $post->post_content;
+    return $data;
+}, 10, 2);
+```
+
+**Note on ACF and custom REST fields:** Fields registered via `register_rest_field()` or ACF's "Show in REST API" option are included automatically — no filter is needed. The filter is only required for fields excluded due to WordPress's unauthenticated request context (e.g. those with a capability-gated `auth_callback`).
 
 ### CORS
 

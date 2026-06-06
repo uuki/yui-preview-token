@@ -84,7 +84,30 @@ DELETE /wp-json/preview-token/v1/token   # 失効
 | `ping_status`  | プレビューに不要        |
 | `template`     | プレビューに不要        |
 
-追加のフィールドを除去したい場合は `pvt_preview_response_data` フィルターを使用する。
+`pvt_preview_response_data` フィルターでレスポンスのフィールドを追加・除去・変換できる。
+
+```php
+// フィールドを除去する
+add_filter('pvt_preview_response_data', function (array $data, WP_Post $post, WP_REST_Request $req): array {
+    unset($data['author']);
+    return $data;
+}, 10, 3);
+
+// ACF フィールドを追加する（「REST API に表示」が有効なフィールドは自動で含まれる。
+// auth_callback で権限が要求されているフィールドなど、未認証コンテキストで除外されるものにのみ使用する）
+add_filter('pvt_preview_response_data', function (array $data, WP_Post $post): array {
+    $data['acf'] = function_exists('get_fields') ? get_fields($post->ID) : [];
+    return $data;
+}, 10, 2);
+
+// content.raw（ブロックのマークアップ）を追加する（トークンの受け取り側を信頼できる場合のみ）
+add_filter('pvt_preview_response_data', function (array $data, WP_Post $post): array {
+    $data['content']['raw'] = $post->post_content;
+    return $data;
+}, 10, 2);
+```
+
+**ACF・カスタム REST フィールドについて:** `register_rest_field()` や ACF の「REST API に表示」で登録したフィールドはフィルター不要で自動的にレスポンスに含まれる。フィルターが必要なのは、`auth_callback` に権限チェックが設けられているなど、未認証コンテキストで除外されるフィールドに限る。
 
 ### CORS
 
