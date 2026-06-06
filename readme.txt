@@ -29,7 +29,7 @@ The frontend (Astro, Next.js, Nuxt, etc.) receives a preview URL and can fetch t
 
 * Generate tokens with expiry presets: 1 hour, 24 hours, 30 days, custom date/time, or no expiry.
 * One token per post — issuing a new token invalidates the previous one.
-* Tokens are stored as SHA-256 hashes; the raw value is never stored in the lookup table.
+* Tokens are generated with `bin2hex(random_bytes(32))` (256-bit CSPRNG). The lookup key stored in `wp_options` is the SHA-256 hash of the raw token, not the token itself — so a database leak does not expose usable tokens directly.
 * Automatic cleanup of expired tokens via WP Cron (daily).
 
 **Editor Integration**
