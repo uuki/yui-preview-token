@@ -202,7 +202,7 @@ class Settings
     public function render_frontend_url(): void
     {
         printf(
-            '<input type="url" name="%s" value="%s" class="regular-text" />'
+            '<input type="url" name="%s" value="%s" class="regular-text" placeholder="https://example.com" />'
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_FRONTEND_URL),
             esc_attr($this->get_frontend_url()),
