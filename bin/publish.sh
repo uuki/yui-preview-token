@@ -45,7 +45,7 @@ for d in .github .claude playground tests src/js docs bin; do
 done
 # Files
 for f in .gitignore .gitattributes .distignore .phpunit.result.cache \
-          CLAUDE.md LICENSE package.json pnpm-lock.yaml \
+          CLAUDE.md LICENSE readme-ja.txt package.json pnpm-lock.yaml \
           tsconfig.json tsdown.config.ts composer.json composer.lock \
           phpunit.xml patchwork.json; do
     rm -f "${STAGE:?}/${f}"
