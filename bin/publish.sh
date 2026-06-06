@@ -40,7 +40,7 @@ rsync -a \
 
 echo "▸ Removing non-production files..."
 # Directories
-for d in .github .claude playground tests src/js docs bin; do
+for d in .github .claude playground tests src/js docs bin database; do
     rm -rf "${STAGE:?}/${d}"
 done
 # Files

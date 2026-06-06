@@ -23,6 +23,7 @@ src/js
 docs
 bin
 dist
+database
 readme-ja.txt
 languages/*.pot
 *.DS_Store
