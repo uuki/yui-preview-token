@@ -8,7 +8,7 @@ Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Issue time-limited preview tokens for headless WordPress setups. Open draft content directly in your designated frontend URL without long-lived credentials.
+Issue time-limited preview tokens for headless WordPress setups. Open drafts directly in your frontend URL without long-lived credentials.
 
 == Description ==
 

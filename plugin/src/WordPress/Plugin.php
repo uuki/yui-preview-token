@@ -27,12 +27,6 @@ class Plugin
 
     public function init(): void
     {
-        load_plugin_textdomain(
-            'preview-token',
-            false,
-            dirname(plugin_basename(PVT_PLUGIN_FILE)) . '/languages'
-        );
-
         $pipeline = new ResponsePipeline([
             [ResponseFilters::class, 'strip_password'],
             [ResponseFilters::class, 'strip_internal_fields'],
