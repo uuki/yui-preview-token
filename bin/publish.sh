@@ -4,7 +4,7 @@
 # Output: dist/preview-token.zip
 #
 # Checklist (WordPress.org "production-ready" requirement):
-#   ✓ TypeScript compiled to assets/js/*.iife.js
+#   ✓ TypeScript compiled to plugin/assets/js/*.iife.js
 #   ✓ composer --no-dev (devDependencies excluded)
 #   ✓ No test files, dev tools, playground files, or source maps
 #   ✓ No node_modules, .git, .claude
@@ -25,35 +25,29 @@ trap cleanup EXIT
 cd "${ROOT_DIR}"
 
 echo "▸ Building TypeScript..."
-pnpm run build
+(cd plugin && pnpm run build)
 
 echo "▸ Installing production PHP dependencies..."
-composer install --no-dev --optimize-autoloader --quiet
+composer install --no-dev --optimize-autoloader --quiet --working-dir=plugin
 
 echo "▸ Copying production files..."
-# Use rsync to skip the large dirs that are never needed
 rsync -a \
     --exclude='node_modules/' \
-    --exclude='.git/' \
-    --exclude='dist/' \
-    . "${STAGE}/"
+    --exclude='src/assets/js/' \
+    plugin/ "${STAGE}/"
 
 echo "▸ Removing non-production files..."
-# WordPress.org requires readme.txt at the plugin root; promote it before docs/ is removed.
-cp "${STAGE}/docs/readme.txt" "${STAGE}/readme.txt"
+# WordPress.org requires readme.txt at the plugin root; source is docs/ at repo root.
+cp "${ROOT_DIR}/docs/readme.txt" "${STAGE}/readme.txt"
 
-# Directories
-for d in .github .claude playground tests src/js docs bin database; do
+# Remove dev-only items from stage
+for d in tests; do
     rm -rf "${STAGE:?}/${d}"
 done
-# Files
-for f in .gitignore .gitattributes .distignore .phpunit.result.cache \
-          CLAUDE.md LICENSE README.md package.json pnpm-lock.yaml \
-          tsconfig.json tsdown.config.ts composer.lock \
+for f in package.json pnpm-lock.yaml tsconfig.json tsdown.config.ts \
           phpunit.xml patchwork.json; do
     rm -f "${STAGE:?}/${f}"
 done
-# POT templates and macOS metadata
 find "${STAGE}/languages" -name "*.pot" -delete 2>/dev/null || true
 find "${STAGE}" -name ".DS_Store" -delete 2>/dev/null || true
 
@@ -66,6 +60,6 @@ ZIP_SIZE=$(du -sh "${ZIP_FILE}" | cut -f1)
 echo "✓ ${ZIP_FILE} (${ZIP_SIZE})"
 
 echo "▸ Restoring dev PHP dependencies..."
-composer install --quiet
+composer install --quiet --working-dir=plugin
 
 echo "✓ Done."

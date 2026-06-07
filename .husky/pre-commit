@@ -1,1 +1,1 @@
-pnpm exec php vendor/bin/phpunit --testdox --no-coverage
+php plugin/vendor/bin/phpunit -c plugin/phpunit.xml --testdox --no-coverage

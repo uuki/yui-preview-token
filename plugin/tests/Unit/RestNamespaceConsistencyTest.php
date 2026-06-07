@@ -36,7 +36,7 @@ class RestNamespaceConsistencyTest extends TestCase
         // Match the namespace as a URL segment; trailing slash is optional
         // (e.g. both "/wp-json/preview-token/v1/" and "/wp-json/preview-token/v1`" match)
         $expected  = "/wp-json/{$namespace}";
-        $root      = dirname(__DIR__, 2);
+        $root      = dirname(__DIR__, 3);
         $failures  = [];
 
         foreach (self::CHECKED_FILES as $rel) {

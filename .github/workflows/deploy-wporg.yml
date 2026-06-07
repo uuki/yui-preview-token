@@ -51,9 +51,11 @@ jobs:
 
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: plugin
 
       - name: Build TypeScript
         run: pnpm run build
+        working-directory: plugin
 
       # ── 4. PHP dependencies (production only) ─────────────────────────────────
 
@@ -66,9 +68,10 @@ jobs:
 
       - name: Install PHP dependencies (production)
         run: composer install --no-dev --optimize-autoloader --no-interaction --quiet
+        working-directory: plugin
 
       # ── 5. Prepare production file tree ───────────────────────────────────────
-      # Mirror what bin/publish.sh does, but into a staging dir instead of a zip.
+      # Rsync from plugin/; readme.txt is sourced from docs/ at the repo root.
 
       - name: Stage production files
         run: |
@@ -77,20 +80,17 @@ jobs:
 
           rsync -a \
             --exclude='node_modules/' \
-            --exclude='.git/' \
-            --exclude='dist/' \
-            . "$STAGE/"
+            --exclude='src/assets/js/' \
+            plugin/ "$STAGE/"
 
-          # WordPress.org requires readme.txt at the plugin root; promote it before docs/ is removed.
-          cp "$STAGE/docs/readme.txt" "$STAGE/readme.txt"
+          # WordPress.org requires readme.txt at the plugin root.
+          cp docs/readme.txt "$STAGE/readme.txt"
 
-          # Remove non-production paths (mirrors .distignore)
-          for d in .github .claude playground tests src/js docs bin database; do
+          # Remove dev-only items from stage
+          for d in tests; do
             rm -rf "${STAGE:?}/$d"
           done
-          for f in .gitignore .gitattributes .distignore .phpunit.result.cache \
-                   CLAUDE.md LICENSE README.md package.json pnpm-lock.yaml \
-                   tsconfig.json tsdown.config.ts composer.lock \
+          for f in package.json pnpm-lock.yaml tsconfig.json tsdown.config.ts \
                    phpunit.xml patchwork.json; do
             rm -f "${STAGE:?}/$f"
           done

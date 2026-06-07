@@ -8,9 +8,9 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
     "outDir": "assets/js",
-    "rootDir": "src/js",
+    "rootDir": "src/assets/js",
     "declaration": false,
     "sourceMap": false
   },
-  "include": ["src/js/**/*"]
+  "include": ["src/assets/js/**/*"]
 }
