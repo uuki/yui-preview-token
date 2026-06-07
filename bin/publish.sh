@@ -37,9 +37,6 @@ rsync -a \
     plugin/ "${STAGE}/"
 
 echo "▸ Removing non-production files..."
-# WordPress.org requires readme.txt at the plugin root; source is docs/ at repo root.
-cp "${ROOT_DIR}/docs/readme.txt" "${STAGE}/readme.txt"
-
 # Remove dev-only items from stage
 for d in tests; do
     rm -rf "${STAGE:?}/${d}"

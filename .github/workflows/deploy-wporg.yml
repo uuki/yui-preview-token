@@ -71,7 +71,7 @@ jobs:
         working-directory: plugin
 
       # ── 5. Prepare production file tree ───────────────────────────────────────
-      # Rsync from plugin/; readme.txt is sourced from docs/ at the repo root.
+      # Rsync from plugin/; readme.txt is already at plugin/readme.txt.
 
       - name: Stage production files
         run: |
@@ -82,9 +82,6 @@ jobs:
             --exclude='node_modules/' \
             --exclude='src/assets/js/' \
             plugin/ "$STAGE/"
-
-          # WordPress.org requires readme.txt at the plugin root.
-          cp docs/readme.txt "$STAGE/readme.txt"
 
           # Remove dev-only items from stage
           for d in tests; do

@@ -34,8 +34,7 @@ Download the latest zip from [Releases](https://github.com/uuki/preview-token/re
 │   ├── bump-version.sh         # Version string updater called by semantic-release
 │   └── publish.sh              # Builds and packages the distribution zip
 ├── docs/
-│   ├── readme.txt              # WP.org plugin page (en) — promoted to plugin root on deploy
-│   ├── readme-ja.txt           # Japanese readme
+│   ├── readme-ja.txt           # Japanese readme (non-standard, not required by WP.org)
 │   └── guide.*.md              # Developer guides (en/ja)
 ├── playground/                 # Local dev environment — WP Playground + Playwright E2E
 │   ├── blueprint.json          # WP Playground setup (plugin activation, option fixtures)
@@ -52,6 +51,7 @@ Download the latest zip from [Releases](https://github.com/uuki/preview-token/re
 │   ├── tests/                  # PHPUnit unit tests
 │   ├── vendor/                 # Composer dependencies (gitignored)
 │   ├── preview-token.php       # Plugin entry point and header
+│   ├── readme.txt              # WP.org plugin page (en) — part of trunk
 │   ├── composer.json
 │   ├── package.json            # JS build deps: tsdown, @wordpress/*
 │   └── tsdown.config.ts        # TypeScript → IIFE bundle config

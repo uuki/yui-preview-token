@@ -13,8 +13,8 @@ VERSION="$1"
 sed -i.bak "s/^\( \* Version:     \).*/\1${VERSION}/" plugin/preview-token.php
 rm -f plugin/preview-token.php.bak
 
-sed -i.bak "s/^Stable tag:.*/Stable tag: ${VERSION}/" docs/readme.txt
-rm -f docs/readme.txt.bak
+sed -i.bak "s/^Stable tag:.*/Stable tag: ${VERSION}/" plugin/readme.txt
+rm -f plugin/readme.txt.bak
 
 sed -i.bak "s/^Stable tag:.*/Stable tag: ${VERSION}/" docs/readme-ja.txt
 rm -f docs/readme-ja.txt.bak

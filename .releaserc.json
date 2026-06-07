@@ -16,7 +16,7 @@
         "assets": [
           "CHANGELOG.md",
           "plugin/preview-token.php",
-          "docs/readme.txt",
+          "plugin/readme.txt",
           "docs/readme-ja.txt"
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]"
