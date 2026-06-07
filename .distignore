@@ -12,6 +12,6 @@ phpunit.xml
 patchwork.json
 .phpunit.result.cache
 tests
-src/assets/js
+src/assets
 languages/*.pot
 *.DS_Store

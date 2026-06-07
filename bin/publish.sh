@@ -33,7 +33,7 @@ composer install --no-dev --optimize-autoloader --quiet --working-dir=plugin
 echo "▸ Copying production files..."
 rsync -a \
     --exclude='node_modules/' \
-    --exclude='src/assets/js/' \
+    --exclude='src/assets/' \
     --exclude='.phpunit.result.cache' \
     --exclude='composer.lock' \
     plugin/ "${STAGE}/"
