@@ -4,7 +4,7 @@
 # Output: dist/preview-token.zip
 #
 # Checklist (WordPress.org "production-ready" requirement):
-#   ✓ TypeScript compiled to preview-token/assets/js/*.iife.js
+#   ✓ TypeScript compiled to plugin/assets/js/*.iife.js
 #   ✓ composer --no-dev (devDependencies excluded)
 #   ✓ No test files, dev tools, playground files, or source maps
 #   ✓ No node_modules, .git, .claude
@@ -34,7 +34,7 @@ echo "▸ Copying production files..."
 rsync -a \
     --exclude='node_modules/' \
     --exclude='src/assets/js/' \
-    preview-token/ "${STAGE}/"
+    plugin/ "${STAGE}/"
 
 echo "▸ Removing non-production files..."
 # WordPress.org requires readme.txt at the plugin root; source is docs/ at repo root.

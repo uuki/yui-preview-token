@@ -1,1 +1,1 @@
-php preview-token/vendor/bin/phpunit -c preview-token/phpunit.xml --testdox --no-coverage
+php plugin/vendor/bin/phpunit -c plugin/phpunit.xml --testdox --no-coverage
