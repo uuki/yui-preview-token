@@ -38,6 +38,11 @@ rsync -a \
     --exclude='composer.lock' \
     plugin/ "${STAGE}/"
 
+# Merge WP.org listing assets (banners, icons, screenshots) into assets/.
+# These live at repo root assets/ to mirror SVN assets/, but must also be
+# included in the installable zip for the WP admin plugin details view.
+rsync -a --exclude='js/' "${ROOT_DIR}/assets/" "${STAGE}/assets/"
+
 echo "▸ Removing non-production files..."
 # Remove dev-only items from stage
 for d in tests; do
