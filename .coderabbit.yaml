@@ -1,0 +1,54 @@
+language: "ja"
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "main"
+
+  path_instructions:
+    - path: "plugin/src/**/*.php"
+      instructions: |
+        PHP 7.4 互換性を維持すること（match 式・named arguments・Union 型・`: mixed` 戻り値型は使用不可）。
+        WordPress コーディング標準に準拠すること。
+        WP_Error の第2引数は必ず __() でラップすること（i18n 必須）。
+        REST API エンドポイントは permission_callback を省略しないこと。
+
+    - path: "plugin/tests/**/*.php"
+      instructions: |
+        Brain Monkey を使用したユニットテストのレビュー。
+        setUp/tearDown で Monkey::setUpWP() / Monkey::tearDown() が対称的に呼ばれているか確認。
+        WP 関数のスタブ化漏れに注意すること。
+
+    - path: "plugin/src/assets/js/**/*.ts"
+      instructions: |
+        WordPress の @wordpress/* パッケージを利用する場面では wp.* グローバルへの直接アクセスを避け、import を使用すること。
+        iife バンドルを前提としているため、グローバル汚染に注意すること。
+
+    - path: "playground/**"
+      instructions: |
+        WP Playground (WASM ベース) の開発環境設定ファイル。本番デプロイには含まれない。
+        blueprint.json の stepType や URL に本番環境が混入しないこと。
+
+    - path: "bin/**"
+      instructions: |
+        シェルスクリプト。`set -euo pipefail` が先頭にあるか、rsync の除外パターンが .distignore と整合しているか確認すること。
+
+    - path: ".github/workflows/**"
+      instructions: |
+        deploy-wporg.yml はマニュアルトリガー専用（push.tags は設定しないこと）。
+        SVN デプロイ用シークレット（SVN_USERNAME / SVN_PASSWORD）を直接 echo しないこと。
+
+  finishing_touches:
+    docstrings:
+      enabled: false
+
+chat:
+  auto_reply: true
