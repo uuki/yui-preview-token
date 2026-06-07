@@ -19,7 +19,7 @@ msgid "WP Preview Token"
 msgstr "WP プレビュートークン"
 
 msgid "Preview Token"
-msgstr "プレビュートークン"
+msgstr "Preview Token"
 
 msgid "External Preview URL"
 msgstr "外部プレビュー URL"
@@ -299,3 +299,6 @@ msgstr "外部からのトークン発行を許可"
 
 msgid "When enabled, authenticated users with the required role can issue tokens via the REST API from outside the WordPress admin — for example from CI/CD pipelines or automated scripts. When disabled (default), token issuance is restricted to the WordPress admin interface."
 msgstr "有効にすると、必要なロールを持つ認証済みユーザーが WordPress 管理画面外から REST API 経由でトークンを発行できます（例：CI/CD パイプラインや自動化スクリプト）。無効（デフォルト）の場合、トークン発行は WordPress 管理画面からのみ可能です。"
+
+msgid "Issues short-lived preview tokens for Headless WordPress preview authentication."
+msgstr "ヘッドレス WordPress のプレビュー認証に使用する、有効期限付きプレビュートークンを発行します。"

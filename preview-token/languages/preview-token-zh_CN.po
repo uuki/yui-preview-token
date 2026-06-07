@@ -19,7 +19,7 @@ msgid "WP Preview Token"
 msgstr "WP 预览令牌"
 
 msgid "Preview Token"
-msgstr "预览令牌"
+msgstr "Preview Token"
 
 msgid "External Preview URL"
 msgstr "外部预览 URL"
@@ -299,3 +299,6 @@ msgstr "允许从外部发行令牌"
 
 msgid "When enabled, authenticated users with the required role can issue tokens via the REST API from outside the WordPress admin — for example from CI/CD pipelines or automated scripts. When disabled (default), token issuance is restricted to the WordPress admin interface."
 msgstr "启用后，具有所需角色的已认证用户可以通过 REST API 从 WordPress 管理界面外部发行令牌（例如 CI/CD 流水线或自动化脚本）。禁用时（默认），令牌发行仅限于 WordPress 管理界面。"
+
+msgid "Issues short-lived preview tokens for Headless WordPress preview authentication."
+msgstr "为 Headless WordPress 预览认证发行短期有效的预览令牌。"

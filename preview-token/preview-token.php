@@ -7,6 +7,8 @@
  * Version:     1.0.4
  * Requires PHP: 7.4
  * License:     GPL-2.0-or-later
+ * Text Domain: preview-token
+ * Domain Path: /languages
  */
 
 declare(strict_types=1);
