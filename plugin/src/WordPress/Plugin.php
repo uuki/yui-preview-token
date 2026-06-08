@@ -42,7 +42,7 @@ class Plugin
         $issue    = new IssueEndpoint($issuer, $this->settings, $rate_limiter);
 
         $this->settings->register();
-        (new AdminScripts($this->settings, plugin_dir_url(PVT_PLUGIN_FILE)))->register();
+        (new AdminScripts($this->settings, plugin_dir_url(constant(Constants::DEFINE_PLUGIN_FILE))))->register();
         (new AuditLogger())->register();
         (new TokenAdmin($issuer))->register();
 

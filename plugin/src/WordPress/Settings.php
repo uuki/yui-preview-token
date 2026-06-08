@@ -60,7 +60,7 @@ class Settings
             return;
         }
 
-        $plugin_url  = rtrim(plugin_dir_url(PVT_PLUGIN_FILE), '/');
+        $plugin_url  = rtrim(plugin_dir_url(constant(Constants::DEFINE_PLUGIN_FILE)), '/');
         $asset_path  = dirname(dirname(__DIR__)) . '/assets/js/settings.iife.js';
         $version     = file_exists($asset_path) ? (string) filemtime($asset_path) : '0';
 
@@ -101,7 +101,7 @@ class Settings
         register_setting(Constants::SETTINGS_GROUP, Constants::OPTION_ALLOWED_ORIGINS, [
             'type'              => 'string',
             // Accepts either a newline-separated string (legacy textarea) or
-            // an array submitted by the dynamic input list (name="pvt_allowed_origins[]").
+            // an array submitted by the dynamic input list (name="Constants::OPTION_ALLOWED_ORIGINS[]").
             'sanitize_callback' => static function ($value): string {
                 $lines = is_array($value)
                     ? $value
