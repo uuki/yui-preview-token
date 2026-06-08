@@ -12,7 +12,7 @@ use PVT\Token\TokenIssuer;
  * Default output: PHP's system error log (same destination as WP_DEBUG_LOG).
  * Each line is prefixed with LOG_PREFIX to distinguish plugin entries from other PHP errors.
  *
- * Custom output: define PVT_LOG_FILE in wp-config.php to write to a dedicated file.
+ * Custom output: define the constant named by Constants::DEFINE_LOG_FILE in wp-config.php.
  *   define('PVT_LOG_FILE', '/var/log/pvt.log');
  *
  * Logged events:
@@ -79,9 +79,10 @@ class AuditLogger
 
     private function output(string $message): void
     {
-        if (defined('PVT_LOG_FILE') && is_string(PVT_LOG_FILE) && PVT_LOG_FILE !== '') {
+        $log_file = defined(Constants::DEFINE_LOG_FILE) ? constant(Constants::DEFINE_LOG_FILE) : null;
+        if (is_string($log_file) && $log_file !== '') {
             $line = sprintf("[%s] %s\n", gmdate('Y-m-d\TH:i:s\Z'), $message);
-            $this->write_to_file(PVT_LOG_FILE, $line);
+            $this->write_to_file($log_file, $line);
         } else {
             error_log($message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- intentional audit logger
         }

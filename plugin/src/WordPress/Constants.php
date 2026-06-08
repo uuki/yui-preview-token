@@ -96,7 +96,9 @@ final class Constants
 
     // ── Audit log ─────────────────────────────────────────────────────────────
 
-    public const LOG_PREFIX = '[pvt]';
+    public const LOG_PREFIX        = '[pvt]';
+    /** Name of the PHP define() constant users set in wp-config.php. */
+    public const DEFINE_LOG_FILE   = 'PVT_LOG_FILE';
 
     private function __construct() {}
 }
