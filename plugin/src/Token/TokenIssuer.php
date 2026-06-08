@@ -12,6 +12,7 @@ class TokenIssuer
     public const META_EXPIRES_AT = '_pvt_expires_at';
     public const META_ISSUED_BY  = '_pvt_issued_by';
     public const META_ISSUED_AT  = '_pvt_issued_at';
+    public const HOOK_TOKEN_ISSUED = 'pvt_token_issued';
 
     /**
      * Issue a new token, overwriting any existing one for the post.
@@ -38,7 +39,7 @@ class TokenIssuer
         update_post_meta($post_id, self::META_ISSUED_BY,  $user_id);
         update_post_meta($post_id, self::META_ISSUED_AT,  time());
 
-        do_action('pvt_token_issued', $post_id, $user_id);
+        do_action(self::HOOK_TOKEN_ISSUED, $post_id, $user_id);
 
         return $token;
     }

@@ -1,4 +1,11 @@
 (function() {
+	//#region src/assets/js/constants.ts
+	const ELEMENT_ORIGINS_LIST = "pvt-origins-list";
+	const ELEMENT_ADD_ORIGIN = "pvt-add-origin";
+	const ELEMENT_WILDCARD_WARNING = "pvt-wildcard-warning";
+	const CLASS_ORIGIN_ROW = "pvt-origin-row";
+	const CLASS_REMOVE_ORIGIN = "pvt-remove-origin";
+	//#endregion
 	//#region src/assets/js/settings.ts
 	/**
 	* Settings page entry — CORS origin list management + wildcard security warning.
@@ -6,12 +13,12 @@
 	* Data injected via wp_localize_script as window.pvtSettingsData.
 	*/
 	const { field, removeLabel, warningTitle, warningText } = pvtSettingsData;
-	const list = document.getElementById("pvt-origins-list");
-	const addBtn = document.getElementById("pvt-add-origin");
+	const list = document.getElementById(ELEMENT_ORIGINS_LIST);
+	const addBtn = document.getElementById(ELEMENT_ADD_ORIGIN);
 	if (!list || !addBtn) {} else {
 		const makeRow = (value) => {
 			const row = document.createElement("div");
-			row.className = "pvt-origin-row";
+			row.className = CLASS_ORIGIN_ROW;
 			row.style.cssText = "display:flex;gap:6px;align-items:center";
 			const input = document.createElement("input");
 			input.type = "text";
@@ -23,7 +30,7 @@
 			input.addEventListener("input", updateWildcardWarning);
 			const btn = document.createElement("button");
 			btn.type = "button";
-			btn.className = "button pvt-remove-origin";
+			btn.className = `button ${CLASS_REMOVE_ORIGIN}`;
 			btn.setAttribute("aria-label", removeLabel);
 			btn.innerHTML = "&#x2715;";
 			btn.addEventListener("click", () => removeRow(row));
@@ -32,7 +39,7 @@
 			return row;
 		};
 		const removeRow = (row) => {
-			if (list.querySelectorAll(".pvt-origin-row").length <= 1) {
+			if (list.querySelectorAll(`.pvt-origin-row`).length <= 1) {
 				const inp = row.querySelector("input");
 				if (inp) inp.value = "";
 				updateWildcardWarning();
@@ -41,7 +48,7 @@
 			list.removeChild(row);
 			updateWildcardWarning();
 		};
-		const WARNING_ID = "pvt-wildcard-warning";
+		const WARNING_ID = ELEMENT_WILDCARD_WARNING;
 		const updateWildcardWarning = () => {
 			const hasBareWildcard = Array.from(list.querySelectorAll("input")).some((inp) => inp.value.trim() === "*");
 			const existing = document.getElementById(WARNING_ID);
@@ -54,9 +61,9 @@
 				list.parentNode?.insertBefore(div, list.nextSibling);
 			} else if (!hasBareWildcard && existing) existing.remove();
 		};
-		list.querySelectorAll(".pvt-remove-origin").forEach((btn) => {
+		list.querySelectorAll(`.${CLASS_REMOVE_ORIGIN}`).forEach((btn) => {
 			btn.addEventListener("click", () => {
-				const row = btn.closest(".pvt-origin-row");
+				const row = btn.closest(`.${CLASS_ORIGIN_ROW}`);
 				if (row) removeRow(row);
 			});
 		});

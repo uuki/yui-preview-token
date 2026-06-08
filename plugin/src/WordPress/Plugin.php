@@ -50,12 +50,12 @@ class Plugin
         add_action('rest_api_init', [$issue,    'register']);
 
         // Daily cleanup of expired token options
-        add_action('pvt_cleanup_tokens', static function() use ($issuer): void {
+        add_action(Constants::HOOK_CLEANUP_TOKENS, static function() use ($issuer): void {
             $issuer->cleanup_expired();
         });
         add_action('init', static function(): void {
-            if (!wp_next_scheduled('pvt_cleanup_tokens')) {
-                wp_schedule_event(time(), 'daily', 'pvt_cleanup_tokens');
+            if (!wp_next_scheduled(Constants::HOOK_CLEANUP_TOKENS)) {
+                wp_schedule_event(time(), 'daily', Constants::HOOK_CLEANUP_TOKENS);
             }
         });
     }

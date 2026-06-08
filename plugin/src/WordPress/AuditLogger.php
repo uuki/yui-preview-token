@@ -23,12 +23,12 @@ class AuditLogger
     public function register(): void
     {
         // Token lifecycle
-        add_action('pvt_token_issued',      [$this, 'on_token_issued'],      10, 2);
-        add_action('pvt_token_used',        [$this, 'on_token_used'],        10, 2);
+        add_action(\PVT\Token\TokenIssuer::HOOK_TOKEN_ISSUED, [$this, 'on_token_issued'], 10, 2);
+        add_action(Constants::HOOK_TOKEN_USED,          [$this, 'on_token_used'],          10, 2);
         // Security events
-        add_action('pvt_invalid_token',     [$this, 'on_invalid_token'],     10, 1);
-        add_action('pvt_rate_limit_exceeded', [$this, 'on_rate_limit_exceeded'], 10, 2);
-        add_action('pvt_capability_denied', [$this, 'on_capability_denied'], 10, 2);
+        add_action(Constants::HOOK_INVALID_TOKEN,       [$this, 'on_invalid_token'],       10, 1);
+        add_action(Constants::HOOK_RATE_LIMIT_EXCEEDED, [$this, 'on_rate_limit_exceeded'], 10, 2);
+        add_action(Constants::HOOK_CAPABILITY_DENIED,   [$this, 'on_capability_denied'],   10, 2);
     }
 
     public function on_token_issued(int $post_id, int $user_id): void

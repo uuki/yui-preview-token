@@ -6,6 +6,7 @@
 
 import { PvtTokenPanel } from './token-panel'
 import { NativeBtn, NativeSelect } from './native-components'
+import { ELEMENT_CLASSIC_ROOT } from './constants'
 
 if (typeof pvtPreviewData === 'undefined') {
   throw new Error('[PVT] pvtPreviewData is not defined')
@@ -18,7 +19,7 @@ interface PvtContainer extends HTMLElement {
 }
 
 const initClassicMetaBox = (): void => {
-  const root = document.getElementById('pvt-classic-meta-box-root') as PvtContainer | null
+  const root = document.getElementById(ELEMENT_CLASSIC_ROOT) as PvtContainer | null
   if (!root) return
 
   const postId = parseInt(root.dataset['postId'] ?? '0', 10)

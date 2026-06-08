@@ -27,13 +27,13 @@ class AdminScripts
     public function enqueue_block_editor(): void
     {
         wp_enqueue_script(
-            'pvt-sidebar',
+            Constants::SCRIPT_SIDEBAR,
             $this->asset_url('sidebar'),
             ['wp-edit-post', 'wp-element', 'wp-components', 'wp-plugins', 'wp-data', 'wp-editor'],
             $this->asset_version('sidebar'),
             true
         );
-        wp_localize_script('pvt-sidebar', 'pvtPreviewData', $this->preview_data());
+        wp_localize_script(Constants::SCRIPT_SIDEBAR, Constants::JS_PREVIEW_DATA, $this->preview_data());
     }
 
     // ── Post list (Quick Edit) ───────────────────────────────────────────
@@ -42,13 +42,13 @@ class AdminScripts
     {
         if ($hook === 'edit.php') {
             wp_enqueue_script(
-                'pvt-quick-edit',
+                Constants::SCRIPT_QUICK_EDIT,
                 $this->asset_url('quick-edit'),
                 ['wp-element', 'inline-edit-post'],
                 $this->asset_version('quick-edit'),
                 true
             );
-            wp_localize_script('pvt-quick-edit', 'pvtPreviewData', $this->preview_data());
+            wp_localize_script(Constants::SCRIPT_QUICK_EDIT, Constants::JS_PREVIEW_DATA, $this->preview_data());
 
         } elseif (in_array($hook, ['post.php', 'post-new.php'], true)) {
             $screen = get_current_screen();
@@ -57,13 +57,13 @@ class AdminScripts
             }
 
             wp_enqueue_script(
-                'pvt-classic-editor',
+                Constants::SCRIPT_CLASSIC_EDITOR,
                 $this->asset_url('classic-editor'),
                 ['wp-element'],
                 $this->asset_version('classic-editor'),
                 true
             );
-            wp_localize_script('pvt-classic-editor', 'pvtPreviewData', $this->preview_data());
+            wp_localize_script(Constants::SCRIPT_CLASSIC_EDITOR, Constants::JS_PREVIEW_DATA, $this->preview_data());
         }
     }
 
@@ -77,7 +77,7 @@ class AdminScripts
         }
 
         add_meta_box(
-            'pvt-preview',
+            Constants::META_BOX_ID,
             __('External Preview', 'preview-token'),
             [$this, 'render_classic_meta_box'],
             null,
@@ -89,7 +89,7 @@ class AdminScripts
     public function render_classic_meta_box(\WP_Post $post): void
     {
         printf(
-            '<div id="pvt-classic-meta-box-root" data-post-id="%d"></div>'
+            '<div id="' . esc_attr(Constants::ELEMENT_CLASSIC_ROOT) . '" data-post-id="%d"></div>'
             . '<p class="description" style="margin-top:6px;font-size:11px">%s</p>',
             esc_attr($post->ID),
             esc_html__('Save your draft before opening the external preview to ensure the latest content is reflected.', 'preview-token')

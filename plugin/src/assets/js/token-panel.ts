@@ -8,6 +8,7 @@ import {
   getPresetOptions,
   toLocalDatetimeString,
 } from './utils'
+import { ATTR_PANEL, ATTR_ACTION } from './constants'
 
 const { createElement: el, useState, useEffect } = wp.element
 
@@ -134,10 +135,10 @@ export const PvtTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }:
       : null,
   )
 
-  if (!loaded) return el('div', { 'data-pvt-panel': 'loading' }, el('p', { style: S_META }, t().loading))
+  if (!loaded) return el('div', { [ATTR_PANEL]: 'loading' }, el('p', { style: S_META }, t().loading))
 
   if (isActive && mode === 'editing') {
-    return el('div', { 'data-pvt-panel': 'editing' },
+    return el('div', { [ATTR_PANEL]: 'editing' },
       expirySelector(),
       error ? el('p', { style: S_ERROR }, error) : null,
       el('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', marginTop: '8px' } },
@@ -152,10 +153,10 @@ export const PvtTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }:
       ? fmt(t().expiresRelative, expiry.abs, expiry.rel)
       : expiry?.abs ?? ''
 
-    return el('div', { 'data-pvt-panel': 'active' },
+    return el('div', { [ATTR_PANEL]: 'active' },
       el('p', { style: S_META }, expiresLabel),
       el('div', { style: { display: 'flex', gap: '4px', alignItems: 'center', marginBottom: '8px' } },
-        el('span', { 'data-pvt-action': 'preview', style: { flex: '1' } },
+        el('span', { [ATTR_ACTION]: 'preview', style: { flex: '1' } },
           el(Btn, {
             variant: 'secondary',
             onClick: doOpenPreview,
@@ -194,10 +195,10 @@ export const PvtTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }:
 
   // Treat expired tokens the same as no token — show the "Generate" view
   // without an expiry-error message. Conceptually, an expired token is gone.
-  return el('div', { 'data-pvt-panel': 'empty' },
+  return el('div', { [ATTR_PANEL]: 'empty' },
     expirySelector(),
     error ? el('p', { style: S_ERROR }, error) : null,
-    el('span', { 'data-pvt-action': 'generate' },
+    el('span', { [ATTR_ACTION]: 'generate' },
       el(Btn, {
         variant: 'secondary',
         onClick: doGenerate,

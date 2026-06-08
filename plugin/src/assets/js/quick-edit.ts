@@ -6,6 +6,7 @@
 
 import { PvtTokenPanel } from './token-panel'
 import { NativeBtn, NativeSelect } from './native-components'
+import { CLASS_QUICK_EDIT_ROOT } from './constants'
 
 if (typeof pvtPreviewData === 'undefined') {
   throw new Error('[PVT] pvtPreviewData is not defined')
@@ -40,10 +41,10 @@ const mountPanel = (row: HTMLElement, postId: number): void => {
   const col = getQuickEditCol(row)
   if (!col || !postId) return
 
-  let container = col.querySelector<PvtContainer>('.pvt-quick-edit-root')
+  let container = col.querySelector<PvtContainer>(`.${CLASS_QUICK_EDIT_ROOT}`)
   if (!container) {
     container = document.createElement('div') as PvtContainer
-    container.className = 'pvt-quick-edit-root'
+    container.className = CLASS_QUICK_EDIT_ROOT
     container.style.cssText = 'border-top:1px solid #ddd;margin-top:8px;padding-top:8px'
     col.appendChild(container)
   }
@@ -51,7 +52,7 @@ const mountPanel = (row: HTMLElement, postId: number): void => {
 }
 
 const unmountRow = (row: HTMLElement): void => {
-  const container = row.querySelector<PvtContainer>('.pvt-quick-edit-root')
+  const container = row.querySelector<PvtContainer>(`.${CLASS_QUICK_EDIT_ROOT}`)
   if (!container) return
   container._pvtRoot?.unmount()
   container._pvtRoot = undefined

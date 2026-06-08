@@ -5,6 +5,7 @@
  */
 
 import { PvtTokenPanel } from './token-panel'
+import { PLUGIN_ID_SIDEBAR } from './constants'
 
 if (typeof pvtPreviewData === 'undefined') {
   // pvtPreviewData is injected by wp_localize_script; if missing, skip silently
@@ -24,7 +25,7 @@ const PluginDocumentSettingPanel =
 if (!PluginDocumentSettingPanel) {
   // Silently skip on pages where Gutenberg is not loaded
 } else {
-  registerPlugin('pvt-preview', {
+  registerPlugin(PLUGIN_ID_SIDEBAR, {
     render() {
       const postId = useSelect(
         (select: ReturnType<typeof wp.data.select>) =>
@@ -44,7 +45,7 @@ if (!PluginDocumentSettingPanel) {
 
       return el(
         PluginDocumentSettingPanel,
-        { name: 'pvt-preview', title: 'External Preview', icon: 'site', initialOpen: true },
+        { name: PLUGIN_ID_SIDEBAR, title: 'External Preview', icon: 'site', initialOpen: true },
         el(PvtTokenPanel, { postId, Btn: Button, SelectInput: SelectControl, onBeforeOpenPreview }),
       )
     },

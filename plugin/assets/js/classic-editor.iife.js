@@ -5,12 +5,18 @@
 	*
 	* Values tightly coupled to a single module (e.g. component style objects,
 	* REST namespace used only by PHP) remain in their respective files.
+	*
+	* Element IDs and data attributes marked "sync: Constants.php" must be kept
+	* in sync with the corresponding PHP constant in src/WordPress/Constants.php.
 	*/
 	const PRESET_SECONDS = {
 		"1h": 3600,
 		"24h": 86400,
 		"30d": 30 * 86400
 	};
+	const ELEMENT_CLASSIC_ROOT = "pvt-classic-meta-box-root";
+	const ATTR_PANEL = "data-pvt-panel";
+	const ATTR_ACTION = "data-pvt-action";
 	//#endregion
 	//#region src/assets/js/utils.ts
 	/**
@@ -254,8 +260,8 @@
 				boxSizing: "border-box"
 			}
 		}) : null);
-		if (!loaded) return el$2("div", { "data-pvt-panel": "loading" }, el$2("p", { style: S_META }, t().loading));
-		if (isActive && mode === "editing") return el$2("div", { "data-pvt-panel": "editing" }, expirySelector(), error ? el$2("p", { style: S_ERROR }, error) : null, el$2("div", { style: {
+		if (!loaded) return el$2("div", { [ATTR_PANEL]: "loading" }, el$2("p", { style: S_META }, t().loading));
+		if (isActive && mode === "editing") return el$2("div", { [ATTR_PANEL]: "editing" }, expirySelector(), error ? el$2("p", { style: S_ERROR }, error) : null, el$2("div", { style: {
 			display: "flex",
 			gap: "8px",
 			alignItems: "center",
@@ -271,13 +277,13 @@
 		})));
 		if (isActive) {
 			const expiresLabel = expiry?.rel ? fmt(t().expiresRelative, expiry.abs, expiry.rel) : expiry?.abs ?? "";
-			return el$2("div", { "data-pvt-panel": "active" }, el$2("p", { style: S_META }, expiresLabel), el$2("div", { style: {
+			return el$2("div", { [ATTR_PANEL]: "active" }, el$2("p", { style: S_META }, expiresLabel), el$2("div", { style: {
 				display: "flex",
 				gap: "4px",
 				alignItems: "center",
 				marginBottom: "8px"
 			} }, el$2("span", {
-				"data-pvt-action": "preview",
+				[ATTR_ACTION]: "preview",
 				style: { flex: "1" }
 			}, el$2(Btn, {
 				variant: "secondary",
@@ -309,7 +315,7 @@
 				isBusy: busy
 			}, t().yes), el$2("span", { style: S_DIVIDER }, "|"), textLink(t().cancel, () => setMode("view"))) : el$2("p", { style: { margin: 0 } }, textLink(t().changeExpiry, () => setMode("editing")), el$2("span", { style: S_DIVIDER }, "·"), textLink(t().deleteToken, () => setMode("confirm_delete"), { color: "#cc1818" })), error ? el$2("p", { style: S_ERROR }, error) : null);
 		}
-		return el$2("div", { "data-pvt-panel": "empty" }, expirySelector(), error ? el$2("p", { style: S_ERROR }, error) : null, el$2("span", { "data-pvt-action": "generate" }, el$2(Btn, {
+		return el$2("div", { [ATTR_PANEL]: "empty" }, expirySelector(), error ? el$2("p", { style: S_ERROR }, error) : null, el$2("span", { [ATTR_ACTION]: "generate" }, el$2(Btn, {
 			variant: "secondary",
 			onClick: doGenerate,
 			isBusy: busy,
@@ -377,7 +383,7 @@
 	if (typeof pvtPreviewData === "undefined") throw new Error("[PVT] pvtPreviewData is not defined");
 	const { createElement: el } = wp.element;
 	const initClassicMetaBox = () => {
-		const root = document.getElementById("pvt-classic-meta-box-root");
+		const root = document.getElementById(ELEMENT_CLASSIC_ROOT);
 		if (!root) return;
 		const postId = parseInt(root.dataset["postId"] ?? "0", 10);
 		if (!postId) return;

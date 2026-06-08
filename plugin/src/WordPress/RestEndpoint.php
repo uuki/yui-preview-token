@@ -75,7 +75,7 @@ class RestEndpoint
         // M-2: Rate limiting per client IP
         $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
         if (!$this->rate_limiter->is_allowed($ip)) {
-            do_action('pvt_rate_limit_exceeded', $ip, 'preview');
+            do_action(Constants::HOOK_RATE_LIMIT_EXCEEDED, $ip, 'preview');
             return new WP_Error(
                 'rate_limit_exceeded',
                 __('Too many requests.', 'preview-token'),
@@ -87,7 +87,7 @@ class RestEndpoint
         $data  = $this->validator->validate($token);
 
         if ($data === false) {
-            do_action('pvt_invalid_token', $ip);
+            do_action(Constants::HOOK_INVALID_TOKEN, $ip);
             return new WP_Error(
                 'invalid_token',
                 __('Invalid or expired preview token.', 'preview-token'),
@@ -115,7 +115,7 @@ class RestEndpoint
         }
 
         // L-5: Audit log
-        do_action('pvt_token_used', $post->ID, $data['user_id']);
+        do_action(Constants::HOOK_TOKEN_USED, $post->ID, $data['user_id']);
 
         $controller = new WP_REST_Posts_Controller($post->post_type);
         $prepared   = $controller->prepare_item_for_response($post, $request);
@@ -123,7 +123,7 @@ class RestEndpoint
 
         // I-2: Allow application-layer response shaping
         // add_filter('pvt_preview_response_data', function(array $data, WP_Post $post, WP_REST_Request $req): array { ... }, 10, 3);
-        $filtered = apply_filters('pvt_preview_response_data', $filtered, $post, $request);
+        $filtered = apply_filters(Constants::FILTER_PREVIEW_RESPONSE_DATA, $filtered, $post, $request);
 
         return new WP_REST_Response($filtered, 200);
     }

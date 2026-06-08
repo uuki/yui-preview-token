@@ -78,7 +78,7 @@ class IssueEndpoint
     {
         $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
         if (!$this->rate_limiter->is_allowed($ip)) {
-            do_action('pvt_rate_limit_exceeded', $ip, 'token');
+            do_action(Constants::HOOK_RATE_LIMIT_EXCEEDED, $ip, 'token');
             return new WP_Error('rate_limit_exceeded', __('Too many requests.', 'preview-token'), ['status' => 429]);
         }
 
@@ -172,7 +172,7 @@ class IssueEndpoint
     private function check_capability(int $user_id, int $post_id)
     {
         if (!user_can($user_id, $this->settings->get_min_capability(), $post_id)) {
-            do_action('pvt_capability_denied', $user_id, $post_id);
+            do_action(Constants::HOOK_CAPABILITY_DENIED, $user_id, $post_id);
             return new WP_Error('forbidden', __('Insufficient permissions.', 'preview-token'), ['status' => 403]);
         }
         return null;

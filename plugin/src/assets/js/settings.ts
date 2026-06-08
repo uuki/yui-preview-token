@@ -4,10 +4,12 @@
  * Data injected via wp_localize_script as window.pvtSettingsData.
  */
 
+import { ELEMENT_ORIGINS_LIST, ELEMENT_ADD_ORIGIN, ELEMENT_WILDCARD_WARNING, CLASS_ORIGIN_ROW, CLASS_REMOVE_ORIGIN } from './constants'
+
 const { field, removeLabel, warningTitle, warningText } = pvtSettingsData
 
-const list   = document.getElementById('pvt-origins-list') as HTMLElement | null
-const addBtn = document.getElementById('pvt-add-origin')   as HTMLElement | null
+const list   = document.getElementById(ELEMENT_ORIGINS_LIST) as HTMLElement | null
+const addBtn = document.getElementById(ELEMENT_ADD_ORIGIN)   as HTMLElement | null
 
 if (!list || !addBtn) {
   // Guard: script may be enqueued on a page where the markup isn't present.
@@ -16,7 +18,7 @@ if (!list || !addBtn) {
 
   const makeRow = (value: string): HTMLDivElement => {
     const row   = document.createElement('div')
-    row.className = 'pvt-origin-row'
+    row.className = CLASS_ORIGIN_ROW
     row.style.cssText = 'display:flex;gap:6px;align-items:center'
 
     const input = document.createElement('input')
@@ -30,7 +32,7 @@ if (!list || !addBtn) {
 
     const btn = document.createElement('button')
     btn.type      = 'button'
-    btn.className = 'button pvt-remove-origin'
+    btn.className = `button ${CLASS_REMOVE_ORIGIN}`
     btn.setAttribute('aria-label', removeLabel)
     btn.innerHTML = '&#x2715;'
     btn.addEventListener('click', () => removeRow(row))
@@ -43,7 +45,7 @@ if (!list || !addBtn) {
   // ── Remove row ─────────────────────────────────────────────────────────────
 
   const removeRow = (row: HTMLDivElement): void => {
-    const rows = list.querySelectorAll('.pvt-origin-row')
+    const rows = list.querySelectorAll(`.${CLASS_ORIGIN_ROW}`)
     if (rows.length <= 1) {
       // Keep one empty row instead of collapsing the list entirely
       const inp = row.querySelector<HTMLInputElement>('input')
@@ -57,7 +59,7 @@ if (!list || !addBtn) {
 
   // ── Wildcard warning ───────────────────────────────────────────────────────
 
-  const WARNING_ID = 'pvt-wildcard-warning'
+  const WARNING_ID = ELEMENT_WILDCARD_WARNING
 
   const updateWildcardWarning = (): void => {
     const hasBareWildcard = Array.from(
@@ -80,9 +82,9 @@ if (!list || !addBtn) {
 
   // ── Wire up existing rows ──────────────────────────────────────────────────
 
-  list.querySelectorAll<HTMLButtonElement>('.pvt-remove-origin').forEach(btn => {
+  list.querySelectorAll<HTMLButtonElement>(`.${CLASS_REMOVE_ORIGIN}`).forEach(btn => {
     btn.addEventListener('click', () => {
-      const row = btn.closest<HTMLDivElement>('.pvt-origin-row')
+      const row = btn.closest<HTMLDivElement>(`.${CLASS_ORIGIN_ROW}`)
       if (row) removeRow(row)
     })
   })

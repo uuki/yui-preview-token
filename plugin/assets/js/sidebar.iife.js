@@ -5,12 +5,18 @@
 	*
 	* Values tightly coupled to a single module (e.g. component style objects,
 	* REST namespace used only by PHP) remain in their respective files.
+	*
+	* Element IDs and data attributes marked "sync: Constants.php" must be kept
+	* in sync with the corresponding PHP constant in src/WordPress/Constants.php.
 	*/
 	const PRESET_SECONDS = {
 		"1h": 3600,
 		"24h": 86400,
 		"30d": 30 * 86400
 	};
+	const ATTR_PANEL = "data-pvt-panel";
+	const ATTR_ACTION = "data-pvt-action";
+	const PLUGIN_ID_SIDEBAR = "pvt-preview";
 	//#endregion
 	//#region src/assets/js/utils.ts
 	/**
@@ -254,8 +260,8 @@
 				boxSizing: "border-box"
 			}
 		}) : null);
-		if (!loaded) return el$1("div", { "data-pvt-panel": "loading" }, el$1("p", { style: S_META }, t().loading));
-		if (isActive && mode === "editing") return el$1("div", { "data-pvt-panel": "editing" }, expirySelector(), error ? el$1("p", { style: S_ERROR }, error) : null, el$1("div", { style: {
+		if (!loaded) return el$1("div", { [ATTR_PANEL]: "loading" }, el$1("p", { style: S_META }, t().loading));
+		if (isActive && mode === "editing") return el$1("div", { [ATTR_PANEL]: "editing" }, expirySelector(), error ? el$1("p", { style: S_ERROR }, error) : null, el$1("div", { style: {
 			display: "flex",
 			gap: "8px",
 			alignItems: "center",
@@ -271,13 +277,13 @@
 		})));
 		if (isActive) {
 			const expiresLabel = expiry?.rel ? fmt(t().expiresRelative, expiry.abs, expiry.rel) : expiry?.abs ?? "";
-			return el$1("div", { "data-pvt-panel": "active" }, el$1("p", { style: S_META }, expiresLabel), el$1("div", { style: {
+			return el$1("div", { [ATTR_PANEL]: "active" }, el$1("p", { style: S_META }, expiresLabel), el$1("div", { style: {
 				display: "flex",
 				gap: "4px",
 				alignItems: "center",
 				marginBottom: "8px"
 			} }, el$1("span", {
-				"data-pvt-action": "preview",
+				[ATTR_ACTION]: "preview",
 				style: { flex: "1" }
 			}, el$1(Btn, {
 				variant: "secondary",
@@ -309,7 +315,7 @@
 				isBusy: busy
 			}, t().yes), el$1("span", { style: S_DIVIDER }, "|"), textLink(t().cancel, () => setMode("view"))) : el$1("p", { style: { margin: 0 } }, textLink(t().changeExpiry, () => setMode("editing")), el$1("span", { style: S_DIVIDER }, "·"), textLink(t().deleteToken, () => setMode("confirm_delete"), { color: "#cc1818" })), error ? el$1("p", { style: S_ERROR }, error) : null);
 		}
-		return el$1("div", { "data-pvt-panel": "empty" }, expirySelector(), error ? el$1("p", { style: S_ERROR }, error) : null, el$1("span", { "data-pvt-action": "generate" }, el$1(Btn, {
+		return el$1("div", { [ATTR_PANEL]: "empty" }, expirySelector(), error ? el$1("p", { style: S_ERROR }, error) : null, el$1("span", { [ATTR_ACTION]: "generate" }, el$1(Btn, {
 			variant: "secondary",
 			onClick: doGenerate,
 			isBusy: busy,
@@ -333,7 +339,7 @@
 	const { registerPlugin } = wp.plugins;
 	const { useSelect } = wp.data;
 	const PluginDocumentSettingPanel = wp.editor?.PluginDocumentSettingPanel ?? wp.editPost?.PluginDocumentSettingPanel;
-	if (!PluginDocumentSettingPanel) {} else registerPlugin("pvt-preview", { render() {
+	if (!PluginDocumentSettingPanel) {} else registerPlugin(PLUGIN_ID_SIDEBAR, { render() {
 		const postId = useSelect((select) => select("core/editor").getCurrentPostId(), []);
 		if (!postId) return null;
 		const onBeforeOpenPreview = async () => {
@@ -342,7 +348,7 @@
 			if (editor.isEditedPostDirty()) await dispatch.savePost();
 		};
 		return el(PluginDocumentSettingPanel, {
-			name: "pvt-preview",
+			name: PLUGIN_ID_SIDEBAR,
 			title: "External Preview",
 			icon: "site",
 			initialOpen: true

@@ -25,9 +25,9 @@ class TokenAdmin
 
     public function register(): void
     {
-        add_action('pvt_settings_render_tokens_tab', [$this, 'render_token_table']);
-        add_action('admin_post_pvt_delete_token',    [$this, 'handle_delete_token']);
-        add_action('admin_post_pvt_delete_expired',  [$this, 'handle_delete_expired']);
+        add_action(Constants::HOOK_SETTINGS_RENDER_TOKENS_TAB,                      [$this, 'render_token_table']);
+        add_action('admin_post_' . Constants::ADMIN_ACTION_DELETE_TOKEN,   [$this, 'handle_delete_token']);
+        add_action('admin_post_' . Constants::ADMIN_ACTION_DELETE_EXPIRED, [$this, 'handle_delete_expired']);
     }
 
     // ── Action handlers ───────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ class TokenAdmin
     public function handle_delete_token(): void
     {
         $post_id = absint(wp_unslash($_GET['post_id'] ?? 0)); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified on next line
-        check_admin_referer("pvt_delete_token_{$post_id}");
+        check_admin_referer(Constants::NONCE_DELETE_TOKEN . "_{$post_id}");
 
         if ($post_id && current_user_can('manage_options')) {
             $this->issuer->delete_by_post($post_id);
@@ -47,7 +47,7 @@ class TokenAdmin
 
     public function handle_delete_expired(): void
     {
-        check_admin_referer('pvt_delete_expired');
+        check_admin_referer(Constants::NONCE_DELETE_EXPIRED);
 
         if (current_user_can('manage_options')) {
             $this->issuer->cleanup_expired();
@@ -80,8 +80,8 @@ class TokenAdmin
             <h2 style="margin:0"><?php esc_html_e('Issued Tokens', 'preview-token'); ?></h2>
             <?php if (!empty($tokens)): ?>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <?php wp_nonce_field('pvt_delete_expired'); ?>
-                <input type="hidden" name="action" value="pvt_delete_expired">
+                <?php wp_nonce_field(Constants::NONCE_DELETE_EXPIRED); ?>
+                <input type="hidden" name="action" value="<?php echo esc_attr(Constants::ADMIN_ACTION_DELETE_EXPIRED); ?>">
                 <button type="submit" class="button button-small">
                     <?php esc_html_e('Delete Expired', 'preview-token'); ?>
                 </button>
@@ -111,8 +111,8 @@ class TokenAdmin
                 $is_expired = ($token['expires_at'] > 0 && $token['expires_at'] <= $now);
                 $no_expiry  = ($token['expires_at'] > $now + self::NO_EXPIRY_THRESHOLD);
                 $delete_url = wp_nonce_url(
-                    admin_url("admin-post.php?action=pvt_delete_token&post_id={$token['post_id']}"),
-                    "pvt_delete_token_{$token['post_id']}"
+                    admin_url('admin-post.php?action=' . Constants::ADMIN_ACTION_DELETE_TOKEN . "&post_id={$token['post_id']}"),
+                    Constants::NONCE_DELETE_TOKEN . "_{$token['post_id']}"
                 );
             ?>
                 <tr>
@@ -190,7 +190,7 @@ class TokenAdmin
     private function tab_url(array $extra = []): string
     {
         return add_query_arg(
-            array_merge(['page' => 'preview-token', 'tab' => 'tokens'], $extra),
+            array_merge(['page' => Constants::SETTINGS_PAGE_SLUG, 'tab' => 'tokens'], $extra),
             admin_url('options-general.php')
         );
     }
