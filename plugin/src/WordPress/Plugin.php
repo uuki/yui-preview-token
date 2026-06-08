@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace DRPT\WordPress;
+namespace YUIPT\WordPress;
 
-use DRPT\Support\ResponseFilters;
-use DRPT\Support\ResponsePipeline;
-use DRPT\Token\TokenIssuer;
-use DRPT\Token\TokenValidator;
+use YUIPT\Support\ResponseFilters;
+use YUIPT\Support\ResponsePipeline;
+use YUIPT\Token\TokenIssuer;
+use YUIPT\Token\TokenValidator;
 
 class Plugin
 {

@@ -14,10 +14,10 @@
 		"24h": 86400,
 		"30d": 30 * 86400
 	};
-	const ATTR_PANEL = "data-drpt-panel";
-	const ATTR_ACTION = "data-drpt-action";
-	const PLUGIN_ID_SIDEBAR = "drpt-preview";
-	const LOG_PREFIX = "[DRPT]";
+	const ATTR_PANEL = "data-yuipt-panel";
+	const ATTR_ACTION = "data-yuipt-action";
+	const PLUGIN_ID_SIDEBAR = "yuipt-preview";
+	const LOG_PREFIX = "[YUIPT]";
 	//#endregion
 	//#region src/assets/js/utils.ts
 	/**
@@ -28,7 +28,7 @@
 		let result = template.replace(/%(\d+)\$s/g, (_, i) => String(args[parseInt(i, 10) - 1] ?? ""));
 		return args.reduce((s, a) => s.replace("%s", String(a)), result);
 	};
-	const i18n = () => drptPreviewData?.i18n;
+	const i18n = () => yuiptPreviewData?.i18n;
 	const getPresetOptions = (allowNoExpiry) => {
 		const t = i18n();
 		return [
@@ -107,8 +107,8 @@
 		};
 	};
 	const apiFetch = async (method, body, queryParams) => {
-		if (typeof drptPreviewData === "undefined") throw new Error(`${LOG_PREFIX} drptPreviewData is not defined`);
-		const { tokenBase, nonce } = drptPreviewData;
+		if (typeof yuiptPreviewData === "undefined") throw new Error(`${LOG_PREFIX} yuiptPreviewData is not defined`);
+		const { tokenBase, nonce } = yuiptPreviewData;
 		const url = queryParams ? `${tokenBase}?${new URLSearchParams(queryParams).toString()}` : tokenBase;
 		const headers = { "X-WP-Nonce": nonce };
 		let bodyStr;
@@ -145,7 +145,7 @@
 		color: "#ddd",
 		margin: "0 4px"
 	};
-	const t = () => drptPreviewData?.i18n ?? {
+	const t = () => yuiptPreviewData?.i18n ?? {
 		preset1h: "1 hour",
 		preset24h: "24 hours",
 		preset30d: "30 days",
@@ -179,8 +179,8 @@
 			...style
 		}
 	}, label);
-	const DrptTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }) => {
-		const PRESET_OPTIONS = getPresetOptions(drptPreviewData?.allowNoExpiry ?? false);
+	const YuiptTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }) => {
+		const PRESET_OPTIONS = getPresetOptions(yuiptPreviewData?.allowNoExpiry ?? false);
 		const [token, setToken] = useState(null);
 		const [loaded, setLoaded] = useState(false);
 		const [preset, setPreset] = useState("1h");
@@ -193,7 +193,7 @@
 			setLoaded(false);
 			setToken(null);
 			setMode("view");
-			fetch(`${drptPreviewData?.tokenBase ?? ""}?post_id=${postId}`, { headers: { "X-WP-Nonce": drptPreviewData?.nonce ?? "" } }).then((r) => r.ok ? r.json() : null).then((d) => {
+			fetch(`${yuiptPreviewData?.tokenBase ?? ""}?post_id=${postId}`, { headers: { "X-WP-Nonce": yuiptPreviewData?.nonce ?? "" } }).then((r) => r.ok ? r.json() : null).then((d) => {
 				setToken(d);
 				setLoaded(true);
 			}).catch(() => setLoaded(true));
@@ -333,10 +333,10 @@
 	//#region src/assets/js/sidebar.ts
 	/**
 	* Gutenberg sidebar entry.
-	* Registers a PluginDocumentSettingPanel with DrptTokenPanel.
+	* Registers a PluginDocumentSettingPanel with YuiptTokenPanel.
 	* WordPress deps: wp-element, wp-components, wp-plugins, wp-data, wp-editor, wp-edit-post
 	*/
-	if (typeof drptPreviewData === "undefined") console.warn(`${LOG_PREFIX} drptPreviewData is not defined`);
+	if (typeof yuiptPreviewData === "undefined") console.warn(`${LOG_PREFIX} yuiptPreviewData is not defined`);
 	const { createElement: el } = wp.element;
 	const { Button, SelectControl } = wp.components;
 	const { registerPlugin } = wp.plugins;
@@ -350,7 +350,7 @@
 			const dispatch = wp.data.dispatch("core/editor");
 			if (editor.isEditedPostDirty()) await dispatch.savePost();
 		};
-		const panel = el(DrptTokenPanel, {
+		const panel = el(YuiptTokenPanel, {
 			postId,
 			Btn: Button,
 			SelectInput: SelectControl,

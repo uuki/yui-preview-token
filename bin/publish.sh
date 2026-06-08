@@ -12,7 +12,7 @@
 
 set -euo pipefail
 
-PLUGIN_SLUG="draft-preview-token"
+PLUGIN_SLUG="yui-preview-token"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_DIR="$(mktemp -d)"
 DIST_DIR="${ROOT_DIR}/dist"

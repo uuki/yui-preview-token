@@ -24,7 +24,7 @@ export default async function globalSetup() {
 
     // Poll until plugin settings page responds without a permission error
     for (let i = 0; i < MAX_ATTEMPTS; i++) {
-        await page.goto(`${WP}/wp-admin/options-general.php?page=draft-preview-token`);
+        await page.goto(`${WP}/wp-admin/options-general.php?page=yui-preview-token`);
         await page.waitForLoadState('domcontentloaded');
         const content = await page.content();
         if (!content.includes('not allowed to access') && !content.includes('権限がありません')) {

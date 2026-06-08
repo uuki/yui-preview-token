@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Tests\Unit;
+namespace YUIPT\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use DRPT\WordPress\Constants;
+use YUIPT\WordPress\Constants;
 
 /**
  * Asserts that every hardcoded REST namespace reference in the playground

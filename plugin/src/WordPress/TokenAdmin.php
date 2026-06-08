@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DRPT\WordPress;
+namespace YUIPT\WordPress;
 
-use DRPT\Token\TokenIssuer;
+use YUIPT\Token\TokenIssuer;
 
 /**
  * Renders the "Issued Tokens" admin tab and handles token deletion actions.
@@ -67,40 +67,40 @@ class TokenAdmin
 
         if (isset($_GET['deleted'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             echo '<div class="notice notice-success is-dismissible"><p>'
-                . esc_html__('Token revoked.', 'draft-preview-token')
+                . esc_html__('Token revoked.', 'yui-preview-token')
                 . '</p></div>';
         }
         if (isset($_GET['cleaned'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             echo '<div class="notice notice-success is-dismissible"><p>'
-                . esc_html__('Expired tokens deleted.', 'draft-preview-token')
+                . esc_html__('Expired tokens deleted.', 'yui-preview-token')
                 . '</p></div>';
         }
         ?>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-            <h2 style="margin:0"><?php esc_html_e('Issued Tokens', 'draft-preview-token'); ?></h2>
+            <h2 style="margin:0"><?php esc_html_e('Issued Tokens', 'yui-preview-token'); ?></h2>
             <?php if (!empty($tokens)): ?>
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <?php wp_nonce_field(Constants::NONCE_DELETE_EXPIRED); ?>
                 <input type="hidden" name="action" value="<?php echo esc_attr(Constants::ADMIN_ACTION_DELETE_EXPIRED); ?>">
                 <button type="submit" class="button button-small">
-                    <?php esc_html_e('Delete Expired', 'draft-preview-token'); ?>
+                    <?php esc_html_e('Delete Expired', 'yui-preview-token'); ?>
                 </button>
             </form>
             <?php endif; ?>
         </div>
 
         <?php if (empty($tokens)): ?>
-            <p><?php esc_html_e('No tokens have been issued yet.', 'draft-preview-token'); ?></p>
+            <p><?php esc_html_e('No tokens have been issued yet.', 'yui-preview-token'); ?></p>
         <?php else: ?>
         <table class="wp-list-table widefat fixed striped" style="margin-top:0">
             <thead>
                 <tr>
-                    <th style="width:28%"><?php esc_html_e('Post', 'draft-preview-token'); ?></th>
-                    <th style="width:10%"><?php esc_html_e('Post Status', 'draft-preview-token'); ?></th>
-                    <th style="width:10%"><?php esc_html_e('Token Status', 'draft-preview-token'); ?></th>
-                    <th style="width:16%"><?php esc_html_e('Issued At', 'draft-preview-token'); ?></th>
-                    <th style="width:16%"><?php esc_html_e('Expires At', 'draft-preview-token'); ?></th>
-                    <th style="width:12%"><?php esc_html_e('Issued By', 'draft-preview-token'); ?></th>
+                    <th style="width:28%"><?php esc_html_e('Post', 'yui-preview-token'); ?></th>
+                    <th style="width:10%"><?php esc_html_e('Post Status', 'yui-preview-token'); ?></th>
+                    <th style="width:10%"><?php esc_html_e('Token Status', 'yui-preview-token'); ?></th>
+                    <th style="width:16%"><?php esc_html_e('Issued At', 'yui-preview-token'); ?></th>
+                    <th style="width:16%"><?php esc_html_e('Expires At', 'yui-preview-token'); ?></th>
+                    <th style="width:12%"><?php esc_html_e('Issued By', 'yui-preview-token'); ?></th>
                     <th style="width:8%"></th>
                 </tr>
             </thead>
@@ -120,11 +120,11 @@ class TokenAdmin
                         <?php if ($post): ?>
                             <strong>
                                 <a href="<?php echo esc_url(get_edit_post_link($post->ID) ?? '#'); ?>">
-                                    <?php echo esc_html($post->post_title ?: __('(no title)', 'draft-preview-token')); ?>
+                                    <?php echo esc_html($post->post_title ?: __('(no title)', 'yui-preview-token')); ?>
                                 </a>
                             </strong>
                         <?php else: ?>
-                            <em style="color:#888"><?php echo esc_html__('Post deleted', 'draft-preview-token'); ?> (#<?php echo esc_html($token['post_id']); ?>)</em>
+                            <em style="color:#888"><?php echo esc_html__('Post deleted', 'yui-preview-token'); ?> (#<?php echo esc_html($token['post_id']); ?>)</em>
                         <?php endif; ?>
                     </td>
                     <td>
@@ -136,11 +136,11 @@ class TokenAdmin
                     </td>
                     <td>
                         <?php if ($no_expiry): ?>
-                            <span style="color:#2271b1;font-weight:600"><?php esc_html_e('No expiry', 'draft-preview-token'); ?></span>
+                            <span style="color:#2271b1;font-weight:600"><?php esc_html_e('No expiry', 'yui-preview-token'); ?></span>
                         <?php elseif ($is_expired): ?>
-                            <span style="color:#b32d2e;font-weight:600"><?php esc_html_e('Expired', 'draft-preview-token'); ?></span>
+                            <span style="color:#b32d2e;font-weight:600"><?php esc_html_e('Expired', 'yui-preview-token'); ?></span>
                         <?php else: ?>
-                            <span style="color:#1e7c34;font-weight:600"><?php esc_html_e('Active', 'draft-preview-token'); ?></span>
+                            <span style="color:#1e7c34;font-weight:600"><?php esc_html_e('Active', 'yui-preview-token'); ?></span>
                         <?php endif; ?>
                     </td>
                     <td>
@@ -163,8 +163,8 @@ class TokenAdmin
                     <td>
                         <a href="<?php echo esc_url($delete_url); ?>"
                            style="color:#b32d2e"
-                           onclick="return confirm('<?php esc_attr_e('Revoke this token?', 'draft-preview-token'); ?>')">
-                            <?php esc_html_e('Revoke', 'draft-preview-token'); ?>
+                           onclick="return confirm('<?php esc_attr_e('Revoke this token?', 'yui-preview-token'); ?>')">
+                            <?php esc_html_e('Revoke', 'yui-preview-token'); ?>
                         </a>
                     </td>
                 </tr>
@@ -175,12 +175,12 @@ class TokenAdmin
             <?php
             printf(
                 /* translators: %d: number of issued tokens */
-                esc_html__('%d token(s) issued in total.', 'draft-preview-token'),
+                esc_html__('%d token(s) issued in total.', 'yui-preview-token'),
                 count($tokens)
             ); ?>
         </p>
         <p class="description" style="margin-top:4px">
-            <?php esc_html_e('Expired tokens are rejected immediately upon use. However, the database records are removed once daily by WP Cron, so expired tokens may remain visible in this list until the next scheduled cleanup. To remove them right away, use the "Delete Expired" button above.', 'draft-preview-token'); ?>
+            <?php esc_html_e('Expired tokens are rejected immediately upon use. However, the database records are removed once daily by WP Cron, so expired tokens may remain visible in this list until the next scheduled cleanup. To remove them right away, use the "Delete Expired" button above.', 'yui-preview-token'); ?>
         </p>
         <?php endif;
     }

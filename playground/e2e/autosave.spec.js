@@ -54,12 +54,12 @@ test.describe('Gutenberg auto-save before external preview', () => {
         // ── Ensure there is an active token ──────────────────────────────────
         // Generate if needed so the "Open external preview" button is shown.
         const panelState = await page.evaluate(() =>
-            document.querySelector('[data-drpt-panel]')?.getAttribute('data-drpt-panel') ?? 'none'
+            document.querySelector('[data-yuipt-panel]')?.getAttribute('data-yuipt-panel') ?? 'none'
         ).catch(() => 'none');
 
         if (panelState !== 'active') {
             await page.evaluate(() => {
-                const btn = document.querySelector('[data-drpt-action="generate"] button');
+                const btn = document.querySelector('[data-yuipt-action="generate"] button');
                 if (btn) btn.click();
             });
             // Wait for token generation (network round-trip)
@@ -93,7 +93,7 @@ test.describe('Gutenberg auto-save before external preview', () => {
         // ── Click "Open external preview" (triggers savePost + window.open) ──
         const popupPromise = context.waitForEvent('page', { timeout: 30_000 });
         await page.evaluate(() => {
-            const btn = document.querySelector('[data-drpt-action="preview"] button');
+            const btn = document.querySelector('[data-yuipt-action="preview"] button');
             if (btn) btn.click();
         });
 
@@ -116,7 +116,7 @@ test.describe('Gutenberg auto-save before external preview', () => {
         expect(dirtyAfter, 'Post must not be dirty after auto-save').toBe(false);
 
         // ── Fetch preview endpoint and verify edited content is present ────────
-        const res  = await page.request.get(`${WP}/wp-json/draft-preview-token/v1/preview?token=${token}`);
+        const res  = await page.request.get(`${WP}/wp-json/yui-preview-token/v1/preview?token=${token}`);
         expect(res.status()).toBe(200);
         const body = await res.json();
         expect(

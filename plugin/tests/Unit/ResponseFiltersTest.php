@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Tests\Unit;
+namespace YUIPT\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use DRPT\Support\ResponseFilters;
+use YUIPT\Support\ResponseFilters;
 
 class ResponseFiltersTest extends TestCase
 {

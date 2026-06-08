@@ -14,7 +14,7 @@ export const fmt = (template: string, ...args: (string | number)[]): string => {
   return args.reduce<string>((s, a) => s.replace('%s', String(a)), result)
 }
 
-const i18n = (): DrptI18n | undefined => drptPreviewData?.i18n
+const i18n = (): YuiptI18n | undefined => yuiptPreviewData?.i18n
 
 export const getPresetOptions = (allowNoExpiry: boolean): SelectOption[] => {
   const t = i18n()
@@ -80,11 +80,11 @@ export const apiFetch = async <T = unknown>(
   body?: JsonBody | null,
   queryParams?: Record<string, string>,
 ): Promise<T | null> => {
-  if (typeof drptPreviewData === 'undefined') {
-    throw new Error(`${LOG_PREFIX} drptPreviewData is not defined`)
+  if (typeof yuiptPreviewData === 'undefined') {
+    throw new Error(`${LOG_PREFIX} yuiptPreviewData is not defined`)
   }
 
-  const { tokenBase, nonce } = drptPreviewData
+  const { tokenBase, nonce } = yuiptPreviewData
   const url = queryParams
     ? `${tokenBase}?${new URLSearchParams(queryParams).toString()}`
     : tokenBase

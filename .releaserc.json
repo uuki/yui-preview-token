@@ -15,7 +15,7 @@
       {
         "assets": [
           "CHANGELOG.md",
-          "plugin/draft-preview-token.php",
+          "plugin/yui-preview-token.php",
           "plugin/readme.txt",
           "docs/readme-ja.txt"
         ],

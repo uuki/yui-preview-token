@@ -5,7 +5,7 @@
  * and render their expected content — not the WordPress permission-denied
  * error "Sorry, you are not allowed to access this page."
  *
- * Regression guard for the issue where options-general.php?page=draft-preview-token
+ * Regression guard for the issue where options-general.php?page=yui-preview-token
  * returned a permission error in certain environments.
  */
 import { test, expect } from '@playwright/test';
@@ -28,18 +28,18 @@ async function loginAndGoTo(page, path) {
 
 test.describe('Plugin settings page tabs', () => {
     test('Settings tab is accessible and not permission-denied', async ({ page }) => {
-        await loginAndGoTo(page, '/wp-admin/options-general.php?page=draft-preview-token');
+        await loginAndGoTo(page, '/wp-admin/options-general.php?page=yui-preview-token');
 
         // Must NOT show the WordPress permission error
         await expect(page.locator('body')).not.toContainText('Sorry, you are not allowed to access this page.');
         await expect(page.locator('body')).not.toContainText('権限がありません');
 
         // Must show the plugin settings heading
-        await expect(page.locator('h1')).toContainText('Draft Preview Token');
+        await expect(page.locator('h1')).toContainText('YUI Preview Token');
     });
 
     test('Issued Tokens tab is accessible and not permission-denied', async ({ page }) => {
-        await loginAndGoTo(page, '/wp-admin/options-general.php?page=draft-preview-token&tab=tokens');
+        await loginAndGoTo(page, '/wp-admin/options-general.php?page=yui-preview-token&tab=tokens');
 
         // Must NOT show the WordPress permission error
         await expect(page.locator('body')).not.toContainText('Sorry, you are not allowed to access this page.');

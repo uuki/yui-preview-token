@@ -1,18 +1,18 @@
 (function() {
 	//#region src/assets/js/constants.ts
-	const ELEMENT_ORIGINS_LIST = "drpt-origins-list";
-	const ELEMENT_ADD_ORIGIN = "drpt-add-origin";
-	const ELEMENT_WILDCARD_WARNING = "drpt-wildcard-warning";
-	const CLASS_ORIGIN_ROW = "drpt-origin-row";
-	const CLASS_REMOVE_ORIGIN = "drpt-remove-origin";
+	const ELEMENT_ORIGINS_LIST = "yuipt-origins-list";
+	const ELEMENT_ADD_ORIGIN = "yuipt-add-origin";
+	const ELEMENT_WILDCARD_WARNING = "yuipt-wildcard-warning";
+	const CLASS_ORIGIN_ROW = "yuipt-origin-row";
+	const CLASS_REMOVE_ORIGIN = "yuipt-remove-origin";
 	//#endregion
 	//#region src/assets/js/settings.ts
 	/**
 	* Settings page entry — CORS origin list management + wildcard security warning.
 	* WordPress deps: none (plain DOM, no wp.* globals needed)
-	* Data injected via wp_localize_script as window.drptSettingsData.
+	* Data injected via wp_localize_script as window.yuiptSettingsData.
 	*/
-	const { field, removeLabel, warningTitle, warningText } = drptSettingsData;
+	const { field, removeLabel, warningTitle, warningText } = yuiptSettingsData;
 	const list = document.getElementById(ELEMENT_ORIGINS_LIST);
 	const addBtn = document.getElementById(ELEMENT_ADD_ORIGIN);
 	if (!list || !addBtn) {} else {
@@ -39,7 +39,7 @@
 			return row;
 		};
 		const removeRow = (row) => {
-			if (list.querySelectorAll(`.drpt-origin-row`).length <= 1) {
+			if (list.querySelectorAll(`.yuipt-origin-row`).length <= 1) {
 				const inp = row.querySelector("input");
 				if (inp) inp.value = "";
 				updateWildcardWarning();

@@ -1,12 +1,12 @@
 /**
  * Settings page entry — CORS origin list management + wildcard security warning.
  * WordPress deps: none (plain DOM, no wp.* globals needed)
- * Data injected via wp_localize_script as window.drptSettingsData.
+ * Data injected via wp_localize_script as window.yuiptSettingsData.
  */
 
 import { ELEMENT_ORIGINS_LIST, ELEMENT_ADD_ORIGIN, ELEMENT_WILDCARD_WARNING, CLASS_ORIGIN_ROW, CLASS_REMOVE_ORIGIN } from './constants'
 
-const { field, removeLabel, warningTitle, warningText } = drptSettingsData
+const { field, removeLabel, warningTitle, warningText } = yuiptSettingsData
 
 const list   = document.getElementById(ELEMENT_ORIGINS_LIST) as HTMLElement | null
 const addBtn = document.getElementById(ELEMENT_ADD_ORIGIN)   as HTMLElement | null

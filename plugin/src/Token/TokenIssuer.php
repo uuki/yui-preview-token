@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Token;
+namespace YUIPT\Token;
 
 class TokenIssuer
 {
-    public const OPTIONS_PREFIX  = 'drpt_tk_';
-    public const META_HASH       = '_drpt_token_hash';
-    public const META_RAW        = '_drpt_token_raw';
-    public const META_EXPIRES_AT = '_drpt_expires_at';
-    public const META_ISSUED_BY  = '_drpt_issued_by';
-    public const META_ISSUED_AT  = '_drpt_issued_at';
-    public const HOOK_TOKEN_ISSUED = 'drpt_token_issued';
+    public const OPTIONS_PREFIX  = 'yuipt_tk_';
+    public const META_HASH       = '_yuipt_token_hash';
+    public const META_RAW        = '_yuipt_token_raw';
+    public const META_EXPIRES_AT = '_yuipt_expires_at';
+    public const META_ISSUED_BY  = '_yuipt_issued_by';
+    public const META_ISSUED_AT  = '_yuipt_issued_at';
+    public const HOOK_TOKEN_ISSUED = 'yuipt_token_issued';
 
     /**
      * Issue a new token, overwriting any existing one for the post.

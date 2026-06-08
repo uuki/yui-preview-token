@@ -11,7 +11,7 @@ import { test, expect } from '@playwright/test';
 import { Buffer } from 'node:buffer';
 
 const WP     = 'http://127.0.0.1:9400';
-const API    = `${WP}/wp-json/draft-preview-token/v1`;
+const API    = `${WP}/wp-json/yui-preview-token/v1`;
 const WP_API = `${WP}/wp-json/wp/v2`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -96,7 +96,7 @@ test.beforeAll(async ({ browser }) => {
     // First, delete any stale passwords with the same name left by interrupted
     // test runs. WordPress allows multiple passwords with identical names so
     // without this cleanup they would accumulate on every run.
-    const APP_PW_NAME = 'drpt-e2e-external-test';
+    const APP_PW_NAME = 'yuipt-e2e-external-test';
     const listRes = await adminPage.request.get(
         `${WP_API}/users/1/application-passwords`,
         { headers: { 'X-WP-Nonce': adminNonce } }
@@ -213,7 +213,7 @@ test.describe('A01 — Broken Access Control', () => {
             await page.fill('#user_pass', 'password');
             await page.click('#wp-submit');
             await page.waitForURL(`${WP}/wp-admin/**`);
-            await page.goto(`${WP}/wp-admin/options-general.php?page=draft-preview-token`);
+            await page.goto(`${WP}/wp-admin/options-general.php?page=yui-preview-token`);
             await page.waitForLoadState('domcontentloaded');
             const body = await page.locator('body').innerText();
             // Must not show the settings form fields to a non-admin
@@ -225,7 +225,7 @@ test.describe('A01 — Broken Access Control', () => {
 
     test('token revoke request without valid nonce → rejected (not 200)', async ({ request }) => {
         const res = await request.get(
-            `${WP}/wp-admin/admin-post.php?action=drpt_delete_token&post_id=${draftPostId}`,
+            `${WP}/wp-admin/admin-post.php?action=yuipt_delete_token&post_id=${draftPostId}`,
             { maxRedirects: 0 }
         );
         expect(res.status()).not.toBe(200);
@@ -251,8 +251,8 @@ test.describe('A02 — Cryptographic Failures', () => {
         // Internal storage keys must never appear in the API response
         expect(keys).not.toContain('hash');
         expect(keys).not.toContain('raw');
-        expect(keys).not.toContain('_drpt_token_hash');
-        expect(keys).not.toContain('_drpt_token_raw');
+        expect(keys).not.toContain('_yuipt_token_hash');
+        expect(keys).not.toContain('_yuipt_token_raw');
         // Token is embedded in preview_url only (one-way)
         expect(body).toHaveProperty('preview_url');
         expect(body).toHaveProperty('expires_at');
@@ -267,9 +267,9 @@ test.describe('A02 — Cryptographic Failures', () => {
         const body = await res.json();
         const meta = body.meta ?? {};
         // Underscore-prefixed meta must not be exposed (WP private meta)
-        expect(meta).not.toHaveProperty('_drpt_token_raw');
-        expect(meta).not.toHaveProperty('_drpt_token_hash');
-        expect(meta).not.toHaveProperty('_drpt_expires_at');
+        expect(meta).not.toHaveProperty('_yuipt_token_raw');
+        expect(meta).not.toHaveProperty('_yuipt_token_hash');
+        expect(meta).not.toHaveProperty('_yuipt_expires_at');
     });
 
 });
@@ -424,7 +424,7 @@ test.describe('A08 — Software & Data Integrity', () => {
 
     test('CSRF: token delete without nonce → rejected (302 to login or 403)', async ({ request }) => {
         const res = await request.post(`${WP}/wp-admin/admin-post.php`, {
-            form: { action: 'drpt_delete_token', post_id: String(draftPostId) },
+            form: { action: 'yuipt_delete_token', post_id: String(draftPostId) },
             maxRedirects: 0,
         });
         expect(res.status()).not.toBe(200);
@@ -432,7 +432,7 @@ test.describe('A08 — Software & Data Integrity', () => {
 
     test('CSRF: bulk delete expired without nonce → rejected', async ({ request }) => {
         const res = await request.post(`${WP}/wp-admin/admin-post.php`, {
-            form: { action: 'drpt_delete_expired' },
+            form: { action: 'yuipt_delete_expired' },
             maxRedirects: 0,
         });
         expect(res.status()).not.toBe(200);
@@ -441,9 +441,9 @@ test.describe('A08 — Software & Data Integrity', () => {
     test('CSRF: settings update without nonce → rejected (302 or 403)', async ({ request }) => {
         const res = await request.post(`${WP}/wp-admin/options.php`, {
             form: {
-                option_page:      'drpt_settings',
+                option_page:      'yuipt_settings',
                 action:           'update',
-                drpt_frontend_url: 'https://evil.example.com',
+                yuipt_frontend_url: 'https://evil.example.com',
             },
             maxRedirects: 0,
         });
@@ -569,9 +569,9 @@ test.describe('External Issuance Guard', () => {
         }
 
         // Enable external issuance via the settings page
-        await adminPage.goto(`${WP}/wp-admin/options-general.php?page=draft-preview-token`);
+        await adminPage.goto(`${WP}/wp-admin/options-general.php?page=yui-preview-token`);
         await adminPage.waitForLoadState('domcontentloaded');
-        const checkbox = adminPage.locator('input[name="drpt_allow_external_issuance"]');
+        const checkbox = adminPage.locator('input[name="yuipt_allow_external_issuance"]');
         if (!(await checkbox.isChecked())) {
             await checkbox.check();
             await adminPage.locator('#submit').click();
@@ -594,9 +594,9 @@ test.describe('External Issuance Guard', () => {
             expect([200, 201]).toContain(res.status());
         } finally {
             // Always restore the default (external issuance OFF)
-            await adminPage.goto(`${WP}/wp-admin/options-general.php?page=draft-preview-token`);
+            await adminPage.goto(`${WP}/wp-admin/options-general.php?page=yui-preview-token`);
             await adminPage.waitForLoadState('domcontentloaded');
-            const cb = adminPage.locator('input[name="drpt_allow_external_issuance"]');
+            const cb = adminPage.locator('input[name="yuipt_allow_external_issuance"]');
             if (await cb.isChecked()) {
                 await cb.uncheck();
                 await adminPage.locator('#submit').click();

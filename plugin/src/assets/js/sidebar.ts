@@ -1,17 +1,17 @@
 /**
  * Gutenberg sidebar entry.
- * Registers a PluginDocumentSettingPanel with DrptTokenPanel.
+ * Registers a PluginDocumentSettingPanel with YuiptTokenPanel.
  * WordPress deps: wp-element, wp-components, wp-plugins, wp-data, wp-editor, wp-edit-post
  */
 
-import { DrptTokenPanel } from './token-panel'
+import { YuiptTokenPanel } from './token-panel'
 import { PLUGIN_ID_SIDEBAR, LOG_PREFIX } from './constants'
 import type { BtnComponent } from './types'
 
-if (typeof drptPreviewData === 'undefined') {
-  // drptPreviewData is injected by wp_localize_script; if missing, skip silently
+if (typeof yuiptPreviewData === 'undefined') {
+  // yuiptPreviewData is injected by wp_localize_script; if missing, skip silently
   // (avoids breaking Gutenberg if the plugin's enqueue hook didn't fire)
-  console.warn(`${LOG_PREFIX} drptPreviewData is not defined`)
+  console.warn(`${LOG_PREFIX} yuiptPreviewData is not defined`)
 }
 
 const { createElement: el }      = wp.element
@@ -44,7 +44,7 @@ if (!PluginDocumentSettingPanel) {
         if (editor.isEditedPostDirty()) await dispatch.savePost()
       }
 
-      const panel = el(DrptTokenPanel, { postId, Btn: Button as unknown as BtnComponent, SelectInput: SelectControl, onBeforeOpenPreview })
+      const panel = el(YuiptTokenPanel, { postId, Btn: Button as unknown as BtnComponent, SelectInput: SelectControl, onBeforeOpenPreview })
       // PluginDocumentSettingPanel props (name, initialOpen) extend beyond @wordpress/editor types
       return (el as Function)(
         PluginDocumentSettingPanel,

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DRPT\WordPress;
+namespace YUIPT\WordPress;
 
-use DRPT\Token\TokenIssuer;
+use YUIPT\Token\TokenIssuer;
 
 /**
  * Writes audit entries for token lifecycle events.

@@ -4,7 +4,7 @@
     "wp": "latest"
   },
   "siteOptions": {
-    "blogname": "WP Preview Token Dev"
+    "blogname": "YUI Preview Token Dev"
   },
   "steps": [
     {
@@ -16,7 +16,7 @@
     },
     {
       "step": "activatePlugin",
-      "pluginPath": "plugin/draft-preview-token.php"
+      "pluginPath": "plugin/yui-preview-token.php"
     },
     {
       "step": "runPHP",
@@ -24,7 +24,7 @@
     },
     {
       "step": "runPHP",
-      "code": "<?php\nrequire '/wordpress/wp-load.php';\nupdate_option('drpt_frontend_url', 'http://localhost:5173');\nupdate_option('drpt_allowed_origins', 'http://localhost:4321');\nupdate_option('drpt_min_capability', 'contributor');\nupdate_option('drpt_rate_limit_requests', 60);\nupdate_option('drpt_rate_limit_window', 60);\n\n?>"
+      "code": "<?php\nrequire '/wordpress/wp-load.php';\nupdate_option('yuipt_frontend_url', 'http://localhost:5173');\nupdate_option('yuipt_allowed_origins', 'http://localhost:4321');\nupdate_option('yuipt_min_capability', 'contributor');\nupdate_option('yuipt_rate_limit_requests', 60);\nupdate_option('yuipt_rate_limit_window', 60);\n\n?>"
     },
     {
       "step": "wp-cli",

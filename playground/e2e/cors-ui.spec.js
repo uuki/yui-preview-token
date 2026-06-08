@@ -14,51 +14,51 @@ test.describe('CORS origins UI', () => {
         // Navigate via dashboard first to ensure WP admin is fully initialized
         await page.goto(`${WP}/wp-admin/`);
         await page.waitForLoadState('domcontentloaded');
-        await page.goto(`${WP}/wp-admin/admin.php?page=draft-preview-token`);
+        await page.goto(`${WP}/wp-admin/admin.php?page=yui-preview-token`);
         await page.waitForLoadState('domcontentloaded');
     });
 
     test('shows at least one origin input row', async ({ page }) => {
-        const rows = page.locator('.drpt-origin-row');
+        const rows = page.locator('.yuipt-origin-row');
         await expect(rows.first()).toBeVisible();
     });
 
     test('Add origin button appends a new input row', async ({ page }) => {
-        const before = await page.locator('.drpt-origin-row').count();
+        const before = await page.locator('.yuipt-origin-row').count();
         await page.getByRole('button', { name: /add origin/i }).click();
-        const after = await page.locator('.drpt-origin-row').count();
+        const after = await page.locator('.yuipt-origin-row').count();
         expect(after).toBe(before + 1);
     });
 
     test('remove button clears last row instead of deleting it', async ({ page }) => {
         // Ensure only one row exists by removing extras first
-        while (await page.locator('.drpt-origin-row').count() > 1) {
-            await page.locator('.drpt-remove-origin').last().click();
+        while (await page.locator('.yuipt-origin-row').count() > 1) {
+            await page.locator('.yuipt-remove-origin').last().click();
         }
-        const input = page.locator('.drpt-origin-row input').first();
+        const input = page.locator('.yuipt-origin-row input').first();
         await input.fill('https://example.com');
-        await page.locator('.drpt-remove-origin').first().click();
+        await page.locator('.yuipt-remove-origin').first().click();
         await expect(input).toHaveValue('');
-        await expect(page.locator('.drpt-origin-row')).toHaveCount(1);
+        await expect(page.locator('.yuipt-origin-row')).toHaveCount(1);
     });
 
     test('saves multiple origins and reloads them as separate inputs', async ({ page }) => {
         // Remove all but one row
-        while (await page.locator('.drpt-origin-row').count() > 1) {
-            await page.locator('.drpt-remove-origin').last().click();
+        while (await page.locator('.yuipt-origin-row').count() > 1) {
+            await page.locator('.yuipt-remove-origin').last().click();
         }
 
         // Fill first row
-        await page.locator('.drpt-origin-row input').first().fill('http://localhost:4321');
+        await page.locator('.yuipt-origin-row input').first().fill('http://localhost:4321');
 
         // Add and fill second row
         await page.getByRole('button', { name: /add origin/i }).click();
-        await page.locator('.drpt-origin-row input').nth(1).fill('https://*.amplifyapp.com');
+        await page.locator('.yuipt-origin-row input').nth(1).fill('https://*.amplifyapp.com');
 
         await page.getByRole('button', { name: /save changes/i }).click();
         await page.waitForURL(`${WP}/wp-admin/options-general.php*`);
 
-        const inputs = page.locator('.drpt-origin-row input');
+        const inputs = page.locator('.yuipt-origin-row input');
         await expect(inputs).toHaveCount(2);
         await expect(inputs.nth(0)).toHaveValue('http://localhost:4321');
         await expect(inputs.nth(1)).toHaveValue('https://*.amplifyapp.com');

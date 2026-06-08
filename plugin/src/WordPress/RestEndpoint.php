@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DRPT\WordPress;
+namespace YUIPT\WordPress;
 
-use DRPT\Support\ResponsePipeline;
-use DRPT\Token\TokenValidator;
+use YUIPT\Support\ResponsePipeline;
+use YUIPT\Token\TokenValidator;
 use WP_Error;
 use WP_HTTP_Response;
 use WP_Post;
@@ -67,7 +67,7 @@ class RestEndpoint
         if (!is_ssl() && !$skip_https) {
             return new WP_Error(
                 'https_required',
-                __('HTTPS is required.', 'draft-preview-token'),
+                __('HTTPS is required.', 'yui-preview-token'),
                 ['status' => 403]
             );
         }
@@ -78,7 +78,7 @@ class RestEndpoint
             do_action(Constants::HOOK_RATE_LIMIT_EXCEEDED, $ip, 'preview');
             return new WP_Error(
                 'rate_limit_exceeded',
-                __('Too many requests.', 'draft-preview-token'),
+                __('Too many requests.', 'yui-preview-token'),
                 ['status' => 429]
             );
         }
@@ -90,7 +90,7 @@ class RestEndpoint
             do_action(Constants::HOOK_INVALID_TOKEN, $ip);
             return new WP_Error(
                 'invalid_token',
-                __('Invalid or expired preview token.', 'draft-preview-token'),
+                __('Invalid or expired preview token.', 'yui-preview-token'),
                 ['status' => 401]
             );
         }
@@ -100,7 +100,7 @@ class RestEndpoint
         if (!($post instanceof WP_Post)) {
             return new WP_Error(
                 'post_not_found',
-                __('Post not found.', 'draft-preview-token'),
+                __('Post not found.', 'yui-preview-token'),
                 ['status' => 404]
             );
         }
@@ -109,7 +109,7 @@ class RestEndpoint
         if (!in_array($post->post_status, Constants::PREVIEWABLE_STATUSES, true)) {
             return new WP_Error(
                 'invalid_post_status',
-                __('Preview is only available for unpublished posts.', 'draft-preview-token'),
+                __('Preview is only available for unpublished posts.', 'yui-preview-token'),
                 ['status' => 403]
             );
         }

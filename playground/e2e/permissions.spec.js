@@ -76,7 +76,7 @@ async function tryCreateToken(page, nonce, postId) {
         const body = await r.json().catch(() => ({}));
         return { status: r.status, code: body.code ?? null, message: body.message ?? null };
     }, {
-        pvtUrl: `${WP}/wp-json/draft-preview-token/v1/token`,
+        pvtUrl: `${WP}/wp-json/yui-preview-token/v1/token`,
         n: nonce,
         pid: postId,
         exp: Math.floor(Date.now() / 1000) + 3600,
@@ -171,8 +171,8 @@ test.describe('Token creation permissions by WordPress role', () => {
         test.beforeAll(async ({ browser }) => {
             test.setTimeout(45_000);
             const { page, ctx } = await loginAndGetNonce(browser, 'admin');
-            await page.goto(`${WP}/wp-admin/options-general.php?page=draft-preview-token`);
-            await page.selectOption('select[name="drpt_min_capability"]', 'administrator');
+            await page.goto(`${WP}/wp-admin/options-general.php?page=yui-preview-token`);
+            await page.selectOption('select[name="yuipt_min_capability"]', 'administrator');
             await page.getByRole('button', { name: /save changes/i }).click();
             await page.waitForURL(`${WP}/wp-admin/options-general.php*`);
             await ctx.close();
@@ -181,8 +181,8 @@ test.describe('Token creation permissions by WordPress role', () => {
         test.afterAll(async ({ browser }) => {
             test.setTimeout(45_000);
             const { page, ctx } = await loginAndGetNonce(browser, 'admin');
-            await page.goto(`${WP}/wp-admin/options-general.php?page=draft-preview-token`);
-            await page.selectOption('select[name="drpt_min_capability"]', 'contributor');
+            await page.goto(`${WP}/wp-admin/options-general.php?page=yui-preview-token`);
+            await page.selectOption('select[name="yuipt_min_capability"]', 'contributor');
             await page.getByRole('button', { name: /save changes/i }).click();
             await page.waitForURL(`${WP}/wp-admin/options-general.php*`);
             await ctx.close();

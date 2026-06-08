@@ -21,13 +21,13 @@ An authorized WordPress user generates a token from the Gutenberg sidebar, Quick
 
 ```
 Editor generates token in Gutenberg sidebar / Quick Edit / Classic Editor
-  └─ plugin issues token → SHA-256 hash stored in wp_options (drpt_tk_{hash})
+  └─ plugin issues token → SHA-256 hash stored in wp_options (yuipt_tk_{hash})
   └─ preview URL built: https://front.example.com/preview?token=<64-char-hex>
 
 User opens the preview URL in browser
 
 Frontend
-  └─ GET /wp-json/draft-preview-token/v1/preview?token=<token>
+  └─ GET /wp-json/yui-preview-token/v1/preview?token=<token>
 
 WordPress
   └─ hashes the token, looks up wp_options key
@@ -42,7 +42,7 @@ Frontend renders preview
 | Property   | Value                                                              |
 |------------|--------------------------------------------------------------------|
 | Generation | `bin2hex(random_bytes(32))` — 256-bit CSPRNG, 64-char hex          |
-| Storage    | `wp_options` key = `drpt_tk_` + `sha256(token)` (O(1) lookup)      |
+| Storage    | `wp_options` key = `yuipt_tk_` + `sha256(token)` (O(1) lookup)      |
 | Expiry     | Configurable: 1 h / 24 h / 30 d / custom datetime / no-expiry     |
 | Reuse      | Allowed within validity window                                     |
 | On expiry  | `401 Unauthorized` (same as invalid)                               |
@@ -55,7 +55,7 @@ Reuse within the validity window is intentional — editors commonly reload the 
 
 **Preview (public)**
 ```
-GET /wp-json/draft-preview-token/v1/preview?token=<token>
+GET /wp-json/yui-preview-token/v1/preview?token=<token>
 ```
 
 | Status | Condition                |
@@ -69,10 +69,10 @@ GET /wp-json/draft-preview-token/v1/preview?token=<token>
 
 **Token management (authenticated)**
 ```
-POST   /wp-json/draft-preview-token/v1/token   # issue
-GET    /wp-json/draft-preview-token/v1/token   # get current token for a post
-PATCH  /wp-json/draft-preview-token/v1/token   # update expiry only
-DELETE /wp-json/draft-preview-token/v1/token   # revoke
+POST   /wp-json/yui-preview-token/v1/token   # issue
+GET    /wp-json/yui-preview-token/v1/token   # get current token for a post
+PATCH  /wp-json/yui-preview-token/v1/token   # update expiry only
+DELETE /wp-json/yui-preview-token/v1/token   # revoke
 ```
 
 The preview response body matches the standard WordPress REST API post format (`/wp/v2/posts/{id}`). The following fields are removed before the response is returned:
@@ -84,24 +84,24 @@ The preview response body matches the standard WordPress REST API post format (`
 | `ping_status` | Not relevant to preview |
 | `template`    | Not relevant to preview |
 
-Use the `drpt_preview_response_data` filter to add, remove, or transform fields in the response.
+Use the `yuipt_preview_response_data` filter to add, remove, or transform fields in the response.
 
 ```php
 // Remove additional fields
-add_filter('drpt_preview_response_data', function (array $data, WP_Post $post, WP_REST_Request $req): array {
+add_filter('yuipt_preview_response_data', function (array $data, WP_Post $post, WP_REST_Request $req): array {
     unset($data['author']);
     return $data;
 }, 10, 3);
 
 // Add ACF fields (ACF fields registered with "Show in REST API" are included automatically;
 // use this only when you need fields that are not exposed to unauthenticated requests)
-add_filter('drpt_preview_response_data', function (array $data, WP_Post $post): array {
+add_filter('yuipt_preview_response_data', function (array $data, WP_Post $post): array {
     $data['acf'] = function_exists('get_fields') ? get_fields($post->ID) : [];
     return $data;
 }, 10, 2);
 
 // Add content.raw (raw block markup — only expose when the token recipient is trusted)
-add_filter('drpt_preview_response_data', function (array $data, WP_Post $post): array {
+add_filter('yuipt_preview_response_data', function (array $data, WP_Post $post): array {
     $data['content']['raw'] = $post->post_content;
     return $data;
 }, 10, 2);
@@ -157,7 +157,7 @@ const token = Astro.url.searchParams.get('token');
 if (!token) return Astro.redirect('/404');
 
 const res = await fetch(
-  `https://wp.example.com/wp-json/draft-preview-token/v1/preview?token=${token}`
+  `https://wp.example.com/wp-json/yui-preview-token/v1/preview?token=${token}`
 );
 
 if (!res.ok) return Astro.redirect('/404');

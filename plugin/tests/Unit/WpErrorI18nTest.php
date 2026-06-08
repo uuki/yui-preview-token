@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Tests\Unit;
+namespace YUIPT\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  * Detects patterns like:
  *   new WP_Error('code', 'raw message', ...)
  * which must instead be:
- *   new WP_Error('code', __('raw message', 'draft-preview-token'), ...)
+ *   new WP_Error('code', __('raw message', 'yui-preview-token'), ...)
  *
  * Handles both single-line and multi-line WP_Error() call syntax.
  */

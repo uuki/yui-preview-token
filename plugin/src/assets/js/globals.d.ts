@@ -24,7 +24,7 @@ declare global {
     editPost:   typeof WPEditor
   }
 
-  interface DrptI18n {
+  interface YuiptI18n {
     // Preset labels
     preset1h:       string
     preset24h:      string
@@ -51,17 +51,17 @@ declare global {
     errorOccurred:  string
   }
 
-  interface DrptPreviewData {
+  interface YuiptPreviewData {
     tokenBase:     string
     nonce:         string
     allowNoExpiry: boolean
-    i18n:          DrptI18n
+    i18n:          YuiptI18n
   }
 
   /** Injected by wp_localize_script before each entry script runs. */
-  const drptPreviewData: DrptPreviewData | undefined
+  const yuiptPreviewData: YuiptPreviewData | undefined
 
-  interface DrptSettingsData {
+  interface YuiptSettingsData {
     /** name attribute for origin inputs, e.g. "drpt_allowed_origins[]" */
     field:        string
     /** aria-label for the × remove button */
@@ -73,7 +73,7 @@ declare global {
   }
 
   /** Injected on the plugin settings page only. */
-  const drptSettingsData: DrptSettingsData
+  const yuiptSettingsData: YuiptSettingsData
 }
 
 export {}

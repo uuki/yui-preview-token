@@ -24,7 +24,7 @@ export interface SelectOption {
 }
 
 // ── Injected component interfaces ────────────────────────────────────────────
-// Minimal props required by DrptTokenPanel; both wp.components.Button and
+// Minimal props required by YuiptTokenPanel; both wp.components.Button and
 // NativeBtn must satisfy BtnProps, and both SelectControl/NativeSelect must
 // satisfy SelectInputProps.
 

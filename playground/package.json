@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "composer install --no-dev --working-dir=../plugin",
     "dev": "concurrently -n WP,Vite -c blue,green \"pnpm run wp\" \"pnpm run frontend\"",
-    "wp": "wp-playground-cli start --path=../plugin/ --port=9400 --skip-browser --define WP_ENVIRONMENT_TYPE local --define-bool DRPT_SKIP_HTTPS_CHECK true --blueprint=blueprint.json",
+    "wp": "wp-playground-cli start --path=../plugin/ --port=9400 --skip-browser --define WP_ENVIRONMENT_TYPE local --define-bool YUIPT_SKIP_HTTPS_CHECK true --blueprint=blueprint.json",
     "frontend": "vite --port=5173",
     "test": "playwright test",
     "test:ui": "playwright test --ui",

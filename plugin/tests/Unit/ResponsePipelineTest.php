@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Tests\Unit;
+namespace YUIPT\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use DRPT\Support\ResponsePipeline;
+use YUIPT\Support\ResponsePipeline;
 
 class ResponsePipelineTest extends TestCase
 {

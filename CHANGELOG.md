@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/uuki/draft-preview-token/compare/v1.1.1...v1.1.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* address WP.org review issues [#3](https://github.com/uuki/draft-preview-token/issues/3) [#4](https://github.com/uuki/draft-preview-token/issues/4) [#5](https://github.com/uuki/draft-preview-token/issues/5) [#6](https://github.com/uuki/draft-preview-token/issues/6) [#7](https://github.com/uuki/draft-preview-token/issues/7) ([5ce5f84](https://github.com/uuki/draft-preview-token/commit/5ce5f841c8b976545794ca7586406f0d1735d5e7))
+* align SETTINGS_PAGE_SLUG and REST_NAMESPACE with plugin slug ([4c53c27](https://github.com/uuki/draft-preview-token/commit/4c53c27f47ff8856018b000f65475a74165b71b1))
+
 ## [1.1.1](https://github.com/uuki/preview-token/compare/v1.1.0...v1.1.1) (2026-06-07)
 
 

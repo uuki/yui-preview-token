@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Tests\Unit;
+namespace YUIPT\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ class NamespaceRenameConsistencyTest extends TestCase
     {
         $root  = dirname(__DIR__, 3);
         $files = [
-            $root . '/plugin/draft-preview-token.php',
+            $root . '/plugin/yui-preview-token.php',
         ];
 
         $iter = new \RecursiveIteratorIterator(

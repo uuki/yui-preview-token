@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DRPT\WordPress;
+namespace YUIPT\WordPress;
 
 class Settings
 {
@@ -19,11 +19,11 @@ class Settings
     private static function role_options(): array
     {
         return [
-            'subscriber'    => __('Subscriber',    'draft-preview-token'),
-            'contributor'   => __('Contributor',   'draft-preview-token'),
-            'author'        => __('Author',        'draft-preview-token'),
-            'editor'        => __('Editor',        'draft-preview-token'),
-            'administrator' => __('Administrator', 'draft-preview-token'),
+            'subscriber'    => __('Subscriber',    'yui-preview-token'),
+            'contributor'   => __('Contributor',   'yui-preview-token'),
+            'author'        => __('Author',        'yui-preview-token'),
+            'editor'        => __('Editor',        'yui-preview-token'),
+            'administrator' => __('Administrator', 'yui-preview-token'),
         ];
     }
 
@@ -74,17 +74,17 @@ class Settings
 
         wp_localize_script(Constants::SCRIPT_SETTINGS, Constants::JS_SETTINGS_DATA, [
             'field'        => Constants::OPTION_ALLOWED_ORIGINS . '[]',
-            'removeLabel'  => __('Remove this origin', 'draft-preview-token'),
-            'warningTitle' => __('Security Warning', 'draft-preview-token'),
-            'warningText'  => __('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'draft-preview-token'),
+            'removeLabel'  => __('Remove this origin', 'yui-preview-token'),
+            'warningTitle' => __('Security Warning', 'yui-preview-token'),
+            'warningText'  => __('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'yui-preview-token'),
         ]);
     }
 
     public function add_settings_page(): void
     {
         add_options_page(
-            __('Draft Preview Token', 'draft-preview-token'),
-            __('Draft Preview Token', 'draft-preview-token'),
+            __('YUI Preview Token', 'yui-preview-token'),
+            __('YUI Preview Token', 'yui-preview-token'),
             'manage_options',
             Constants::SETTINGS_PAGE_SLUG,
             [$this, 'render_page']
@@ -155,14 +155,14 @@ class Settings
 
         add_settings_section(Constants::SETTINGS_SECTION, '', '__return_null', Constants::SETTINGS_PAGE_SLUG);
 
-        add_settings_field(Constants::OPTION_FRONTEND_URL,        __('External Preview URL',          'draft-preview-token'), [$this, 'render_frontend_url'],             Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
-        add_settings_field(Constants::OPTION_ALLOWED_ORIGINS,     __('Allowed Origins (CORS)',         'draft-preview-token'), [$this, 'render_allowed_origins'],          Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
-        add_settings_field(Constants::OPTION_MIN_CAPABILITY,      __('Minimum Capability',             'draft-preview-token'), [$this, 'render_min_capability'],           Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
-        add_settings_field(Constants::OPTION_RATE_LIMIT_REQUESTS, __('Rate Limit',                     'draft-preview-token'), [$this, 'render_rate_limit_requests'],      Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
-        add_settings_field(Constants::OPTION_RATE_LIMIT_WINDOW,   __('Rate Limit Window',              'draft-preview-token'), [$this, 'render_rate_limit_window'],        Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
-        add_settings_field(Constants::OPTION_ALLOW_NO_EXPIRY,     __('Allow No-Expiry Tokens',         'draft-preview-token'), [$this, 'render_allow_no_expiry'],          Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
-        add_settings_field(Constants::OPTION_SKIP_HTTPS_CHECK,    __('Skip HTTPS Check',               'draft-preview-token'), [$this, 'render_skip_https_check'],         Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
-        add_settings_field(Constants::OPTION_ALLOW_EXTERNAL_ISSUANCE, __('Allow External Token Issuance', 'draft-preview-token'), [$this, 'render_allow_external_issuance'], Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_FRONTEND_URL,        __('External Preview URL',          'yui-preview-token'), [$this, 'render_frontend_url'],             Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_ALLOWED_ORIGINS,     __('Allowed Origins (CORS)',         'yui-preview-token'), [$this, 'render_allowed_origins'],          Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_MIN_CAPABILITY,      __('Minimum Capability',             'yui-preview-token'), [$this, 'render_min_capability'],           Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_RATE_LIMIT_REQUESTS, __('Rate Limit',                     'yui-preview-token'), [$this, 'render_rate_limit_requests'],      Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_RATE_LIMIT_WINDOW,   __('Rate Limit Window',              'yui-preview-token'), [$this, 'render_rate_limit_window'],        Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_ALLOW_NO_EXPIRY,     __('Allow No-Expiry Tokens',         'yui-preview-token'), [$this, 'render_allow_no_expiry'],          Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_SKIP_HTTPS_CHECK,    __('Skip HTTPS Check',               'yui-preview-token'), [$this, 'render_skip_https_check'],         Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
+        add_settings_field(Constants::OPTION_ALLOW_EXTERNAL_ISSUANCE, __('Allow External Token Issuance', 'yui-preview-token'), [$this, 'render_allow_external_issuance'], Constants::SETTINGS_PAGE_SLUG, Constants::SETTINGS_SECTION);
     }
 
     public function render_page(): void
@@ -170,18 +170,18 @@ class Settings
         // Defense-in-depth: verify capability explicitly even though
         // add_options_page already restricts access to manage_options.
         if (!current_user_can('manage_options')) {
-            wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'draft-preview-token'));
+            wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'yui-preview-token'));
         }
 
         $current_tab = sanitize_key($_GET['tab'] ?? 'settings'); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $base_url    = admin_url('options-general.php?page=draft-preview-token');
         $tabs        = [
-            'settings' => __('Settings',      'draft-preview-token'),
-            'tokens'   => __('Issued Tokens', 'draft-preview-token'),
+            'settings' => __('Settings',      'yui-preview-token'),
+            'tokens'   => __('Issued Tokens', 'yui-preview-token'),
         ];
         ?>
         <div class="wrap">
-            <h1>Draft Preview Token</h1>
+            <h1>YUI Preview Token</h1>
             <nav class="nav-tab-wrapper" style="margin-bottom:20px">
                 <?php foreach ($tabs as $slug => $label): ?>
                 <a href="<?php echo esc_url(add_query_arg('tab', $slug, $base_url)); ?>"
@@ -213,7 +213,7 @@ class Settings
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_FRONTEND_URL),
             esc_attr($this->get_frontend_url()),
-            esc_html__('URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress. If left empty, the WordPress site URL is used as a fallback.', 'draft-preview-token')
+            esc_html__('URL of the external client or frontend used to render preview content. Intended for headless setups (e.g. Astro, Next.js, Nuxt) and decoupled architectures where draft content is rendered outside of WordPress. If left empty, the WordPress site URL is used as a fallback.', 'yui-preview-token')
         );
     }
 
@@ -236,24 +236,24 @@ class Settings
                        style="flex:1;font-family:-apple-system,&quot;system-ui&quot;,&quot;Segoe UI&quot;,Roboto,Oxygen-Sans,Ubuntu,Cantarell,&quot;Helvetica Neue&quot;,sans-serif" />
                 <button type="button"
                         class="button <?php echo esc_attr(Constants::CLASS_REMOVE_ORIGIN); ?>"
-                        aria-label="<?php esc_attr_e('Remove this origin', 'draft-preview-token'); ?>">&#x2715;</button>
+                        aria-label="<?php esc_attr_e('Remove this origin', 'yui-preview-token'); ?>">&#x2715;</button>
             </div>
             <?php endforeach; ?>
         </div>
         <button type="button" id="<?php echo esc_attr(Constants::ELEMENT_ADD_ORIGIN); ?>" class="button" style="margin-top:6px">
-            <?php esc_html_e('+ Add origin', 'draft-preview-token'); ?>
+            <?php esc_html_e('+ Add origin', 'yui-preview-token'); ?>
         </button>
         <?php
         // Server-side warning when * is already saved (shown before JS loads).
         if (in_array('*', $this->get_allowed_origins(), true)):
         ?>
         <div id="<?php echo esc_attr(Constants::ELEMENT_WILDCARD_WARNING); ?>" class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
-            <strong><?php esc_html_e('Security Warning', 'draft-preview-token'); ?>:</strong>
-            <?php esc_html_e('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'draft-preview-token'); ?>
+            <strong><?php esc_html_e('Security Warning', 'yui-preview-token'); ?>:</strong>
+            <?php esc_html_e('The bare wildcard (*) allows any origin to access draft content via a valid token. Use specific origin patterns whenever possible.', 'yui-preview-token'); ?>
         </div>
         <?php endif; ?>
         <p class="description" style="margin-top:6px">
-            <?php esc_html_e('Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers.', 'draft-preview-token'); ?>
+            <?php esc_html_e('Wildcards are supported (e.g. https://*.example.com, *). Leave all fields empty to disable CORS headers.', 'yui-preview-token'); ?>
         </p>
         <?php
         // JS (settings.iife.js) is enqueued via enqueue_settings_scripts() and
@@ -282,11 +282,11 @@ class Settings
     {
         printf(
             '<input type="number" name="%s" value="%d" min="1" max="1000" class="small-text" /> '
-            . esc_html__('requests per window', 'draft-preview-token')
+            . esc_html__('requests per window', 'yui-preview-token')
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_RATE_LIMIT_REQUESTS),
             absint($this->get_rate_limit_requests()),
-            esc_html__('Maximum number of preview requests allowed from a single IP address within the rate limit window. Requests that exceed this limit receive a 429 response. Default: 30.', 'draft-preview-token')
+            esc_html__('Maximum number of preview requests allowed from a single IP address within the rate limit window. Requests that exceed this limit receive a 429 response. Default: 30.', 'yui-preview-token')
         );
     }
 
@@ -294,11 +294,11 @@ class Settings
     {
         printf(
             '<input type="number" name="%s" value="%d" min="1" max="3600" class="small-text" /> '
-            . esc_html__('seconds', 'draft-preview-token')
+            . esc_html__('seconds', 'yui-preview-token')
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_RATE_LIMIT_WINDOW),
             absint($this->get_rate_limit_window()),
-            esc_html__('Time window in seconds over which the rate limit is measured. The request counter resets after each window expires. Default: 60.', 'draft-preview-token')
+            esc_html__('Time window in seconds over which the rate limit is measured. The request counter resets after each window expires. Default: 60.', 'yui-preview-token')
         );
     }
 
@@ -366,8 +366,8 @@ class Settings
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_ALLOW_NO_EXPIRY),
             checked($this->get_allow_no_expiry(), true, false),
-            esc_html__('Enable', 'draft-preview-token'),
-            esc_html__('Allow preview tokens with no expiry. Use with caution — these tokens persist until manually deleted.', 'draft-preview-token')
+            esc_html__('Enable', 'yui-preview-token'),
+            esc_html__('Allow preview tokens with no expiry. Use with caution — these tokens persist until manually deleted.', 'yui-preview-token')
         );
     }
 
@@ -386,22 +386,22 @@ class Settings
                        name="<?php echo esc_attr(Constants::OPTION_SKIP_HTTPS_CHECK); ?>"
                        value="1"
                        <?php checked($enabled); ?> />
-                <?php esc_html_e('Enable (development only)', 'draft-preview-token'); ?>
+                <?php esc_html_e('Enable (development only)', 'yui-preview-token'); ?>
             </label>
             <p class="description">
-                <?php esc_html_e('By default the preview endpoint requires HTTPS so that tokens cannot be intercepted in transit. Enable this option only when running WordPress on a local development environment where HTTPS is unavailable.', 'draft-preview-token'); ?>
+                <?php esc_html_e('By default the preview endpoint requires HTTPS so that tokens cannot be intercepted in transit. Enable this option only when running WordPress on a local development environment where HTTPS is unavailable.', 'yui-preview-token'); ?>
             </p>
             <?php if ($enabled): ?>
             <div class="notice notice-warning inline" style="margin-top:6px;padding:8px 12px">
-                <strong><?php esc_html_e('Security Warning', 'draft-preview-token'); ?>:</strong>
-                <?php esc_html_e('The HTTPS check is currently disabled. Preview tokens can be sent over unencrypted HTTP. Do not use this setting in a production environment.', 'draft-preview-token'); ?>
+                <strong><?php esc_html_e('Security Warning', 'yui-preview-token'); ?>:</strong>
+                <?php esc_html_e('The HTTPS check is currently disabled. Preview tokens can be sent over unencrypted HTTP. Do not use this setting in a production environment.', 'yui-preview-token'); ?>
             </div>
             <?php endif; ?>
             <p class="description" style="margin-top:6px;font-style:italic">
                 <?php
                 printf(
                     /* translators: %s: PHP constant name */
-                    esc_html__('If the %s constant is defined in wp-config.php, it takes precedence over this setting.', 'draft-preview-token'),
+                    esc_html__('If the %s constant is defined in wp-config.php, it takes precedence over this setting.', 'yui-preview-token'),
                     '<code>' . esc_html(Constants::DEFINE_SKIP_HTTPS_CHECK) . '</code>'
                 );
                 ?>
@@ -423,8 +423,8 @@ class Settings
             . '<p class="description">%s</p>',
             esc_attr(Constants::OPTION_ALLOW_EXTERNAL_ISSUANCE),
             checked($enabled, true, false),
-            esc_html__('Enable', 'draft-preview-token'),
-            esc_html__('When enabled, authenticated users with the required role can issue tokens via the REST API from outside the WordPress admin — for example from CI/CD pipelines or automated scripts. When disabled (default), token issuance is restricted to the WordPress admin interface.', 'draft-preview-token')
+            esc_html__('Enable', 'yui-preview-token'),
+            esc_html__('When enabled, authenticated users with the required role can issue tokens via the REST API from outside the WordPress admin — for example from CI/CD pipelines or automated scripts. When disabled (default), token issuance is restricted to the WordPress admin interface.', 'yui-preview-token')
         );
     }
 

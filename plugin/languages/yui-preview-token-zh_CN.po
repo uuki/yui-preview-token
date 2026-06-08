@@ -1,10 +1,10 @@
-# Simplified Chinese translation for Draft Preview Token
-# Copyright (C) 2026 Draft Preview Token
+# Simplified Chinese translation for YUI Preview Token
+# Copyright (C) 2026 YUI Preview Token
 # This file is distributed under the MIT license.
 msgid ""
 msgstr ""
-"Project-Id-Version: Draft Preview Token 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/uuki/draft-preview-token/issues\n"
+"Project-Id-Version: YUI Preview Token 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/uuki/yui-preview-token/issues\n"
 "POT-Creation-Date: 2026-06-06T00:00:00+00:00\n"
 "PO-Revision-Date: 2026-06-06T00:00:00+00:00\n"
 "Last-Translator: \n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Draft Preview Token"
-msgstr "Draft Preview Token"
+msgid "YUI Preview Token"
+msgstr "YUI Preview Token"
 
 msgid "External Preview URL"
 msgstr "外部预览 URL"
@@ -267,8 +267,8 @@ msgstr "预览仅适用于未发布的文章。"
 msgid "Too many requests."
 msgstr "请求过多。"
 
-msgid "Token issuance from external clients is not enabled. Enable \"Allow External Token Issuance\" in Settings → Draft Preview Token."
-msgstr "未启用从外部客户端发行令牌。请在「设置 → Draft Preview Token」中启用「允许从外部发行令牌」。"
+msgid "Token issuance from external clients is not enabled. Enable \"Allow External Token Issuance\" in Settings → YUI Preview Token."
+msgstr "未启用从外部客户端发行令牌。请在「设置 → YUI Preview Token」中启用「允许从外部发行令牌」。"
 
 msgid "Token issuance from external clients is not enabled."
 msgstr "未启用从外部客户端发行令牌。"

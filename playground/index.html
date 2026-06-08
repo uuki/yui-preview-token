@@ -36,7 +36,7 @@
     } else {
       try {
         const res = await fetch(
-          `/wp-json/draft-preview-token/v1/preview?token=${encodeURIComponent(token)}`
+          `/wp-json/yui-preview-token/v1/preview?token=${encodeURIComponent(token)}`
         );
         if (!res.ok) throw new Error(`${res.status} — invalid or expired token`);
 

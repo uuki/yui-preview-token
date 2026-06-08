@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DRPT\WordPress;
+namespace YUIPT\WordPress;
 
-use DRPT\Token\TokenIssuer;
+use YUIPT\Token\TokenIssuer;
 use WP_Error;
 use WP_Post;
 use WP_REST_Request;
@@ -79,13 +79,13 @@ class IssueEndpoint
         $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
         if (!$this->rate_limiter->is_allowed($ip)) {
             do_action(Constants::HOOK_RATE_LIMIT_EXCEEDED, $ip, 'token');
-            return new WP_Error('rate_limit_exceeded', __('Too many requests.', 'draft-preview-token'), ['status' => 429]);
+            return new WP_Error('rate_limit_exceeded', __('Too many requests.', 'yui-preview-token'), ['status' => 429]);
         }
 
         if (!$this->settings->get_allow_external_issuance() && !$this->is_admin_ui_request($request)) {
             return new WP_Error(
                 'external_issuance_disabled',
-                __('Token issuance from external clients is not enabled. Enable "Allow External Token Issuance" in Settings → Draft Preview Token.', 'draft-preview-token'),
+                __('Token issuance from external clients is not enabled. Enable "Allow External Token Issuance" in Settings → YUI Preview Token.', 'yui-preview-token'),
                 ['status' => 403]
             );
         }
@@ -112,7 +112,7 @@ class IssueEndpoint
     public function handle_patch(WP_REST_Request $request)
     {
         if (!$this->settings->get_allow_external_issuance() && !$this->is_admin_ui_request($request)) {
-            return new WP_Error('external_issuance_disabled', __('Token issuance from external clients is not enabled.', 'draft-preview-token'), ['status' => 403]);
+            return new WP_Error('external_issuance_disabled', __('Token issuance from external clients is not enabled.', 'yui-preview-token'), ['status' => 403]);
         }
 
         $post_id    = (int) $request->get_param('post_id');
@@ -126,7 +126,7 @@ class IssueEndpoint
         if ($resolved instanceof WP_Error) return $resolved;
 
         if (!$this->issuer->update_expiry($post_id, $resolved)) {
-            return new WP_Error('no_token', __('No active token for this post.', 'draft-preview-token'), ['status' => 404]);
+            return new WP_Error('no_token', __('No active token for this post.', 'yui-preview-token'), ['status' => 404]);
         }
 
         return new WP_REST_Response($this->format($this->issuer->get_by_post($post_id), $post_id), 200);
@@ -136,7 +136,7 @@ class IssueEndpoint
     public function handle_delete(WP_REST_Request $request)
     {
         if (!$this->settings->get_allow_external_issuance() && !$this->is_admin_ui_request($request)) {
-            return new WP_Error('external_issuance_disabled', __('Token issuance from external clients is not enabled.', 'draft-preview-token'), ['status' => 403]);
+            return new WP_Error('external_issuance_disabled', __('Token issuance from external clients is not enabled.', 'yui-preview-token'), ['status' => 403]);
         }
 
         $post_id = (int) $request->get_param('post_id');
@@ -173,7 +173,7 @@ class IssueEndpoint
     {
         if (!user_can($user_id, $this->settings->get_min_capability(), $post_id)) {
             do_action(Constants::HOOK_CAPABILITY_DENIED, $user_id, $post_id);
-            return new WP_Error('forbidden', __('Insufficient permissions.', 'draft-preview-token'), ['status' => 403]);
+            return new WP_Error('forbidden', __('Insufficient permissions.', 'yui-preview-token'), ['status' => 403]);
         }
         return null;
     }
@@ -183,10 +183,10 @@ class IssueEndpoint
     {
         $post = get_post($post_id);
         if (!($post instanceof WP_Post)) {
-            return new WP_Error('post_not_found', __('Post not found.', 'draft-preview-token'), ['status' => 404]);
+            return new WP_Error('post_not_found', __('Post not found.', 'yui-preview-token'), ['status' => 404]);
         }
         if (!in_array($post->post_status, Constants::PREVIEWABLE_STATUSES, true)) {
-            return new WP_Error('invalid_post_status', __('Preview is only available for unpublished posts.', 'draft-preview-token'), ['status' => 403]);
+            return new WP_Error('invalid_post_status', __('Preview is only available for unpublished posts.', 'yui-preview-token'), ['status' => 403]);
         }
         return null;
     }
@@ -201,7 +201,7 @@ class IssueEndpoint
         if ($expires_at !== 0) return $expires_at;
 
         if (!$this->settings->get_allow_no_expiry()) {
-            return new WP_Error('no_expiry_disabled', __('No-expiry tokens are not enabled on this site.', 'draft-preview-token'), ['status' => 403]);
+            return new WP_Error('no_expiry_disabled', __('No-expiry tokens are not enabled on this site.', 'yui-preview-token'), ['status' => 403]);
         }
 
         return time() + self::NO_EXPIRY_SECONDS;

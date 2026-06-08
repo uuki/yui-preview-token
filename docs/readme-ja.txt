@@ -1,9 +1,9 @@
-=== Draft Preview Token ===
+=== YUI Preview Token ===
 Contributors: uuki
 Tags: preview, headless, rest-api, token, draft
 Requires at least: 5.9
 Tested up to: 7.0
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == 説明 ==
 
-**Draft Preview Token** は、デカップル型（ヘッドレス）WordPress 構成における認証問題を解決します。こうした用途で使用可能な Application Password は WordPress に標準機能として備わっている素晴らしい仕組みですが、長期的なシークレットをフロントエンド側で管理する必要が生じます。代わりにこのプラグインでは、投稿ごとに読み取りアクセスを期限付きで許可するトークンを発行します。
+**YUI Preview Token** は、デカップル型（ヘッドレス）WordPress 構成における認証問題を解決します。こうした用途で使用可能な Application Password は WordPress に標準機能として備わっている素晴らしい仕組みですが、長期的なシークレットをフロントエンド側で管理する必要が生じます。代わりにこのプラグインでは、投稿ごとに読み取りアクセスを期限付きで許可するトークンを発行します。
 
 フロントエンド（Astro、Next.js、Nuxt など）はプレビュー URL を受け取り、REST API 経由でドラフトコンテンツをダイレクトに取得できます。永続的な認証情報の管理は不要です。
 
@@ -20,7 +20,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 1. 権限のある WordPress ユーザーが Gutenberg サイドバー、クイック編集パネル、またはクラシックエディターのメタボックスからトークンを生成します。
 2. トークンが外部フロントエンドを指す URL に埋め込まれます。
-3. フロントエンドが `/wp-json/draft-preview-token/v1/preview?token=…` を呼び出してドラフトコンテンツを取得します。
+3. フロントエンドが `/wp-json/yui-preview-token/v1/preview?token=…` を呼び出してドラフトコンテンツを取得します。
 4. トークンは自動的に期限切れとなり、手動でのクリーンアップは不要です。
 
 = 主な機能 =
@@ -68,7 +68,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 * トークンの発行・使用イベントをログ記録（投稿 ID・ユーザー ID・クライアント IP）。
 * セキュリティイベントのログ記録：無効なトークン試行・レート制限超過・権限拒否。
-* デフォルトは `WP_DEBUG_LOG` に出力。`DRPT_LOG_FILE` で専用ファイルに変更可能。
+* デフォルトは `WP_DEBUG_LOG` に出力。`YUIPT_LOG_FILE` で専用ファイルに変更可能。
 
 **国際化対応**
 
@@ -79,20 +79,20 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 **フィルター**
 
-* `drpt_preview_response_data` — 送信前に REST API レスポンスデータを変更します。
+* `yuipt_preview_response_data` — 送信前に REST API レスポンスデータを変更します。
 
 **アクション**
 
-* `drpt_token_issued( int $post_id, int $user_id )` — トークン発行後に発火。
-* `drpt_token_used( int $post_id, int $user_id )` — トークンが正常に使用されたときに発火。
-* `drpt_invalid_token( string $ip )` — 無効・期限切れトークンのアクセス時に発火。
-* `drpt_rate_limit_exceeded( string $ip, string $endpoint )` — レート制限超過時に発火。
-* `drpt_capability_denied( int $user_id, int $post_id )` — 権限拒否時に発火。
+* `yuipt_token_issued( int $post_id, int $user_id )` — トークン発行後に発火。
+* `yuipt_token_used( int $post_id, int $user_id )` — トークンが正常に使用されたときに発火。
+* `yuipt_invalid_token( string $ip )` — 無効・期限切れトークンのアクセス時に発火。
+* `yuipt_rate_limit_exceeded( string $ip, string $endpoint )` — レート制限超過時に発火。
+* `yuipt_capability_denied( int $user_id, int $post_id )` — 権限拒否時に発火。
 
 **定数（wp-config.php）**
 
-* `DRPT_SKIP_HTTPS_CHECK` — `true` に設定すると HTTPS 要件を無効化します（開発環境専用）。
-* `DRPT_LOG_FILE` — 専用監査ログファイルの絶対パス。
+* `YUIPT_SKIP_HTTPS_CHECK` — `true` に設定すると HTTPS 要件を無効化します（開発環境専用）。
+* `YUIPT_LOG_FILE` — 専用監査ログファイルの絶対パス。
 
 = ユースケース =
 
@@ -102,7 +102,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 1. `preview-token` フォルダを `/wp-content/plugins/` にアップロードします。
 2. WordPress の**プラグイン**メニューからプラグインを有効化します。
-3. **設定 → Draft Preview Token** で**外部プレビュー URL**（フロントエンドのベース URL）を設定します。
+3. **設定 → YUI Preview Token** で**外部プレビュー URL**（フロントエンドのベース URL）を設定します。
 4. フロントエンドドメインの許可 CORS オリジンを追加します。
 5. Gutenberg サイドバー、クイック編集パネル、またはクラシックエディターのメタボックスからトークンを生成します。
 
@@ -148,11 +148,11 @@ TypeScript ソースから JavaScript バンドルを再ビルドするには：
 
 = HTTPS は必須ですか？ =
 
-デフォルトでは必須です。トークンが通信経路上で傍受されるのを防ぐため、プレビューエンドポイントは HTTP リクエストに 403 を返します。ローカル開発環境では、`wp-config.php` に `define('DRPT_SKIP_HTTPS_CHECK', true);` を追加することでバイパスできます。
+デフォルトでは必須です。トークンが通信経路上で傍受されるのを防ぐため、プレビューエンドポイントは HTTP リクエストに 403 を返します。ローカル開発環境では、`wp-config.php` に `define('YUIPT_SKIP_HTTPS_CHECK', true);` を追加することでバイパスできます。
 
 = トークンを発行できるユーザーを制限するには？ =
 
-**設定 → Draft Preview Token → 最低ロール** で最低 WordPress ロールを選択します（購読者・寄稿者・投稿者・編集者・管理者）。そのロール未満のユーザーがトークンを発行しようとすると 403 が返されます。
+**設定 → YUI Preview Token → 最低ロール** で最低 WordPress ロールを選択します（購読者・寄稿者・投稿者・編集者・管理者）。そのロール未満のユーザーがトークンを発行しようとすると 403 が返されます。
 
 = CORS 設定でワイルドカードを使えますか？ =
 
@@ -160,7 +160,7 @@ TypeScript ソースから JavaScript バンドルを再ビルドするには：
 
 = 監査ログはどこに保存されますか？ =
 
-デフォルトでは、ログは PHP の `error_log()` を介して出力されます（`WP_DEBUG_LOG` の設定に従います）。専用ファイルに書き出すには、`wp-config.php` に `define('DRPT_LOG_FILE', '/絶対/パス/drpt.log');` を追加してください。
+デフォルトでは、ログは PHP の `error_log()` を介して出力されます（`WP_DEBUG_LOG` の設定に従います）。専用ファイルに書き出すには、`wp-config.php` に `define('YUIPT_LOG_FILE', '/絶対/パス/drpt.log');` を追加してください。
 
 = クラシックエディタープラグインと互換性がありますか？ =
 
@@ -171,7 +171,7 @@ TypeScript ソースから JavaScript バンドルを再ビルドするには：
 `token` クエリパラメータをプレビューエンドポイントに渡すだけで、認証ヘッダーは不要です：
 
 ```
-GET /wp-json/draft-preview-token/v1/preview?token=<token>
+GET /wp-json/yui-preview-token/v1/preview?token=<token>
 ```
 
 トークンは発行時に特定の投稿と紐づいており（SHA-256 ハッシュが `wp_options` に保存）、サーバーはトークンのみから返すべき投稿を決定します。クライアントが別の投稿にリダイレクトさせることはできません。
@@ -183,7 +183,7 @@ const params   = new URLSearchParams(location.search)
 const token    = params.get('token')
 const postType = params.get('pt')   // 'post'・'page'・カスタム投稿タイプのスラッグ
 
-const res  = await fetch(`https://wp.example.com/wp-json/draft-preview-token/v1/preview?token=${token}`)
+const res  = await fetch(`https://wp.example.com/wp-json/yui-preview-token/v1/preview?token=${token}`)
 const post = await res.json()
 ```
 

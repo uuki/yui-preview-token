@@ -14,7 +14,7 @@
 import { test, expect } from '@playwright/test';
 
 const WP     = 'http://127.0.0.1:9400';
-const API    = `${WP}/wp-json/draft-preview-token/v1`;
+const API    = `${WP}/wp-json/yui-preview-token/v1`;
 const WP_API = `${WP}/wp-json/wp/v2`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

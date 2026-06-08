@@ -21,13 +21,13 @@
 
 ```
 エディターが Gutenberg サイドバー / クイック編集 / クラシックエディターでトークンを生成
-  └─ プラグインがトークンを発行 → SHA-256 ハッシュを wp_options に保存（drpt_tk_{hash}）
+  └─ プラグインがトークンを発行 → SHA-256 ハッシュを wp_options に保存（yuipt_tk_{hash}）
   └─ プレビュー URL を生成: https://front.example.com/preview?token=<64文字のhex>
 
 ユーザーがブラウザでプレビュー URL を開く
 
 フロントエンド
-  └─ GET /wp-json/draft-preview-token/v1/preview?token=<token>
+  └─ GET /wp-json/yui-preview-token/v1/preview?token=<token>
 
 WordPress
   └─ トークンをハッシュ化して wp_options のキーを引く
@@ -42,7 +42,7 @@ WordPress
 | 項目     | 内容                                                                   |
 |----------|------------------------------------------------------------------------|
 | 生成方法 | `bin2hex(random_bytes(32))` — 256-bit CSPRNG、64文字の16進数            |
-| 保存先   | `wp_options`、キー = `drpt_tk_` + `sha256(token)`（O(1) ルックアップ） |
+| 保存先   | `wp_options`、キー = `yuipt_tk_` + `sha256(token)`（O(1) ルックアップ） |
 | 有効期限 | 設定可能: 1時間 / 24時間 / 30日 / カスタム日時 / 無期限               |
 | 再利用   | 有効期限内は複数回利用可                                               |
 | 失効時   | `401 Unauthorized`（存在しない場合と同一）                             |
@@ -55,7 +55,7 @@ WordPress
 
 **プレビュー（公開）**
 ```
-GET /wp-json/draft-preview-token/v1/preview?token=<token>
+GET /wp-json/yui-preview-token/v1/preview?token=<token>
 ```
 
 | ステータス | 条件                         |
@@ -69,10 +69,10 @@ GET /wp-json/draft-preview-token/v1/preview?token=<token>
 
 **トークン管理（認証済み）**
 ```
-POST   /wp-json/draft-preview-token/v1/token   # 発行
-GET    /wp-json/draft-preview-token/v1/token   # 現在のトークン取得
-PATCH  /wp-json/draft-preview-token/v1/token   # 有効期限のみ更新
-DELETE /wp-json/draft-preview-token/v1/token   # 失効
+POST   /wp-json/yui-preview-token/v1/token   # 発行
+GET    /wp-json/yui-preview-token/v1/token   # 現在のトークン取得
+PATCH  /wp-json/yui-preview-token/v1/token   # 有効期限のみ更新
+DELETE /wp-json/yui-preview-token/v1/token   # 失効
 ```
 
 レスポンスボディは WordPress 標準の REST API フォーマット（`/wp/v2/posts/{id}`）に準拠する。以下のフィールドはレスポンス前に除去される。
@@ -84,24 +84,24 @@ DELETE /wp-json/draft-preview-token/v1/token   # 失効
 | `ping_status`  | プレビューに不要        |
 | `template`     | プレビューに不要        |
 
-`drpt_preview_response_data` フィルターでレスポンスのフィールドを追加・除去・変換できる。
+`yuipt_preview_response_data` フィルターでレスポンスのフィールドを追加・除去・変換できる。
 
 ```php
 // フィールドを除去する
-add_filter('drpt_preview_response_data', function (array $data, WP_Post $post, WP_REST_Request $req): array {
+add_filter('yuipt_preview_response_data', function (array $data, WP_Post $post, WP_REST_Request $req): array {
     unset($data['author']);
     return $data;
 }, 10, 3);
 
 // ACF フィールドを追加する（「REST API に表示」が有効なフィールドは自動で含まれる。
 // auth_callback で権限が要求されているフィールドなど、未認証コンテキストで除外されるものにのみ使用する）
-add_filter('drpt_preview_response_data', function (array $data, WP_Post $post): array {
+add_filter('yuipt_preview_response_data', function (array $data, WP_Post $post): array {
     $data['acf'] = function_exists('get_fields') ? get_fields($post->ID) : [];
     return $data;
 }, 10, 2);
 
 // content.raw（ブロックのマークアップ）を追加する（トークンの受け取り側を信頼できる場合のみ）
-add_filter('drpt_preview_response_data', function (array $data, WP_Post $post): array {
+add_filter('yuipt_preview_response_data', function (array $data, WP_Post $post): array {
     $data['content']['raw'] = $post->post_content;
     return $data;
 }, 10, 2);
@@ -157,7 +157,7 @@ const token = Astro.url.searchParams.get('token');
 if (!token) return Astro.redirect('/404');
 
 const res = await fetch(
-  `https://wp.example.com/wp-json/draft-preview-token/v1/preview?token=${token}`
+  `https://wp.example.com/wp-json/yui-preview-token/v1/preview?token=${token}`
 );
 
 if (!res.ok) return Astro.redirect('/404');

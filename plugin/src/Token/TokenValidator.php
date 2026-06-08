@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Token;
+namespace YUIPT\Token;
 
 class TokenValidator
 {

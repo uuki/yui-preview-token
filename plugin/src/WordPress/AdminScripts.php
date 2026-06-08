@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DRPT\WordPress;
+namespace YUIPT\WordPress;
 
 class AdminScripts
 {
@@ -78,7 +78,7 @@ class AdminScripts
 
         add_meta_box(
             Constants::META_BOX_ID,
-            __('External Preview', 'draft-preview-token'),
+            __('External Preview', 'yui-preview-token'),
             [$this, 'render_classic_meta_box'],
             null,
             'side',
@@ -92,7 +92,7 @@ class AdminScripts
             '<div id="' . esc_attr(Constants::ELEMENT_CLASSIC_ROOT) . '" data-post-id="%d"></div>'
             . '<p class="description" style="margin-top:6px;font-size:11px">%s</p>',
             esc_attr($post->ID),
-            esc_html__('Save your draft before opening the external preview to ensure the latest content is reflected.', 'draft-preview-token')
+            esc_html__('Save your draft before opening the external preview to ensure the latest content is reflected.', 'yui-preview-token')
         );
     }
 
@@ -106,31 +106,31 @@ class AdminScripts
             'allowNoExpiry' => $this->settings->get_allow_no_expiry(),
             'i18n'          => [
                 // Preset labels
-                'preset1h'        => __('1 hour',    'draft-preview-token'),
-                'preset24h'       => __('24 hours',  'draft-preview-token'),
-                'preset30d'       => __('30 days',   'draft-preview-token'),
-                'presetCustom'    => __('Custom',    'draft-preview-token'),
-                'presetNoExpiry'  => __('No expiry', 'draft-preview-token'),
+                'preset1h'        => __('1 hour',    'yui-preview-token'),
+                'preset24h'       => __('24 hours',  'yui-preview-token'),
+                'preset30d'       => __('30 days',   'yui-preview-token'),
+                'presetCustom'    => __('Custom',    'yui-preview-token'),
+                'presetNoExpiry'  => __('No expiry', 'yui-preview-token'),
                 // Panel UI
-                'loading'         => __('Loading…',                  'draft-preview-token'),
-                'expiry'          => __('Expiry',                    'draft-preview-token'),
-                'update'          => __('Update',                    'draft-preview-token'),
-                'cancel'          => __('Cancel',                    'draft-preview-token'),
-                'openPreview'     => __('Open external preview',     'draft-preview-token'),
-                'copyPreviewUrl'  => __('Copy external preview URL', 'draft-preview-token'),
-                'changeExpiry'    => __('Change expiry',             'draft-preview-token'),
-                'deleteToken'     => __('Delete',                    'draft-preview-token'),
-                'deleteConfirm'   => __('Delete this token?',        'draft-preview-token'),
-                'yes'             => __('Yes',                       'draft-preview-token'),
-                'generateToken'   => __('Generate token',            'draft-preview-token'),
-                'regenerateToken' => __('Regenerate token',          'draft-preview-token'),
+                'loading'         => __('Loading…',                  'yui-preview-token'),
+                'expiry'          => __('Expiry',                    'yui-preview-token'),
+                'update'          => __('Update',                    'yui-preview-token'),
+                'cancel'          => __('Cancel',                    'yui-preview-token'),
+                'openPreview'     => __('Open external preview',     'yui-preview-token'),
+                'copyPreviewUrl'  => __('Copy external preview URL', 'yui-preview-token'),
+                'changeExpiry'    => __('Change expiry',             'yui-preview-token'),
+                'deleteToken'     => __('Delete',                    'yui-preview-token'),
+                'deleteConfirm'   => __('Delete this token?',        'yui-preview-token'),
+                'yes'             => __('Yes',                       'yui-preview-token'),
+                'generateToken'   => __('Generate token',            'yui-preview-token'),
+                'regenerateToken' => __('Regenerate token',          'yui-preview-token'),
                 // Status — %s is a placeholder substituted in JS
                 /* translators: %s: token expiry date */
-                'tokenExpired'    => __('Token expired: %s',          'draft-preview-token'),
+                'tokenExpired'    => __('Token expired: %s',          'yui-preview-token'),
                 /* translators: 1: expiry date, 2: relative time remaining */
-                'expiresRelative' => __('Expires: %1$s (%2$s remaining)', 'draft-preview-token'),
-                'lessThan1min'    => __('< 1 min',                    'draft-preview-token'),
-                'errorOccurred'   => __('An error occurred',          'draft-preview-token'),
+                'expiresRelative' => __('Expires: %1$s (%2$s remaining)', 'yui-preview-token'),
+                'lessThan1min'    => __('< 1 min',                    'yui-preview-token'),
+                'errorOccurred'   => __('An error occurred',          'yui-preview-token'),
             ],
         ];
     }

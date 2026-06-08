@@ -20,7 +20,7 @@ const S_DIVIDER: React.CSSProperties = { color: '#ddd', margin: '0 4px' }
 
 // ── i18n helper ───────────────────────────────────────────────────────────────
 
-const t = (): DrptI18n => drptPreviewData?.i18n ?? {
+const t = (): YuiptI18n => yuiptPreviewData?.i18n ?? {
   preset1h: '1 hour', preset24h: '24 hours', preset30d: '30 days',
   presetCustom: 'Custom', presetNoExpiry: 'No expiry',
   loading: 'Loading…', expiry: 'Expiry',
@@ -45,7 +45,7 @@ const textLink = (label: string, onClick: () => void, style?: React.CSSPropertie
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export interface DrptTokenPanelProps {
+export interface YuiptTokenPanelProps {
   postId:               number | null
   Btn:                  BtnComponent
   SelectInput:          SelectComponent
@@ -53,8 +53,8 @@ export interface DrptTokenPanelProps {
   onBeforeOpenPreview?: () => Promise<void>
 }
 
-export const DrptTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }: DrptTokenPanelProps) => {
-  const allowNoExpiry = drptPreviewData?.allowNoExpiry ?? false
+export const YuiptTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }: YuiptTokenPanelProps) => {
+  const allowNoExpiry = yuiptPreviewData?.allowNoExpiry ?? false
   const PRESET_OPTIONS: SelectOption[] = getPresetOptions(allowNoExpiry)
 
   const [token,     setToken]     = useState<TokenData | null>(null)
@@ -69,8 +69,8 @@ export const DrptTokenPanel = ({ postId, Btn, SelectInput, onBeforeOpenPreview }
     if (!postId) return
     setLoaded(false); setToken(null); setMode('view')
 
-    fetch(`${drptPreviewData?.tokenBase ?? ''}?post_id=${postId}`, {
-      headers: { 'X-WP-Nonce': drptPreviewData?.nonce ?? '' },
+    fetch(`${yuiptPreviewData?.tokenBase ?? ''}?post_id=${postId}`, {
+      headers: { 'X-WP-Nonce': yuiptPreviewData?.nonce ?? '' },
     })
       .then(r => r.ok ? r.json() as Promise<TokenData> : null)
       .then(d => { setToken(d); setLoaded(true) })

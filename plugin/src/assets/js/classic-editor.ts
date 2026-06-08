@@ -1,36 +1,36 @@
 /**
  * Classic Editor meta box entry.
- * Mounts DrptTokenPanel into the container injected by Settings::render_classic_meta_box().
+ * Mounts YuiptTokenPanel into the container injected by Settings::render_classic_meta_box().
  * WordPress deps: wp-element
  */
 
-import { DrptTokenPanel } from './token-panel'
+import { YuiptTokenPanel } from './token-panel'
 import { NativeBtn, NativeSelect } from './native-components'
 import { ELEMENT_CLASSIC_ROOT, LOG_PREFIX } from './constants'
 
-if (typeof drptPreviewData === 'undefined') {
-  throw new Error(`${LOG_PREFIX} drptPreviewData is not defined`)
+if (typeof yuiptPreviewData === 'undefined') {
+  throw new Error(`${LOG_PREFIX} yuiptPreviewData is not defined`)
 }
 
 const { createElement: el } = wp.element
 
-interface DrptContainer extends HTMLElement {
+interface YuiptContainer extends HTMLElement {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _drptRoot?: { render: (children: any) => void; unmount: () => void }
+  _yuiptRoot?: { render: (children: any) => void; unmount: () => void }
 }
 
 const initClassicMetaBox = (): void => {
-  const root = document.getElementById(ELEMENT_CLASSIC_ROOT) as DrptContainer | null
+  const root = document.getElementById(ELEMENT_CLASSIC_ROOT) as YuiptContainer | null
   if (!root) return
 
   const postId = parseInt(root.dataset['postId'] ?? '0', 10)
   if (!postId) return
 
-  const panel = el(DrptTokenPanel, { postId, Btn: NativeBtn, SelectInput: NativeSelect })
+  const panel = el(YuiptTokenPanel, { postId, Btn: NativeBtn, SelectInput: NativeSelect })
 
   if (wp.element.createRoot) {
-    if (!root._drptRoot) root._drptRoot = wp.element.createRoot(root)
-    root._drptRoot!.render(panel)
+    if (!root._yuiptRoot) root._yuiptRoot = wp.element.createRoot(root)
+    root._yuiptRoot!.render(panel)
   } else {
     wp.element.render(panel, root)
   }

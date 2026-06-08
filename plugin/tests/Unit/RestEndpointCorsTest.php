@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace DRPT\Tests\Unit;
+namespace YUIPT\Tests\Unit;
 
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use PHPUnit\Framework\TestCase;
-use DRPT\WordPress\RestEndpoint;
-use DRPT\WordPress\Settings;
-use DRPT\Token\TokenValidator;
-use DRPT\Support\ResponsePipeline;
-use DRPT\WordPress\RateLimiter;
+use YUIPT\WordPress\RestEndpoint;
+use YUIPT\WordPress\Settings;
+use YUIPT\Token\TokenValidator;
+use YUIPT\Support\ResponsePipeline;
+use YUIPT\WordPress\RateLimiter;
 
 class RestEndpointCorsTest extends TestCase
 {

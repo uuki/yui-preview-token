@@ -18,26 +18,26 @@ export const PRESET_SECONDS = {
 
 // ── Element IDs ─── sync: Constants::ELEMENT_* ───────────────────────────────
 
-export const ELEMENT_CLASSIC_ROOT     = 'drpt-classic-meta-box-root'
-export const ELEMENT_ORIGINS_LIST     = 'drpt-origins-list'
-export const ELEMENT_ADD_ORIGIN       = 'drpt-add-origin'
-export const ELEMENT_WILDCARD_WARNING = 'drpt-wildcard-warning'
+export const ELEMENT_CLASSIC_ROOT     = 'yuipt-classic-meta-box-root'
+export const ELEMENT_ORIGINS_LIST     = 'yuipt-origins-list'
+export const ELEMENT_ADD_ORIGIN       = 'yuipt-add-origin'
+export const ELEMENT_WILDCARD_WARNING = 'yuipt-wildcard-warning'
 
 // ── CSS classes ───────────────────────────────────────────────────────────────
 
-export const CLASS_QUICK_EDIT_ROOT = 'drpt-quick-edit-root'
-export const CLASS_ORIGIN_ROW      = 'drpt-origin-row'
-export const CLASS_REMOVE_ORIGIN   = 'drpt-remove-origin'
+export const CLASS_QUICK_EDIT_ROOT = 'yuipt-quick-edit-root'
+export const CLASS_ORIGIN_ROW      = 'yuipt-origin-row'
+export const CLASS_REMOVE_ORIGIN   = 'yuipt-remove-origin'
 
 // ── data attributes ─── sync: Constants::ATTR_* ───────────────────────────────
 
-export const ATTR_PANEL  = 'data-drpt-panel'
-export const ATTR_ACTION = 'data-drpt-action'
+export const ATTR_PANEL  = 'data-yuipt-panel'
+export const ATTR_ACTION = 'data-yuipt-action'
 
 // ── Gutenberg plugin ID ───────────────────────────────────────────────────────
 
-export const PLUGIN_ID_SIDEBAR = 'drpt-preview'
+export const PLUGIN_ID_SIDEBAR = 'yuipt-preview'
 
 // ── Log prefix ────────────────────────────────────────────────────────────────
 
-export const LOG_PREFIX = '[DRPT]'
+export const LOG_PREFIX = '[YUIPT]'

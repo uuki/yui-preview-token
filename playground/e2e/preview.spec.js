@@ -34,12 +34,12 @@ test.describe('Preview page', () => {
 
 test.describe('REST API', () => {
     test('returns 401 for an invalid token', async ({ request }) => {
-        const res = await request.get(`${WP}/wp-json/draft-preview-token/v1/preview?token=invalid`);
+        const res = await request.get(`${WP}/wp-json/yui-preview-token/v1/preview?token=invalid`);
         expect(res.status()).toBe(401);
     });
 
     test('returns 400 when token param is missing', async ({ request }) => {
-        const res = await request.get(`${WP}/wp-json/draft-preview-token/v1/preview`);
+        const res = await request.get(`${WP}/wp-json/yui-preview-token/v1/preview`);
         expect(res.status()).toBe(400);
     });
 });
@@ -95,12 +95,12 @@ test.describe('Gutenberg sidebar preview', () => {
 
         // Check if generate button exists and click it
         const hasGenerate = await page.evaluate(() =>
-            !!document.querySelector('[data-drpt-action="generate"]')
+            !!document.querySelector('[data-yuipt-action="generate"]')
         ).catch(() => false);
 
         if (hasGenerate) {
             await page.evaluate(() => {
-                const span = document.querySelector('[data-drpt-action="generate"]');
+                const span = document.querySelector('[data-yuipt-action="generate"]');
                 if (span) (span.querySelector('button') ?? span).click();
             }).catch(() => null);
             // Wait for token generation (fixed wait — no polling)
@@ -110,7 +110,7 @@ test.describe('Gutenberg sidebar preview', () => {
         // Click preview button — Gutenberg calls window.open() internally after auto-save
         const popupPromise = context.waitForEvent('page');
         await page.evaluate(() => {
-            const btn = document.querySelector('[data-drpt-action="preview"] button');
+            const btn = document.querySelector('[data-yuipt-action="preview"] button');
             if (btn) btn.click();
         }).catch(() => null);
         const previewPage = await popupPromise;
@@ -152,32 +152,32 @@ test.describe('Quick Edit token panel', () => {
 
         // Wait for PVT panel to finish loading
         await page.waitForFunction(() => {
-            const panel = document.querySelector('.drpt-quick-edit-root [data-drpt-panel]');
-            return panel && panel.getAttribute('data-drpt-panel') !== 'loading';
+            const panel = document.querySelector('.yuipt-quick-edit-root [data-yuipt-panel]');
+            return panel && panel.getAttribute('data-yuipt-panel') !== 'loading';
         }, { timeout: 20_000 });
 
         await page.waitForFunction(() =>
-            !!document.querySelector('.drpt-quick-edit-root [data-drpt-action="generate"], .drpt-quick-edit-root [data-drpt-action="preview"]'),
+            !!document.querySelector('.yuipt-quick-edit-root [data-yuipt-action="generate"], .yuipt-quick-edit-root [data-yuipt-action="preview"]'),
             { timeout: 5_000 }
         );
 
         const hasGenerate = await page.evaluate(() =>
-            !!document.querySelector('.drpt-quick-edit-root [data-drpt-action="generate"]')
+            !!document.querySelector('.yuipt-quick-edit-root [data-yuipt-action="generate"]')
         );
 
         if (hasGenerate) {
             await page.evaluate(() => {
-                const span = document.querySelector('.drpt-quick-edit-root [data-drpt-action="generate"]');
+                const span = document.querySelector('.yuipt-quick-edit-root [data-yuipt-action="generate"]');
                 (span?.querySelector('button') ?? span)?.click();
             });
             await page.waitForFunction(() =>
-                !!document.querySelector('.drpt-quick-edit-root [data-drpt-action="preview"]'),
+                !!document.querySelector('.yuipt-quick-edit-root [data-yuipt-action="preview"]'),
                 { timeout: 10_000 }
             );
         }
 
         const href = await page.evaluate(() => {
-            const span = document.querySelector('.drpt-quick-edit-root [data-drpt-action="preview"]');
+            const span = document.querySelector('.yuipt-quick-edit-root [data-yuipt-action="preview"]');
             return (span?.querySelector('a') ?? span)?.href ?? '';
         });
         expect(href).toMatch(/[?&]token=[0-9a-f]{64}/);
@@ -225,32 +225,32 @@ test.describe('Classic Editor token panel', () => {
 
         // Wait for PVT meta box panel to finish loading
         await page.waitForFunction(() => {
-            const panel = document.querySelector('#drpt-classic-meta-box-root [data-drpt-panel]');
-            return panel && panel.getAttribute('data-drpt-panel') !== 'loading';
+            const panel = document.querySelector('#yuipt-classic-meta-box-root [data-yuipt-panel]');
+            return panel && panel.getAttribute('data-yuipt-panel') !== 'loading';
         }, { timeout: 20_000 });
 
         await page.waitForFunction(() =>
-            !!document.querySelector('#drpt-classic-meta-box-root [data-drpt-action="generate"], #drpt-classic-meta-box-root [data-drpt-action="preview"]'),
+            !!document.querySelector('#yuipt-classic-meta-box-root [data-yuipt-action="generate"], #yuipt-classic-meta-box-root [data-yuipt-action="preview"]'),
             { timeout: 5_000 }
         );
 
         const hasGenerate = await page.evaluate(() =>
-            !!document.querySelector('#drpt-classic-meta-box-root [data-drpt-action="generate"]')
+            !!document.querySelector('#yuipt-classic-meta-box-root [data-yuipt-action="generate"]')
         );
 
         if (hasGenerate) {
             await page.evaluate(() => {
-                const span = document.querySelector('#drpt-classic-meta-box-root [data-drpt-action="generate"]');
+                const span = document.querySelector('#yuipt-classic-meta-box-root [data-yuipt-action="generate"]');
                 (span?.querySelector('button') ?? span)?.click();
             });
             await page.waitForFunction(() =>
-                !!document.querySelector('#drpt-classic-meta-box-root [data-drpt-action="preview"]'),
+                !!document.querySelector('#yuipt-classic-meta-box-root [data-yuipt-action="preview"]'),
                 { timeout: 10_000 }
             );
         }
 
         const href = await page.evaluate(() => {
-            const span = document.querySelector('#drpt-classic-meta-box-root [data-drpt-action="preview"]');
+            const span = document.querySelector('#yuipt-classic-meta-box-root [data-yuipt-action="preview"]');
             return (span?.querySelector('a') ?? span)?.href ?? '';
         });
         expect(href).toMatch(/[?&]token=[0-9a-f]{64}/);

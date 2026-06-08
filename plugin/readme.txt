@@ -1,9 +1,9 @@
-=== Draft Preview Token ===
+=== YUI Preview Token ===
 Contributors: uukidev
 Tags: preview, headless, rest-api, token, draft
 Requires at least: 5.9
 Tested up to: 7.0
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ Issue time-limited preview tokens for headless WordPress setups. Open drafts dir
 
 == Description ==
 
-**Draft Preview Token** solves the authentication problem in decoupled (headless) WordPress architectures. Application Passwords are a great built-in WordPress feature for this purpose, but they require managing long-lived secrets on the frontend side. This plugin instead issues per-post tokens that grant read access for a configurable period — no persistent secrets required.
+**YUI Preview Token** solves the authentication problem in decoupled (headless) WordPress architectures. Application Passwords are a great built-in WordPress feature for this purpose, but they require managing long-lived secrets on the frontend side. This plugin instead issues per-post tokens that grant read access for a configurable period — no persistent secrets required.
 
 The frontend (Astro, Next.js, Nuxt, etc.) receives a preview URL and can fetch the draft content directly via the REST API.
 
@@ -20,7 +20,7 @@ The frontend (Astro, Next.js, Nuxt, etc.) receives a preview URL and can fetch t
 
 1. An authorized WordPress user generates a token from the Gutenberg sidebar, Quick Edit panel, or Classic Editor meta box.
 2. The token is embedded in a preview URL pointing to your external frontend.
-3. The frontend calls `/wp-json/draft-preview-token/v1/preview?token=…` to retrieve the draft content.
+3. The frontend calls `/wp-json/yui-preview-token/v1/preview?token=…` to retrieve the draft content.
 4. The token expires automatically; no manual cleanup needed.
 
 = Key Features =
@@ -79,15 +79,15 @@ The frontend (Astro, Next.js, Nuxt, etc.) receives a preview URL and can fetch t
 
 **Filter**
 
-* `drpt_preview_response_data` — Modify the REST API response data before it is sent.
+* `yuipt_preview_response_data` — Modify the REST API response data before it is sent.
 
 **Actions**
 
-* `drpt_token_issued( int $post_id, int $user_id )` — Fires after a token is issued.
-* `drpt_token_used( int $post_id, int $user_id )` — Fires when a token is used successfully.
-* `drpt_invalid_token( string $ip )` — Fires on an invalid/expired token attempt.
-* `drpt_rate_limit_exceeded( string $ip, string $endpoint )` — Fires when rate limit is hit.
-* `drpt_capability_denied( int $user_id, int $post_id )` — Fires on a capability denial.
+* `yuipt_token_issued( int $post_id, int $user_id )` — Fires after a token is issued.
+* `yuipt_token_used( int $post_id, int $user_id )` — Fires when a token is used successfully.
+* `yuipt_invalid_token( string $ip )` — Fires on an invalid/expired token attempt.
+* `yuipt_rate_limit_exceeded( string $ip, string $endpoint )` — Fires when rate limit is hit.
+* `yuipt_capability_denied( int $user_id, int $post_id )` — Fires on a capability denial.
 
 **Constants (wp-config.php)**
 
@@ -100,9 +100,9 @@ This plugin is designed for **headless WordPress** setups where a decoupled fron
 
 == Installation ==
 
-1. Upload the `preview-token` folder to `/wp-content/plugins/`.
+1. Upload the `yui-preview-token` folder to `/wp-content/plugins/`.
 2. Activate the plugin through the **Plugins** menu in WordPress.
-3. Go to **Settings → Draft Preview Token** and set your **External Preview URL** (the base URL of your frontend).
+3. Go to **Settings → YUI Preview Token** and set your **External Preview URL** (the base URL of your frontend).
 4. Add the allowed CORS origin(s) for your frontend domain.
 5. Generate tokens from the Gutenberg sidebar, Quick Edit panel, or Classic Editor meta box.
 
@@ -110,13 +110,13 @@ This plugin is designed for **headless WordPress** setups where a decoupled fron
 
 The files in `assets/js/` are compiled and minified bundles. Per WordPress.org guidelines, the human-readable TypeScript source files are available at:
 
-https://github.com/uuki/preview-token/tree/main/plugin/src/assets/js
+https://github.com/uuki/yui-preview-token/tree/main/plugin/src/assets/js
 
 = Build from Source =
 
 To rebuild the JavaScript bundles from the TypeScript sources:
 
-1. Clone the repository: `git clone https://github.com/uuki/preview-token.git`
+1. Clone the repository: `git clone https://github.com/uuki/yui-preview-token.git`
 2. Install Node.js dependencies: `cd plugin && pnpm install`
 3. Compile: `pnpm run build`
 
@@ -152,7 +152,7 @@ By default, yes. The preview endpoint returns a 403 for HTTP requests to protect
 
 = How do I restrict who can generate tokens? =
 
-In **Settings → Draft Preview Token → Minimum Capability**, choose the minimum WordPress role (Subscriber, Contributor, Author, Editor, or Administrator). Users below that role will receive a 403 when attempting to generate tokens.
+In **Settings → YUI Preview Token → Minimum Capability**, choose the minimum WordPress role (Subscriber, Contributor, Author, Editor, or Administrator). Users below that role will receive a 403 when attempting to generate tokens.
 
 = Can I use wildcard origins in CORS settings? =
 
@@ -171,7 +171,7 @@ Yes. When the Classic Editor plugin is active, the token panel appears as a meta
 Pass the `token` query parameter directly to the preview endpoint — no authentication headers required:
 
 ```
-GET /wp-json/draft-preview-token/v1/preview?token=<token>
+GET /wp-json/yui-preview-token/v1/preview?token=<token>
 ```
 
 The token is bound to a specific post at issuance time (stored as a SHA-256 hash in `wp_options`). The server resolves which post to return from the token alone; the client cannot redirect it to a different post.
@@ -183,7 +183,7 @@ const params  = new URLSearchParams(location.search)
 const token   = params.get('token')
 const postType = params.get('pt')   // 'post', 'page', or a custom post type slug
 
-const res  = await fetch(`https://wp.example.com/wp-json/draft-preview-token/v1/preview?token=${token}`)
+const res  = await fetch(`https://wp.example.com/wp-json/yui-preview-token/v1/preview?token=${token}`)
 const post = await res.json()
 ```
 
