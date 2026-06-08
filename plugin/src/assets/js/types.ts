@@ -1,4 +1,5 @@
 import type { ComponentType, CSSProperties, ReactNode } from '@wordpress/element'
+import type { ATTR_ACTION } from './constants'
 
 export interface TokenData {
   preview_url: string
@@ -26,7 +27,7 @@ export interface SelectOption {
 // NativeBtn must satisfy BtnProps, and both SelectControl/NativeSelect must
 // satisfy SelectInputProps.
 
-export interface BtnProps {
+export type BtnProps = {
   variant?:          'primary' | 'secondary' | 'tertiary' | 'link'
   href?:             string
   target?:           string
@@ -42,9 +43,10 @@ export interface BtnProps {
   rel?:              string
   type?:             'button' | 'submit'
   'aria-label'?:     string
-  /** Stable selector for E2E tests — locale-independent. */
-  'data-pvt-action'?: string
   [key: string]:     unknown
+} & {
+  /** Stable selector for E2E tests — locale-independent. Key: ATTR_ACTION. */
+  [K in typeof ATTR_ACTION]?: string
 }
 
 export interface SelectInputProps {
