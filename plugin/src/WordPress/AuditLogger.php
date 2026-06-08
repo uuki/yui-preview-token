@@ -13,7 +13,7 @@ use PVT\Token\TokenIssuer;
  * Each line is prefixed with LOG_PREFIX to distinguish plugin entries from other PHP errors.
  *
  * Custom output: define the constant named by Constants::DEFINE_LOG_FILE in wp-config.php.
- *   define('PVT_LOG_FILE', '/var/log/pvt.log');
+ *   define(Constants::DEFINE_LOG_FILE, '/var/log/pvt.log');
  *
  * Logged events:
  *   - token issued / used                  (lifecycle)

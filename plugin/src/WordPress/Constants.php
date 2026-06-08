@@ -96,6 +96,12 @@ final class Constants
 
     // ── Audit log ─────────────────────────────────────────────────────────────
 
+    // ── Transient key prefixes ────────────────────────────────────────────────
+
+    public const TRANSIENT_PREFIX_RATE_LIMITER = 'pvt_rl_';
+
+    // ── Audit log ─────────────────────────────────────────────────────────────
+
     public const LOG_PREFIX        = '[pvt]';
     /** Name of the PHP define() constant set in the plugin bootstrap file. */
     public const DEFINE_PLUGIN_FILE = 'PVT_PLUGIN_FILE';
