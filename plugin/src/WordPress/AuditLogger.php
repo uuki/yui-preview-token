@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace PVT\WordPress;
 
+use PVT\Token\TokenIssuer;
+
 /**
  * Writes audit entries for token lifecycle events.
  *
  * Default output: PHP's system error log (same destination as WP_DEBUG_LOG).
- * Each line is prefixed with [pvt] to distinguish PVT entries from other PHP errors.
+ * Each line is prefixed with LOG_PREFIX to distinguish plugin entries from other PHP errors.
  *
  * Custom output: define PVT_LOG_FILE in wp-config.php to write to a dedicated file.
  *   define('PVT_LOG_FILE', '/var/log/pvt.log');
@@ -23,7 +25,7 @@ class AuditLogger
     public function register(): void
     {
         // Token lifecycle
-        add_action(\PVT\Token\TokenIssuer::HOOK_TOKEN_ISSUED, [$this, 'on_token_issued'], 10, 2);
+        add_action(TokenIssuer::HOOK_TOKEN_ISSUED,      [$this, 'on_token_issued'],        10, 2);
         add_action(Constants::HOOK_TOKEN_USED,          [$this, 'on_token_used'],          10, 2);
         // Security events
         add_action(Constants::HOOK_INVALID_TOKEN,       [$this, 'on_invalid_token'],       10, 1);
@@ -61,7 +63,7 @@ class AuditLogger
     private function write(string $event, int $post_id, int $user_id): void
     {
         $message = sprintf(
-            '[pvt] event=%s post_id=%d user_id=%d ip=%s',
+            Constants::LOG_PREFIX . ' event=%s post_id=%d user_id=%d ip=%s',
             $event,
             $post_id,
             $user_id,
@@ -72,7 +74,7 @@ class AuditLogger
 
     private function write_security(string $event, string $context): void
     {
-        $this->output(sprintf('[pvt] event=%s %s', $event, $context));
+        $this->output(sprintf(Constants::LOG_PREFIX . ' event=%s %s', $event, $context));
     }
 
     private function output(string $message): void

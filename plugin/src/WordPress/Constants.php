@@ -94,5 +94,9 @@ final class Constants
 
     public const META_BOX_ID = 'pvt-preview';
 
+    // ── Audit log ─────────────────────────────────────────────────────────────
+
+    public const LOG_PREFIX = '[pvt]';
+
     private function __construct() {}
 }
