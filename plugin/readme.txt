@@ -193,9 +193,9 @@ const post = await res.json()
 2. **Gutenberg sidebar** — Active token: expiry info, open preview in the designated frontend URL, and copy-to-clipboard.
 3. **Classic Editor** — Token panel in the meta box sidebar, before a token is issued.
 4. **Classic Editor** — Active token with "Open external preview" button and change-expiry / delete actions.
-6. **Settings page** — Configure the frontend URL, CORS origins, minimum role, and rate limits.
-7. **Issued Tokens tab** — Review all issued tokens with post, status, expiry, and issuer. Revoke or bulk-delete expired ones.
-8. **Quick Edit panel** — Token management directly from the post list screen, without opening the editor.
+5. **Settings page** — Configure the frontend URL, CORS origins, minimum role, and rate limits.
+6. **Issued Tokens tab** — Review all issued tokens with post, status, expiry, and issuer. Revoke or bulk-delete expired ones.
+7. **Quick Edit panel** — Token management directly from the post list screen, without opening the editor.
 
 == Changelog ==
 
