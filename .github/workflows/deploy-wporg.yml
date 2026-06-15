@@ -13,14 +13,21 @@ on:
 #   SVN_PASSWORD  — WordPress.org password (or application password)
 
 jobs:
+  validate:
+    name: Validate SVN structure
+    uses: ./.github/workflows/validate-svn-structure.yml
+    with:
+      version: ${{ github.event.inputs.version }}
+
   deploy:
     name: Build and deploy
+    needs: validate
     runs-on: ubuntu-latest
     environment: wordpress-org   # optional: gate behind an env protection rule
 
     env:
-      PLUGIN_SLUG: preview-token
-      SVN_URL: https://plugins.svn.wordpress.org/preview-token
+      PLUGIN_SLUG: yui-preview-token
+      SVN_URL: https://plugins.svn.wordpress.org/yui-preview-token
 
     steps:
       # ── 1. Source ─────────────────────────────────────────────────────────────

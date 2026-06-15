@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # bin/publish.sh — Build a production-ready zip for WordPress.org submission.
 #
-# Output: dist/preview-token.zip
+# Output: dist/yui-preview-token.zip
 #
 # Checklist (WordPress.org "production-ready" requirement):
 #   ✓ TypeScript compiled to plugin/assets/js/*.iife.js

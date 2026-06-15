@@ -1,0 +1,32 @@
+name: Validate SVN structure
+
+# Reusable workflow: validates that plugin/readme.txt, the plugin version
+# header, and assets/ conform to the WordPress.org SVN repository structure
+# (Stable tag, plugin Version header, Screenshots numbering, required icons
+# and banners). Used as a pre-deploy gate by deploy-wporg.yml, and can also
+# be run manually to check a version before triggering a deploy.
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to validate (e.g. 1.1.2)'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to validate (e.g. 1.1.2)'
+        required: true
+        type: string
+
+jobs:
+  validate:
+    name: Validate SVN structure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Run validation
+        run: bin/validate-svn-structure.sh "${{ inputs.version }}"
