@@ -1,6 +1,6 @@
-# Preview Token
+# YUI Preview Token
 
-<img src="assets/banner-1544x500.png" width="100%" alt="Preview Token">
+<img src="assets/banner-1544x500.png" width="100%" alt="YUI Preview Token">
 
 A WordPress plugin that issues time-limited preview tokens for headless setups. External frontends (Astro, Next.js, Nuxt, SvelteKit, etc.) can fetch draft content via the REST API without storing long-lived credentials.
 
@@ -8,7 +8,7 @@ A WordPress plugin that issues time-limited preview tokens for headless setups. 
 
 1. An editor generates a token from the Gutenberg sidebar, Quick Edit panel, or Classic Editor meta box.
 2. The plugin embeds the token in a preview URL pointing to the configured frontend.
-3. The frontend calls `/wp-json/preview-token/v1/preview?token=…` to fetch the draft post.
+3. The frontend calls `/wp-json/yui-preview-token/v1/preview?token=…` to fetch the draft post.
 4. The token expires automatically.
 
 Tokens are generated with `bin2hex(random_bytes(32))` (256-bit CSPRNG). The `wp_options` lookup key is the SHA-256 hash of the raw token — a database leak does not expose usable tokens.
@@ -20,7 +20,9 @@ Tokens are generated with `bin2hex(random_bytes(32))` (256-bit CSPRNG). The `wp_
 
 ## Installation
 
-Download the latest zip from [Releases](https://github.com/uuki/preview-token/releases) and install via **Plugins → Add New → Upload Plugin**, or extract to `wp-content/plugins/preview-token/`.
+Search for **"YUI Preview Token"** in **Plugins → Add New**, or install directly from the [WordPress.org plugin page](https://wordpress.org/plugins/yui-preview-token/).
+
+Alternatively, download the latest zip from [Releases](https://github.com/uuki/yui-preview-token/releases) and install via **Plugins → Add New → Upload Plugin**, or extract to `wp-content/plugins/yui-preview-token/`.
 
 ## Repository structure
 
@@ -33,11 +35,13 @@ Download the latest zip from [Releases](https://github.com/uuki/preview-token/re
 │   ├── icon-*.png
 │   └── screenshot-*.png
 ├── bin/
-│   ├── bump-version.sh         # Version string updater called by semantic-release
-│   └── publish.sh              # Builds and packages the distribution zip
+│   ├── bump-version.sh             # Version string updater called by semantic-release
+│   ├── publish.sh                  # Builds and packages the distribution zip
+│   └── validate-svn-structure.sh   # Validates readme.txt/assets against WP.org SVN conventions
 ├── docs/
 │   ├── readme-ja.txt           # Japanese readme (non-standard, not required by WP.org)
-│   └── guide.*.md              # Developer guides (en/ja)
+│   ├── guide.*.md              # Developer guides (en/ja)
+│   └── playground.*.md         # Local dev environment guides (en/ja)
 ├── playground/                 # Local dev environment — WP Playground + Playwright E2E
 │   ├── blueprint.json          # WP Playground setup (plugin activation, option fixtures)
 │   ├── e2e/                    # Playwright test specs
@@ -52,7 +56,7 @@ Download the latest zip from [Releases](https://github.com/uuki/preview-token/re
 │   │   └── Support/            # Response pipeline and filters
 │   ├── tests/                  # PHPUnit unit tests
 │   ├── vendor/                 # Composer dependencies (gitignored)
-│   ├── yui-preview-token.php       # Plugin entry point and header
+│   ├── yui-preview-token.php   # Plugin entry point and header
 │   ├── readme.txt              # WP.org plugin page (en) — part of trunk
 │   ├── composer.json
 │   ├── package.json            # JS build deps: tsdown, @wordpress/*
@@ -69,29 +73,36 @@ Download the latest zip from [Releases](https://github.com/uuki/preview-token/re
 
 ### Prerequisites
 
-- Node.js v20+, pnpm
+- Node.js v24.10+, pnpm
 - PHP 7.4+, Composer
 
 ### Setup
 
 ```bash
-git clone https://github.com/uuki/preview-token.git
-cd preview-token
+git clone https://github.com/uuki/yui-preview-token.git
+cd yui-preview-token
+pnpm install        # root tooling: husky, commitlint, semantic-release
+
+cd plugin
 composer install
 pnpm install
+cd ..
 ```
 
 ### Build JavaScript bundles
 
 ```bash
+cd plugin
 pnpm run build
 ```
 
-TypeScript sources are in `src/js/`. Compiled bundles go to `assets/js/`.
+TypeScript sources are in `plugin/src/assets/js/`. Compiled bundles go to `plugin/assets/js/`.
 
 ### Local development environment
 
 ```bash
+cd playground
+pnpm install
 pnpm run dev
 ```
 
@@ -101,16 +112,16 @@ Starts WP Playground (`http://127.0.0.1:9400`) and a Vite preview frontend (`htt
 
 ```bash
 # PHP unit tests
-composer test
+cd plugin && composer test
 
 # End-to-end tests (requires dev servers running)
-pnpm run test
+cd playground && pnpm run test
 ```
 
 ### Production zip
 
 ```bash
-pnpm run release   # → dist/preview-token.zip
+pnpm run publish:zip   # → dist/yui-preview-token.zip
 ```
 
 ## Documentation
@@ -120,6 +131,10 @@ pnpm run release   # → dist/preview-token.zip
 - [開発者ガイド（日本語）](docs/guide.ja.md)
 - [Playground（日本語）](docs/playground.ja.md)
 
+## About the name
+
+"YUI" comes from the Japanese word *yui* (結), meaning "to connect" or "to bind together." It's used as a shared series name for this author's WordPress plugins.
+
 ## License
 
-GPL-2.0-or-later — see the [WordPress.org plugin page](https://wordpress.org/plugins/preview-token/) for details.
+GPL-2.0-or-later — see the [WordPress.org plugin page](https://wordpress.org/plugins/yui-preview-token/) for details.
