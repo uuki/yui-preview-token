@@ -33,7 +33,7 @@ jobs:
       # ── 1. Source ─────────────────────────────────────────────────────────────
 
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # ── 2. Resolve version ────────────────────────────────────────────────────
       # Strip the leading "v" from the tag name, or use the manual input.
